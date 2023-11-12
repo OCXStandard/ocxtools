@@ -1,0 +1,100 @@
+﻿<ocx:ocxXML xmlns:ocx="http://data.dnvgl.com/Schemas/ocxXMLSchema" schemaVersion="2.8.6" xsi:schemaLocation="http://data.dnvgl.com/Schemas/ocxXMLSchema OCX_Schema.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<ocx:Header name="HCM_MID-SHIP/A" author="NAPAA" organization="NAPAO" time_stamp="2023-01-31T17:55:57.7882789+02:00" originating_system="NAPA Steel" documentation="OCX Export" application_version="NAPA Release B32 2022.2 x64 P" />
+	<ocx:Vessel id="nplcid1" name="HCM_MID-SHIP/A" ocx:GUIDRef="0e8a1e21-1e99-47dd-8949-03d8b7a28ead">
+		<ocx:DistanceTolerance numericvalue="1" unit="Umm" />
+		<ocx:AngleTolerance numericvalue="0.05" unit="URad" />
+		<ocx:ClassificationData ocx:newbuildingSociety="DNV" identification="">
+			<ocx:PrincipalParticulars>
+				<ocx:Lpp numericvalue="100" unit="Um" />
+				<ocx:RuleLength numericvalue="100" unit="Um" />
+				<ocx:BlockCoefficient numericvalue="0" unit="UDimless" />
+				<ocx:FP_Pos numericvalue="100" unit="Um" />
+				<ocx:MouldedBreadth numericvalue="20" unit="Um" />
+				<ocx:MouldedDepth numericvalue="NaN" unit="Um" />
+				<ocx:ScantlingDraught numericvalue="25" unit="Um" />
+				<ocx:DesignSpeed numericvalue="0" unit="UKnots" />
+				<ocx:AP_Pos numericvalue="0" unit="Um" />
+			</ocx:PrincipalParticulars>
+		</ocx:ClassificationData>
+		<ocx:BuilderInformation yard="NAPAY" designer="NAPAD" owner="NAPA" yearOfBuild="2022-01" />
+		<ocx:CoordinateSystem id="nplcid12" ocx:GUIDRef="6ebe529b-0037-412f-98c9-fa995e75d2cc" isGlobal="true">
+			<ocx:LocalCartesian>
+				<ocx:Origin>
+					<ocx:X numericvalue="0" unit="Um" />
+					<ocx:Y numericvalue="0" unit="Um" />
+					<ocx:Z numericvalue="0" unit="Um" />
+				</ocx:Origin>
+				<ocx:PrimaryAxis x="1" y="0" z="0" />
+				<ocx:SecondaryAxis x="0" y="1" z="0" />
+			</ocx:LocalCartesian>
+			<ocx:FrameTables>
+				<ocx:XRefPlanes>
+					<ocx:RefPlane id="nplcid286" name="X2.25" ocx:GUIDRef="db79bec5-0744-47d7-93ab-9cacf4a65188">
+						<ocx:ReferenceLocation numericvalue="2.25" unit="Um" />
+					</ocx:RefPlane>
+					<ocx:RefPlane id="nplcid290" name="X4.5" ocx:GUIDRef="d1a93b9a-f3cd-44cf-bdb4-754f6efe7b45">
+						<ocx:ReferenceLocation numericvalue="4.5" unit="Um" />
+					</ocx:RefPlane>
+					<ocx:RefPlane id="nplcid294" name="X6.75" ocx:GUIDRef="3a46e94e-e639-4e01-bc27-39a5f48ea64a">
+						<ocx:ReferenceLocation numericvalue="6.75" unit="Um" />
+					</ocx:RefPlane>
+					<ocx:RefPlane id="nplcid298" name="X9" ocx:GUIDRef="e9c54d4e-8acf-4325-801c-bce1c62b3e28">
+						<ocx:ReferenceLocation numericvalue="9" unit="Um" />
+					</ocx:RefPlane>
+					<ocx:RefPlane id="nplcid345" name="X0.75" ocx:GUIDRef="f0ac955e-cf90-4fcd-a928-4d38aa3e5dda">
+						<ocx:ReferenceLocation numericvalue="0.75" unit="Um" />
+					</ocx:RefPlane>
+					<ocx:RefPlane id="nplcid348" name="X1.5" ocx:GUIDRef="36e50d1f-ed1f-4e24-9199-ff0bf9fdb27e">
+						<ocx:ReferenceLocation numericvalue="1.5" unit="Um" />
+					</ocx:RefPlane>
+					<ocx:RefPlane id="nplcid353" name="X3" ocx:GUIDRef="513a4418-6382-4af7-98dc-701bf7a83a7d">
+						<ocx:ReferenceLocation numericvalue="3" unit="Um" />
+					</ocx:RefPlane>
+					<ocx:RefPlane id="nplcid356" name="X3.75" ocx:GUIDRef="756289c6-dc55-4cb6-9eeb-ce655bddc699">
+						<ocx:ReferenceLocation numericvalue="3.75" unit="Um" />
+					</ocx:RefPlane>
+					<ocx:RefPlane id="nplcid361" name="X5.25" ocx:GUIDRef="8e5ef9e5-4fdc-414c-b7c5-00bf76cd95c1">
+						<ocx:ReferenceLocation numericvalue="5.25" unit="Um" />
+					</ocx:RefPlane>
+					<ocx:RefPlane id="nplcid364" name="X6" ocx:GUIDRef="c2f34d0b-2780-4976-ace2-6a3ef91fc903">
+						<ocx:ReferenceLocation numericvalue="6" unit="Um" />
+					</ocx:RefPlane>
+					<ocx:RefPlane id="nplcid369" name="X7.5" ocx:GUIDRef="10369571-1c89-4f51-9a9a-d57f1f265267">
+						<ocx:ReferenceLocation numericvalue="7.5" unit="Um" />
+					</ocx:RefPlane>
+					<ocx:RefPlane id="nplcid372" name="X8.25" ocx:GUIDRef="aad78e3c-0487-49e0-8dcc-87224144b214">
+						<ocx:ReferenceLocation numericvalue="8.25" unit="Um" />
+					</ocx:RefPlane>
+				</ocx:XRefPlanes>
+				<ocx:YRefPlanes>
+					<ocx:RefPlane id="nplcid282" name="Y0" ocx:GUIDRef="ff336bd3-55bd-469f-b8a4-6a9714772bab">
+						<ocx:ReferenceLocation numericvalue="0" unit="Um" />
+					</ocx:RefPlane>
+				</ocx:YRefPlanes>
+				<ocx:ZRefPlanes>
+					<ocx:RefPlane id="nplcid268" name="Z6" ocx:GUIDRef="a2c941e9-8e73-47b2-80d4-119473638a89">
+						<ocx:ReferenceLocation numericvalue="6" unit="Um" />
+					</ocx:RefPlane>
+					<ocx:RefPlane id="nplcid342" name="Z1.5" ocx:GUIDRef="9618e415-8e2f-4846-826d-d2241e036bfb">
+						<ocx:ReferenceLocation numericvalue="1.5" unit="Um" />
+					</ocx:RefPlane>
+				</ocx:ZRefPlanes>
+			</ocx:FrameTables>
+			<ocx:VesselGrid>
+				<ocx:XGrid id="nplcid13" isReversed="false">
+					<ocx:DistanceToAP numericvalue="0" unit="Um" />
+					<ocx:XSpacingGroup id="nplcid14" firstGridNumber="0" count="134">
+						<ocx:GridPosition numericvalue="0" unit="Um" />
+						<ocx:Spacing numericvalue="0.75" unit="Um" />
+					</ocx:XSpacingGroup>
+				</ocx:XGrid>
+				<ocx:YGrid id="nplcid15">
+					<ocx:YSpacingGroup id="nplcid16" firstGridNumber="0" count="24">
+						<ocx:GridPosition numericvalue="0" unit="Um" />
+						<ocx:Spacing numericvalue="0.86" unit="Um" />
+					</ocx:YSpacingGroup>
+				</ocx:YGrid>
+			</ocx:VesselGrid>
+		</ocx:CoordinateSystem>
+	</ocx:Vessel>
+</ocx:ocxXML>
