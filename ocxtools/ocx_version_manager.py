@@ -1,19 +1,19 @@
 #  Copyright (c) 2023. OCX Consortium https://3docx.org. See the LICENSE
 """OCX databinding version management."""
 # system imports
+import importlib
 import sys
 from pathlib import Path
-from typing import Tuple, List, Any
-import importlib
 from types import ModuleType
-from dataclasses import fields, dataclass
+from typing import Any, List, Tuple
+
 # 3rd party imports
 from loguru import logger
 
 
 class VersionManager:
     """
-        OCX databinding version management and dynamic module loading.
+    OCX databinding version management and dynamic module loading.
     """
 
     def __init__(self):
@@ -30,7 +30,7 @@ class VersionManager:
         Returns:
 
         """
-        if clazz.__name__ == 'OcxXmlT':
+        if clazz.__name__ == "OcxXmlT":
             return clazz(**{k: v.upper() for k, v in params.items()})
         return clazz(**params)
 
@@ -44,11 +44,11 @@ class VersionManager:
         Returns:
               The OCX schema version of the model.
         """
-        version = 'NA'
+        version = "NA"
         content = ocx_model.read_text().split()
         for item in content:
-            if 'schemaVersion' in item:
-                version = item[item.find('=') + 2:-1]
+            if "schemaVersion" in item:
+                version = item[item.find("=") + 2 : -1]
         return version
 
     @staticmethod
@@ -61,11 +61,11 @@ class VersionManager:
         Returns:
               The OCX schema version of the model.
         """
-        namespace = 'NA'
+        namespace = "NA"
         content = ocx_model.read_text().split()
         for item in content:
-            if 'xmlns:ocx' in item:
-                namespace = item[item.find('=') + 2:-1]
+            if "xmlns:ocx" in item:
+                namespace = item[item.find("=") + 2 : -1]
         return namespace
 
     @staticmethod
@@ -81,14 +81,14 @@ class VersionManager:
         """
         module = None
         ocx_pkg = f'{module_name}_{version.replace(".", "")}'
-        ocx_module = f'{module_name}.{ocx_pkg}.{ocx_pkg}'
+        ocx_module = f"{module_name}.{ocx_pkg}.{ocx_pkg}"
         if (spec := importlib.util.find_spec(ocx_module)) is not None:
             module = importlib.util.module_from_spec(spec)
             sys.modules[ocx_module] = module
             spec.loader.exec_module(module)
             logger.debug(f"Found module {ocx_module!r} in location {spec.origin}")
         else:
-            logger.error(f'No module {ocx_module!r}')
+            logger.error(f"No module {ocx_module!r}")
         return module
 
     @staticmethod
@@ -104,7 +104,7 @@ class VersionManager:
         """
         all_names = []
         ocx_pkg = f'{module_name}_{version.replace(".", "")}'
-        ocx_module = f'{module_name}.{ocx_pkg}'
+        ocx_module = f"{module_name}.{ocx_pkg}"
         if (spec := importlib.util.find_spec(ocx_module)) is not None:
             module = importlib.util.module_from_spec(spec)
             sys.modules[ocx_module] = module
@@ -112,7 +112,7 @@ class VersionManager:
             logger.debug(f"Found module {ocx_module!r} in location {spec.origin}")
             all_names = module.__all__
         else:
-            logger.error(f'No module with name {module_name!r} and version {version!r}')
+            logger.error(f"No module with name {module_name!r} and version {version!r}")
         return all_names
 
     @staticmethod
@@ -142,11 +142,11 @@ class VersionManager:
         Returns:
             version_1 and version_2 unique class names
         """
-        module = 'ocx'
+        module = "ocx"
         v1_class_names = set(VersionManager.get_all_class_names(module, version_1))
         v2_class_names = set(VersionManager.get_all_class_names(module, version_2))
-        logger.debug(f'{version_1!r} names: {len(v1_class_names)}')
-        logger.debug(f'{version_2!r} names: {len(v2_class_names)}')
+        logger.debug(f"{version_1!r} names: {len(v1_class_names)}")
+        logger.debug(f"{version_2!r} names: {len(v2_class_names)}")
         common = v1_class_names.intersection(v2_class_names)
         only_v1 = v1_class_names - common
         only_v2 = v2_class_names - common

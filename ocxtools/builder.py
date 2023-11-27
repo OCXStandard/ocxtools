@@ -2,38 +2,29 @@
 """The OCX model builder module."""
 
 # system imports
-from abc import ABC, abstractmethod
-from typing import Dict, Any, Iterator
-from dataclasses import dataclass
 import enum
+from dataclasses import dataclass
+from typing import Any, Dict
 
 # 3rd party imports
-from xsdata.models.datatype import XmlBase64Binary
-from xsdata.models.datatype import XmlDate
-from xsdata.models.datatype import XmlDateTime
-from xsdata.models.datatype import XmlDuration
-from xsdata.models.datatype import XmlHexBinary
-from xsdata.models.datatype import XmlPeriod
-from xsdata.models.datatype import XmlTime
+from xsdata.models.datatype import (
+    XmlBase64Binary,
+    XmlDate,
+    XmlDateTime,
+    XmlDuration,
+    XmlHexBinary,
+    XmlPeriod,
+    XmlTime,
+)
 
-from loguru import logger
-import lxml.etree
-from lxml.etree import QName
-from xsdata.formats.dataclass.parsers.config import ParserConfig
-from xsdata.formats.dataclass.parsers.handlers import LxmlEventHandler
-from xsdata.formats.dataclass.parsers import XmlParser, UserXmlParser
-from xsdata.formats.dataclass.parsers.mixins import XmlHandler
-from xsdata.formats.dataclass.serializers.config import SerializerConfig
-from xsdata.formats.dataclass.serializers import XmlSerializer
-from xsdata.formats.dataclass.context import XmlContextError, XmlContext
-from xsdata.exceptions import ParserError
-from pathlib import Path
 # Project imports
-from ocxtools.loader import DynamicLoader, DeclarationOfOcxImport
+from ocxtools.loader import DeclarationOfOcxImport, DynamicLoader
 from ocxtools.parser import MetaData
 
 
-def ocx_deepcopy(prototype_obj, declaration: DeclarationOfOcxImport, memo: Dict) -> dataclass:
+def ocx_deepcopy(
+    prototype_obj, declaration: DeclarationOfOcxImport, memo: Dict
+) -> dataclass:
     """Recursively copy an OCX object"""
     name = MetaData.class_name(prototype_obj)
     clone = DynamicLoader.load_class(module_declaration=declaration, class_name=name)
@@ -51,16 +42,34 @@ def ocx_copy(prototype_obj, declaration: DeclarationOfOcxImport) -> dataclass:
     return clone
 
 
-not_supported = ['VesselGrid', 'FrameTables']
+not_supported = ["VesselGrid", "FrameTables"]
 
 
 def my_deepcopy(data, declaration: DeclarationOfOcxImport, memo) -> Any:
     result = data
-    if isinstance(data, (int, float, type(None), str, bool, enum.Enum, XmlPeriod, XmlDate, XmlTime, XmlDateTime,
-                      XmlHexBinary, XmlBase64Binary, XmlDuration)):
+    if isinstance(
+        data,
+        (
+            int,
+            float,
+            type(None),
+            str,
+            bool,
+            enum.Enum,
+            XmlPeriod,
+            XmlDate,
+            XmlTime,
+            XmlDateTime,
+            XmlHexBinary,
+            XmlBase64Binary,
+            XmlDuration,
+        ),
+    ):
         result = data
     elif isinstance(data, dict):
-        result = {key: my_deepcopy(value, declaration, memo) for key, value in data.items()}
+        result = {
+            key: my_deepcopy(value, declaration, memo) for key, value in data.items()
+        }
         assert id(result) != id(data)
     elif isinstance(data, list):
         result = [my_deepcopy(item, declaration, memo) for item in data]
@@ -69,11 +78,13 @@ def my_deepcopy(data, declaration: DeclarationOfOcxImport, memo) -> Any:
         aux = [my_deepcopy(item, declaration, memo) for item in data]
         result = tuple(aux)
         assert id(result) != id(data)
-    elif hasattr(data, '__class__'):  # Its a dataclass
+    elif hasattr(data, "__class__"):  # Its a dataclass
         name = MetaData.class_name(data)
         if name in not_supported:
             return result
-        result = DynamicLoader.load_class(module_declaration=declaration, class_name=name)()
+        result = DynamicLoader.load_class(
+            module_declaration=declaration, class_name=name
+        )()
         if result is not None:
             memo[id(data)] = result
             for k, v in data.__dict__.items():

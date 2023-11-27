@@ -61,10 +61,10 @@ export:   ## Export the dependencies to docs/requirements.txt
 	@poetry export --with=docs -o ./docs/requirements.txt
 .PHONY: publish
 
-# Poetry run CLI
-poetry-run:  ## Run the CLI
-	@poetry run  databinding
-.PHONY: poetry-run
+#  Run CLI
+run:  ## Run the CLI
+	python __main__.py
+.PHONY: run
 # pre-commit ######################################################################
 pre-commit:	## Run any pre-commit hooks
 	@pre-commit run --all-files
@@ -82,9 +82,10 @@ test-cov:  ## View the test coverage report
 	cmd /c start $(CURDIR)/htmlcov/index.html
 .PHONY: test-cov
 
-
+# REST API #######################################################################
+swagger:  ## Swagger api documentation
 # HELP ########################################################################
-
+	cmd /c start http://localhost:8080/swagger-ui.html
 
 .PHONY: help
 help: ## Show this help

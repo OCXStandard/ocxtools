@@ -1,18 +1,41 @@
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.4.0
+    rev: v4.5.0
     hooks:
       - id: check-yaml
       - id: end-of-file-fixer
       - id: trailing-whitespace
-  - repo: https://github.com/ambv/black
-    rev: 23.9.1
-    hooks:
-      - id: black
-        language_version: python3.10
-      - id: black-jupyter
-        language_version: python3.10
-  - repo: https://github.com/pycqa/flake8
-    rev: 6.1.0
-    hooks:
-      - id: flake8
+#  - repo: https://github.com/ambv/black
+#    rev: 23.11.0
+#    hooks:
+#      - id: black
+#        language_version: python3.11
+#  - repo: https://github.com/pycqa/flake8
+#    rev: 6.1.0
+#    hooks:
+#      - id: flake8
+#  -   repo: https://github.com/pycqa/isort
+#      rev: 5.12.0
+#      hooks:
+#      -   id: isort
+#  -   repo: https://github.com/pre-commit/mirrors-mypy
+#      rev: v1.7.0
+#      hooks:
+#      -   id: mypy
+#  -   repo: https://github.com/hadialqattan/pycln
+#      rev: 'v2.3.0'
+#      hooks:
+#      -   id: pycln
+#          args: ['.', "--all"]
+#  - repo: https://github.com/pycqa/pydocstyle
+#    rev: '6.3.0'
+#    hooks:
+#      - id: pydocstyle
+#        args: [ '.' ]
+#  - repo: local
+#    hooks:
+#      - id: unittest
+#        name: run unit tests
+#        language: system
+#        pass_filenames: false
+#        entry: poetry run coverage run -m pytest

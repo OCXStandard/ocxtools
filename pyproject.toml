@@ -29,6 +29,7 @@ loguru = "*"
 sphinx = "<=6.2.1"
 ocx = "*"
 aiohttp = "*"
+arrow = "*"
 
 [tool.poetry.group.development.dependencies]
 pre-commit = "*"

@@ -2,16 +2,15 @@
 """Factory module for creating python objects."""
 
 # system imports
-from abc import ABC, abstractmethod
-import copy
 from dataclasses import dataclass
 
-#Project imports
+# Project imports
 from ocxtools.loader import DeclarationOfOcxImport, DynamicLoader
 
 
 class PrototypeProxy:
     """Creates a new OCX instance by cloning from an existing OCX instance."""
+
     def __init__(self, declaration: DeclarationOfOcxImport, class_name: str):
         self._clone = DynamicLoader.load_class(declaration, class_name)()
 
@@ -27,5 +26,5 @@ class PrototypeProxy:
             A deepcopy of the prototype instance.
         """
         for k, v in prototype_instance.__dict__.items():
-            print(f'k: {k}, v: {type(v)}')
+            print(f"k: {k}, v: {type(v)}")
         return self._clone()
