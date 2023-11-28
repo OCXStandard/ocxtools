@@ -11,7 +11,7 @@ from typing_extensions import Annotated
 # Project imports
 from ocxtools.exceptions import ValidatorError
 from ocxtools.renderer.renderer import TableRender
-from ocxtools.validator.factory import ValidatorFactory
+from ocxtools.validator.validator_report import ValidatorReport
 from ocxtools.validator.validator_client import EmbeddingMethod, OcxValidatorClient
 
 docker_validator = "http://localhost:8080"
@@ -31,13 +31,8 @@ def one(
     ocx_validator = OcxValidatorClient(docker_validator)
     try:
         response = ocx_validator.validate_one(str(model), domain, embedding)
-        report = ValidatorFactory.create_report_data(response)
-        print(TableRender.render(report.counters.to_dict()))
-        print(TableRender.render(report.overview.to_dict()))
-        # print(tabulate(report.counters.to_dict(), headers='keys'))
-        # print(tabulate(report.overview.to_dict(), headers= 'keys'))
-        for error in report.reports:
-            print(TableRender.render(error.to_dict()))
+        report = ValidatorReport.create(response)
+        print(report.counters)
     except ValidatorError as e:
         print(e)
 

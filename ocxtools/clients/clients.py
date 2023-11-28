@@ -80,7 +80,7 @@ class RestClient(IRestClient):
     def __init__(self, base_url):
         super().__init__(base_url)
         self._headers = {
-            "Accept": "application/xml",
+            "Accept": "application/json",
             "Content-Type": "application/json",
         }
 
@@ -150,7 +150,7 @@ class RestClient(IRestClient):
             logger.error(err)
             raise RequestClientError(err) from err
 
-    def _post_data(self, url: str, data: Dict) -> Tuple[int, str]:
+    def _post_data(self, url: str, payload: Dict) -> Tuple[int, str]:
         """
         Post method.
         Args:
@@ -164,23 +164,24 @@ class RestClient(IRestClient):
              RequestException if the status code is not 201.
         """
         try:
-            body = json.dumps(data)
-            response = requests.post(url, headers=self._headers, json=body)
+            body = json.dumps(payload)
+            response = requests.post(url, headers=self._headers, json=payload)
             return response.status_code, response.text
+        except json.JSONDecodeError as e:
+            logger.error(e)
+            raise RequestClientError(e)
         except requests.exceptions.HTTPError as errh:
             logger.error(errh)
+            raise RequestClientError(errh) from errh
         except requests.exceptions.ConnectionError as errc:
             logger.error(errc)
+            raise RequestClientError(errc) from errc
         except requests.exceptions.Timeout as errt:
             logger.error(errt)
+            raise RequestClientError(errt) from errt
         except requests.exceptions.RequestException as err:
             logger.error(err)
-        finally:
-            msg = (
-                f"Failed to fetch data from {url}, status code: {response.status_code}"
-            )
-            logger.error(msg)
-            raise RequestClientError(msg)
+            raise RequestClientError(err) from err
 
     def set_headers(self, headers: Dict):
         """

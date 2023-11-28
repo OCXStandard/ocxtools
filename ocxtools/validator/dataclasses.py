@@ -41,6 +41,18 @@ class ReportError(BaseDataClass):
 
 
 @dataclass
+class ReportAssertion(BaseDataClass):
+    description: str = field(default="", metadata={"header": "Description"})
+    location: str = field(default="", metadata={"header": "Location"})
+
+
+@dataclass
+class ReportWarning(BaseDataClass):
+    description: str = field(default="", metadata={"header": "Description"})
+    location: str = field(default="", metadata={"header": "Location"})
+
+
+@dataclass
 class ReportOverview(BaseDataClass):
     profileID: str = field(default="", metadata={"header": "Schema Version"})
 
@@ -63,10 +75,11 @@ class ReportContext(BaseDataClass):
 @dataclass
 class ValidationReport(BaseDataClass):
     """Validation Report"""
-
+    source: str = field(metadata={"header": "Source"})
     date: str = field(metadata={"header": "Date"})
     result: str = field(metadata={"header": "Result"})
     counters: ReportCounters = None
     overview: ReportOverview = None
-    context: List[ReportContext] = None
-    reports: [ReportError] = None
+    errors: [ReportError] = None
+    assertions: [ReportError] = None
+    warnings: [ReportError] = None

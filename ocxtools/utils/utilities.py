@@ -5,6 +5,8 @@ from itertools import groupby
 from pathlib import Path
 from urllib.parse import urlparse
 
+# Project imports
+from ocxtools.exceptions import SourceError
 
 def all_equal(iterable) -> True:
     """
@@ -41,14 +43,14 @@ class SourceValidator:
             if bool(parsed_url.scheme and parsed_url.netloc):
                 return parsed_url.geturl()
             else:
-                raise ValueError(f"(The {source} is not a valid url.")
+                raise SourceError(f"(The {source} is not a valid url.")
         # File
         else:
             file_path = Path(source)
             if file_path.exists():
                 return str(file_path.resolve())
             else:
-                raise ValueError(f"The {source} does not exist.")
+                raise SourceError(f"The {source} does not exist.")
 
 
 class OcxVersion:

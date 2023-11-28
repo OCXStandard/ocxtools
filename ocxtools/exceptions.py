@@ -38,3 +38,7 @@ class RequestClientError(requests.RequestException):
 
 class CurlClientError(pycurl_error):
     """Curl client errors."""
+
+
+class SourceError(ValueError):
+    """SourceValidator errors."""

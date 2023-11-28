@@ -44,7 +44,7 @@ class OcxValidatorClient(CurlRestClient):
         validation_type: str,
         embedding_method: str,
         location_as_path: bool,
-        add_input_to_report: bool = True,
+        add_input_to_report: bool = False,
         wrap_report_data_in_cdata: bool = False,
         locale: str = "en",
     ) -> json:
@@ -102,10 +102,6 @@ class OcxValidatorClient(CurlRestClient):
         try:
             Path(SourceValidator.validate(ocx_model))
             version = OcxVersion.get_version(ocx_model)
-            # parser = OcxParser()
-            # ocxxml = parser.parse(str(file_path))
-            # serializer = Serializer(ocxxml)
-            # decoded_str = serializer.serialize_xml()
             validation_type = f"{domain}.v{version}"
             tree = lxml.etree.parse(ocx_model)
             byte_string = lxml.etree.tostring(tree)
@@ -120,7 +116,7 @@ class OcxValidatorClient(CurlRestClient):
                     location_as_path = False
                 case _:
                     raise ValidatorError(
-                        f"Embedding method {embedding_method} is not supported."
+                        f'Embedding method {embedding_method.value!r} is not supported.'
                     )
             response = self._validate(
                 content,

@@ -51,11 +51,12 @@ class ValidatorFactory:
         """
         The validator report data.
         Args:
-            data: Input data
+            data: The validator result
 
         Returns:
             A list of the ValidationReport objects
         """
+
         context = []
         errors = []
         context_items = data.get("context").get("items")

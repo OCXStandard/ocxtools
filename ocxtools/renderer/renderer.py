@@ -6,8 +6,11 @@ from typing import Dict
 
 # Third party imports
 from tabulate import tabulate
+from lxml import etree
 
 # Project imports
+from ocxtools.utils.utilities import SourceValidator
+from ocxtools.exceptions import SourceError, RenderError
 
 
 class TableRender:
@@ -27,3 +30,29 @@ class TableRender:
             headers.append(k)
             values.append(v)
         return tabulate([headers, values], headers="firstrow")
+
+
+class XsltTransformer:
+    """
+        Transform an XML file using an xslt stylesheet.
+    """
+
+    def __init__(self, xslt_file: str):
+        try:
+            self._xslt_file = SourceValidator.validate(xslt_file)
+        except SourceError as e:
+            raise RenderError(e) from e
+
+    def render(self, xml_file: str, xslt_file: str, output_file: str):
+        # Parse XML and XSLT files
+        xml_tree = etree.parse(xml_file)
+        xslt_tree = etree.parse(self._xslt_file)
+
+        # Create an XSLT processor
+        transform = etree.XSLT(xslt_tree)
+
+        # Apply the transformation
+        result_tree = transform(xml_tree)
+
+        # Save the result to a new file
+        result_tree.write(output_file, pretty_print=True, encoding='utf-8')

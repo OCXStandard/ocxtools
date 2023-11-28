@@ -87,6 +87,13 @@ swagger:  ## Swagger api documentation
 # HELP ########################################################################
 	cmd /c start http://localhost:8080/swagger-ui.html
 
+
+# REST API #######################################################################
+validate:  ## Docker GUI validation
+# HELP ########################################################################
+	cmd /c start http://localhost:8080/ocx/upload
+
+
 .PHONY: help
 help: ## Show this help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
