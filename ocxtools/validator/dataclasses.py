@@ -38,3 +38,10 @@ class ValidationReport(BaseDataClass):
     warnings: int = field(metadata={"header": "Number of warnings"})
     assertions: int = field(metadata={"header": "Number of assertions"})
     report: str = field(metadata={"header": "Report"})
+
+@dataclass
+class ValidationInformation(BaseDataClass):
+    """Validation Info"""
+    domain: str = field(metadata={"header": "Domain"})
+    validation_type: str = field(metadata={"header": "Validation type"})
+    description: str = field(metadata={"header": "Description"})

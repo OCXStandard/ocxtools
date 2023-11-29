@@ -13,8 +13,7 @@ class TestXsltRenderer:
         transformer = XsltTransformer(str(xslt_file.resolve()))
         validator = OcxValidatorClient(base_url='http://localhost:8080')
         response = validator.validate_one(str(model.resolve()), domain='ocx')
-        reporter = ValidatorReport(model)
-        report_data = reporter.create_report(response)
+        report_data = ValidatorReport.create_report(model, response)
         report = report_data.report.encode(encoding='utf-8')
         transformed_file = shared_datadir / f'report_{model.stem}.html'
         transformer.render(report, transformed_file.resolve())

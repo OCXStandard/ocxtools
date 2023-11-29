@@ -13,6 +13,5 @@ def test_create_report(shared_datadir):
     response =  client.validate_one(
                 ocx_model=model, domain='ocx', embedding_method=EmbeddingMethod.BASE64
             )
-    reporter = ValidatorReport(model)
-    report = reporter.create_report(response)
+    report = ValidatorReport.create_report(model, response)
     assert report.result == 'FAILURE'

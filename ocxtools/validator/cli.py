@@ -10,7 +10,6 @@ from typing_extensions import Annotated
 
 # Project imports
 from ocxtools.exceptions import ValidatorError
-from ocxtools.renderer.renderer import TableRender
 from ocxtools.validator.validator_report import ValidatorReport
 from ocxtools.validator.validator_client import EmbeddingMethod, OcxValidatorClient
 
@@ -23,16 +22,19 @@ validate = typer.Typer()
 def one(
     model: Path,
     domain: Annotated[str, typer.Option(help="The validator domain.")] = "ocx",
+    schema_version: Annotated[str, typer.Option(help="Input schema version.")] = "3.0.0",
     embedding: Annotated[
         EmbeddingMethod, typer.Option(help="The embedding method.")
     ] = "BASE64",
+    force: Annotated[bool, typer.Option(help="Validate against the input schema version.")] = False,
 ):
     """Validate one 3Docx XML file with the docker validator."""
     client = OcxValidatorClient(VALIDATOR)
     model = str(model)
     try:
         response = client.validate_one(
-                ocx_model=model, domain=domain, embedding_method=embedding
+            ocx_model=model, domain=domain, schema_version=schema_version,
+            embedding_method=embedding, force_version=force
             )
         report = ValidatorReport.create_report(response)
         print(report.result)
@@ -43,11 +45,11 @@ def one(
 @validate.command()
 def info():
     """Verify that the Docker validator is alive and obtain the available validation options."""
-    ocx_validator = OcxValidatorClient(docker_validator)
+    ocx_validator = OcxValidatorClient(VALIDATOR)
     try:
         response = ocx_validator.get_validator_info()
-        information = ValidatorFactory.create_info_data(response)
-
+        reporter = ValidatorReport()
+        information = reporter.create_info_data(response)
         print(f"Validator service:  {ocx_validator.validator_service()!r}")
         for item in information:
             print(item.domain, item.validation_type, item.description)
