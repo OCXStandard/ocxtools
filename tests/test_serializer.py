@@ -1,6 +1,6 @@
 #  Copyright (c) 2023. OCX Consortium https://3docx.org. See the LICENSE
 import json
-
+from pathlib import Path
 # Project imports
 from ocxtools.parser.parser import OcxParser
 from ocxtools.serializer.serializer import Serializer
@@ -21,4 +21,4 @@ def test_serialize_xml(shared_datadir):
     ocxxml = parser.parse(str(model.resolve()))
     serializer = Serializer(ocxxml)
     result = serializer.serialize_xml()
-    print(result)
+    assert '?xml version' in result

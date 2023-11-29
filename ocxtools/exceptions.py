@@ -42,3 +42,6 @@ class CurlClientError(pycurl_error):
 
 class SourceError(ValueError):
     """SourceValidator errors."""
+
+class ReporterError(ValueError):
+    """Reporter errors."""

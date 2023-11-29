@@ -1,53 +1,57 @@
 #  Copyright (c) 2023. OCX Consortium https://3docx.org. See the LICENSE
 """The validator report class."""
 
-#System imports
+# System imports
 from typing import Dict
 # Third party imports
 import arrow
+import lxml.etree
+from loguru import logger
 # Project imports
-from ocxtools.validator.dataclasses import (ReportError,
-                                            ReportWarning,
-                                            ReportAssertion,
-                                            ReportOverview,
-                                            ReportCounters,
-                                            ValidationReport
-                                            )
 
+from ocxtools.validator.dataclasses import ValidationReport
+from ocx_schema_parser.xelement import LxmlElement
+from ocxtools.exceptions import ReporterError
 
 
 class ValidatorReport:
     """Validator report."""
+
     def __init__(self, source: str):
         self._source = source
         self._report = None
 
-    def create(self, report_data: Dict) -> ValidationReport:
+    def create_report(self, report_data: str) -> ValidationReport:
         """
-        Crete the report
+        Create the report
         Args:
             report_data: The validation result.
 
         Returns:
             The report dataclass
         """
-        errors =[]
-        assertions = []
-        warnings = []
-        counters = ReportCounters(**report_data.get('counters'))
-        overview = ReportOverview(**report_data.get('overview'))
-        if counters.nrOfErrors > 0:
-            for error in report_data.get('reports').get('error'):
-                errors.append(ReportError(**error))
-        if counters.nrOfAssertions > 0:
-            assertions = [ReportAssertion(**item) for item in report_data.get('assertion')]
-        if counters.nrOfWarnings > 0:
-            warnings = [ReportWarning(**item) for item in report_data.get('warning')]
-
-        return ValidationReport(source=self._source,
-                                date=arrow.get(report_data.get("date")).format(),
-                                result=report_data.get('result'),
-                                counters= counters,
-                                errors= errors,
-                                warnings=warnings,
-                                assertions=assertions)
+        try:
+            report_bytes = report_data.encode(encoding='utf-8')
+            root = lxml.etree.fromstring(report_bytes)
+            n_assert = int(LxmlElement.find_child_with_name(root, 'nrOfAssertions').text)
+            n_err = int(LxmlElement.find_child_with_name(root, 'nrOfAssertions').text)
+            n_warn = int(LxmlElement.find_child_with_name(root, 'nrOfAssertions').text)
+            profile_id = LxmlElement.find_child_with_name(root, 'profileID').text
+            result = LxmlElement.find_child_with_name(root, 'result').text
+            date = LxmlElement.find_child_with_name(root, 'date').text
+            validator_name = LxmlElement.find_child_with_name(root, 'validationServiceName').text
+            validator_version = LxmlElement.find_child_with_name(root, 'validationServiceVersion').text
+            errors = LxmlElement.find_all_children_with_name(root, 'errors')
+            return ValidationReport(source=self._source,
+                                    date=arrow.get(date).format(),
+                                    result= result,
+                                    validation_type= profile_id,
+                                    validator_version = validator_version,
+                                    validator_name = validator_name,
+                                    errors= n_err,
+                                    warnings = n_warn,
+                                    assertions= n_assert,
+                                    report=report_data)
+        except ValueError as e:
+            logger.error(e)
+            raise ReporterError(e) from e

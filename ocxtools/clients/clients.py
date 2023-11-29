@@ -49,7 +49,7 @@ class IRestClient(ABC):
     @abstractmethod
     def api(
         self, request_type: RequestType, endpoint: str, payload: Union[Dict, str] = None
-    ) -> json:
+    ) -> str:
         """Abstract api method.
         Arguments:
             request_type: Type of Request.
@@ -57,6 +57,8 @@ class IRestClient(ABC):
                Type - String
             endpoint: API Endpoint. Type - String
             payload: API Request Parameters or Query String.
+        Returns:
+            The response string (json or xml depending on the header.
         """
 
     @abstractmethod
@@ -86,7 +88,7 @@ class RestClient(IRestClient):
 
     def api(
         self, request_type: RequestType, endpoint: str, payload: Union[Dict, str] = None
-    ) -> json:
+    ) -> str:
         """Function to call the API via the pycurl Library
 
         Arguments:
@@ -111,9 +113,9 @@ class RestClient(IRestClient):
 
             match status_code:
                 case 200:
-                    return json.loads(response)
+                    return response
                 case 201:
-                    return json.loads(response)
+                    return response
                 case _:  # All other codes
                     msg = f"ERROR from {url} with status code {status_code}.\nResponse: {response}"
                     logger.error(msg)
@@ -228,14 +230,14 @@ class CurlRestClient(IRestClient):
 
             match status_code:
                 case 200:
-                    return json.loads(response)
+                    return response
                 case 201:
-                    return json.loads(response)
+                    return response
                 case _:  # All other codes
                     msg = f"ERROR from {url} with status code {status_code}.\nResponse: {response}"
                     raise CurlClientError(msg)
         except CurlClientError as e:
-            raise CurlClientError from e
+            raise CurlClientError(e) from e
 
     def _get_data(self, url: str) -> Tuple[int, str]:
         """

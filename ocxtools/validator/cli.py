@@ -14,7 +14,7 @@ from ocxtools.renderer.renderer import TableRender
 from ocxtools.validator.validator_report import ValidatorReport
 from ocxtools.validator.validator_client import EmbeddingMethod, OcxValidatorClient
 
-docker_validator = "http://localhost:8080"
+VALIDATOR = "http://localhost:8080"
 
 validate = typer.Typer()
 
@@ -28,11 +28,14 @@ def one(
     ] = "BASE64",
 ):
     """Validate one 3Docx XML file with the docker validator."""
-    ocx_validator = OcxValidatorClient(docker_validator)
+    client = OcxValidatorClient(VALIDATOR)
+    model = str(model)
     try:
-        response = ocx_validator.validate_one(str(model), domain, embedding)
-        report = ValidatorReport.create(response)
-        print(report.counters)
+        response = client.validate_one(
+                ocx_model=model, domain=domain, embedding_method=embedding
+            )
+        report = ValidatorReport.create_report(response)
+        print(report.result)
     except ValidatorError as e:
         print(e)
 

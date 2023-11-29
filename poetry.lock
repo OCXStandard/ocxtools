@@ -548,6 +548,20 @@ files = [
 ]
 
 [[package]]
+name = "fuzzywuzzy"
+version = "0.18.0"
+description = "Fuzzy string matching in python"
+optional = false
+python-versions = "*"
+files = [
+    {file = "fuzzywuzzy-0.18.0-py2.py3-none-any.whl", hash = "sha256:928244b28db720d1e0ee7587acf660ea49d7e4c632569cad4f1cd7e68a5f0993"},
+    {file = "fuzzywuzzy-0.18.0.tar.gz", hash = "sha256:45016e92264780e58972dca1b3d939ac864b78437422beecebb3095f8efd00e8"},
+]
+
+[package.extras]
+speedup = ["python-levenshtein (>=0.12)"]
+
+[[package]]
 name = "identify"
 version = "2.5.32"
 description = "File identification library for Python"
@@ -581,6 +595,17 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 files = [
     {file = "imagesize-1.4.1-py2.py3-none-any.whl", hash = "sha256:0d8d18d08f840c19d0ee7ca1fd82490fdc3729b7ac93f49870406ddde8ef8d8b"},
     {file = "imagesize-1.4.1.tar.gz", hash = "sha256:69150444affb9cb0d5cc5a92b3676f0b2fb7cd9ae39e947a5e11a36b4497cd4a"},
+]
+
+[[package]]
+name = "inflection"
+version = "0.5.1"
+description = "A port of Ruby on Rails inflector to Python"
+optional = false
+python-versions = ">=3.5"
+files = [
+    {file = "inflection-0.5.1-py2.py3-none-any.whl", hash = "sha256:f38b2b640938a4f35ade69ac3d053042959b62a0f1076a5bbaa1b9526605a8a2"},
+    {file = "inflection-0.5.1.tar.gz", hash = "sha256:1a29730d366e996aaacffb2f1f1cb9593dc38e2ddd30c91250c6dde09ea9b417"},
 ]
 
 [[package]]
@@ -932,6 +957,28 @@ typer = "*"
 xsdata = "*"
 
 [[package]]
+name = "ocx-schema-parser"
+version = "1.4.0"
+description = ""
+optional = false
+python-versions = ">=3.11,<4.0"
+files = [
+    {file = "ocx_schema_parser-1.4.0-py3-none-any.whl", hash = "sha256:41fbd5e4505e68cfd6f2253dddcd751349b2285e928be043afc7de515b7d4a40"},
+    {file = "ocx_schema_parser-1.4.0.tar.gz", hash = "sha256:9c99d682397abba89356b1db63264e254f276ba5f08bd69f044e356cad0f99ac"},
+]
+
+[package.dependencies]
+fuzzywuzzy = ">=0.18.0,<0.19.0"
+inflection = "*"
+loguru = "*"
+lxml = "*"
+pyspellchecker = "*"
+pyyaml = "*"
+sphinx = "<=6.2.1"
+tbump = "*"
+xsdata = "*"
+
+[[package]]
 name = "packaging"
 version = "23.2"
 description = "Core utilities for Python packages"
@@ -1004,6 +1051,17 @@ files = [
 [package.extras]
 plugins = ["importlib-metadata"]
 windows-terminal = ["colorama (>=0.4.6)"]
+
+[[package]]
+name = "pyspellchecker"
+version = "0.7.2"
+description = "Pure python spell checker based on work by Peter Norvig"
+optional = false
+python-versions = ">=3.6"
+files = [
+    {file = "pyspellchecker-0.7.2-py3-none-any.whl", hash = "sha256:b5ef23437702b8d03626f814b9646779b572d378b325ad252d8a8e616b3d76db"},
+    {file = "pyspellchecker-0.7.2.tar.gz", hash = "sha256:bc51ffb2c18ba26eaa1340756ebf96d0d886ed6a31d6f8e7a0094ad49d24550a"},
+]
 
 [[package]]
 name = "pytest"
@@ -1726,4 +1784,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "365415be7d524ab86d2b8d36d74144290c09ad2fc42a0b3b7b01909ad6c58693"
+content-hash = "a2c836171b5cb4c701d394dd89b0ff0d9e1a0dbfd250a46b3f18ca2cff67ec8b"

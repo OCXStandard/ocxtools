@@ -3,6 +3,7 @@
 from pathlib import Path
 from ocxtools.validator.validator_client import OcxValidatorClient
 from ocxtools.renderer.renderer import XsltTransformer
+from ocxtools.validator.validator_report import ValidatorReport
 
 
 class TestXsltRenderer:
@@ -12,10 +13,9 @@ class TestXsltRenderer:
         transformer = XsltTransformer(str(xslt_file.resolve()))
         validator = OcxValidatorClient(base_url='http://localhost:8080')
         response = validator.validate_one(str(model.resolve()), domain='ocx')
-        context = response.get('context')
-        report =  context.get('items')[0].get('value')
-        report_file = shared_datadir  / 'report.xml'
-        with open(str(report_file.resolve()), 'w') as fp:
-            fp.write(report)
-        transformed_file = f'report_{model.stem}.html'
-        transformer.render(str(report_file.resolve()),str(xslt_file.resolve()), transformed_file)
+        reporter = ValidatorReport(model)
+        report_data = reporter.create_report(response)
+        report = report_data.report.encode(encoding='utf-8')
+        transformed_file = shared_datadir / f'report_{model.stem}.html'
+        transformer.render(report, transformed_file.resolve())
+        assert transformed_file.exists()

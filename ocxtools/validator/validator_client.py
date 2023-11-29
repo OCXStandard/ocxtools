@@ -38,21 +38,21 @@ class OcxValidatorClient(CurlRestClient):
         return self.api(request_type=RequestType.GET, endpoint=endpoint)
 
     def _validate(
-        self,
-        content: str,
-        domain: str,
-        validation_type: str,
-        embedding_method: str,
-        location_as_path: bool,
-        add_input_to_report: bool = False,
-        wrap_report_data_in_cdata: bool = False,
-        locale: str = "en",
+            self,
+            content: str,
+            domain: str,
+            validation_type: str,
+            embedding_method: str,
+            location_as_path: bool,
+            add_input_to_report: bool = True,
+            wrap_report_data_in_cdata: bool = False,
+            locale: str = "en",
     ) -> json:
         """Internal method. Validate a single OCX model.
 
         Args:
             wrap_report_data_in_cdata:
-            add_input_to_report: If True, add the input source to the report. Default = ``False``
+            add_input_to_report: If True, add the input source to the report. Default = ``True``
             location_as_path: True if embedding method is set to ``URL``
             validation_type: The validation type
             embedding_method: The content embedding. Valid values: ``STRING``, ``URL``, ``BASE64``
@@ -75,33 +75,38 @@ class OcxValidatorClient(CurlRestClient):
             "wrapReportDataInCDATA": wrap_report_data_in_cdata,
             "locale": locale,
         }
-        self.set_headers(["accept: application/json", "Content-Type: application/json"])
+        self.set_headers(["accept: application/xml", "Content-Type: application/json"])
         return self.api(
             request_type=RequestType.POST, endpoint=endpoint, payload=params
         )
 
     def validate_one(
-        self,
-        ocx_model: str,
-        domain: str = "ocx",
-        embedding_method: EmbeddingMethod = EmbeddingMethod.BASE64,
-    ) -> json:
+            self,
+            ocx_model: str,
+            domain: str = "ocx",
+            schema_version: str = '3.0.0',
+            embedding_method: EmbeddingMethod = EmbeddingMethod.BASE64, force_version: bool = False) -> str:
         """Validate a single 3Docx XML file. The XML file will be pretty-print formatted before validation.
 
         Args:
-            embedding_method: The content embedding method.
             ocx_model: The model source path
             domain: The validator validation domain
+            schema_version: Schema version to use in the validation
+            force_version: True if ``version`` shall be used irrespective of the source 3Docx version            embedding_method: The content embedding method.
+            embedding_method: The source embedding method. Valid Types are ``STRING`` or ``BASE64``.
 
         Returns:
-            The validator response
+            The validator response as xml or json string
 
         Raises:
             ValidatorError on a bad response.
         """
         try:
             Path(SourceValidator.validate(ocx_model))
+
             version = OcxVersion.get_version(ocx_model)
+            if force_version:
+                version = schema_version
             validation_type = f"{domain}.v{version}"
             tree = lxml.etree.parse(ocx_model)
             byte_string = lxml.etree.tostring(tree)
@@ -118,14 +123,13 @@ class OcxValidatorClient(CurlRestClient):
                     raise ValidatorError(
                         f'Embedding method {embedding_method.value!r} is not supported.'
                     )
-            response = self._validate(
+            return self._validate(
                 content,
                 domain,
                 validation_type,
                 embedding_method.value,
                 location_as_path,
             )
-            return response
         except lxml.etree.LxmlError as e:
             logger.error(e)
             raise ValidatorError(e) from e

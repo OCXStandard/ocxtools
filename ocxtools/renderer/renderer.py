@@ -43,9 +43,15 @@ class XsltTransformer:
         except SourceError as e:
             raise RenderError(e) from e
 
-    def render(self, xml_file: str, xslt_file: str, output_file: str):
+    def render(self, data: bytes,  output_file: str):
+        """
+
+        Args:
+            data: the xml data as a byte string
+            output_file: The output file
+        """
         # Parse XML and XSLT files
-        xml_tree = etree.parse(xml_file)
+        xml_tree = etree.fromstring(data)
         xslt_tree = etree.parse(self._xslt_file)
 
         # Create an XSLT processor

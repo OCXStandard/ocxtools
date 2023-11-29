@@ -26,60 +26,15 @@ class BaseDataClass:
 
 
 @dataclass
-class ValidationInformation(BaseDataClass):
-    """Validation information"""
-
-    domain: str
-    validation_type: str
-    description: str
-
-
-@dataclass
-class ReportError(BaseDataClass):
-    description: str = field(default="", metadata={"header": "Description"})
-    location: str = field(default="", metadata={"header": "Location"})
-
-
-@dataclass
-class ReportAssertion(BaseDataClass):
-    description: str = field(default="", metadata={"header": "Description"})
-    location: str = field(default="", metadata={"header": "Location"})
-
-
-@dataclass
-class ReportWarning(BaseDataClass):
-    description: str = field(default="", metadata={"header": "Description"})
-    location: str = field(default="", metadata={"header": "Location"})
-
-
-@dataclass
-class ReportOverview(BaseDataClass):
-    profileID: str = field(default="", metadata={"header": "Schema Version"})
-
-
-@dataclass
-class ReportCounters(BaseDataClass):
-    nrOfAssertions: int = field(default=0, metadata={"header": "Assertions"})
-    nrOfErrors: int = field(default=0, metadata={"header": "Errors"})
-    nrOfWarnings: int = field(default=0, metadata={"header": "Warnings"})
-
-
-@dataclass
-class ReportContext(BaseDataClass):
-    name: str = field(default="xml", metadata={"header": "Name"})
-    mimeType: str = field(default="application/xml", metadata={"header": "Mime Type"})
-    embeddingMethod: str = field(default="STRING", metadata={"header": "Embedding"})
-    value: str = ""
-
-
-@dataclass
 class ValidationReport(BaseDataClass):
     """Validation Report"""
+    validator_name: str = field(metadata={"header": "Validator name"})
+    validator_version: str = field(metadata={"header": "Validator version"})
+    validation_type: str = field(metadata={"header": "Validation type"})
     source: str = field(metadata={"header": "Source"})
     date: str = field(metadata={"header": "Date"})
     result: str = field(metadata={"header": "Result"})
-    counters: ReportCounters = None
-    overview: ReportOverview = None
-    errors: [ReportError] = None
-    assertions: [ReportError] = None
-    warnings: [ReportError] = None
+    errors: int = field(metadata={"header": "Number of errors"})
+    warnings: int = field(metadata={"header": "Number of warnings"})
+    assertions: int = field(metadata={"header": "Number of assertions"})
+    report: str = field(metadata={"header": "Report"})
