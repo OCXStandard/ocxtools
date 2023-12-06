@@ -24,6 +24,7 @@ class ValidatorReport:
         """
         Create the report
         Args:
+            source: The source model.
             report_data: The validation result.
 
         Returns:
@@ -33,8 +34,8 @@ class ValidatorReport:
             report_bytes = report_data.encode(encoding='utf-8')
             root = lxml.etree.fromstring(report_bytes)
             n_assert = int(LxmlElement.find_child_with_name(root, 'nrOfAssertions').text)
-            n_err = int(LxmlElement.find_child_with_name(root, 'nrOfAssertions').text)
-            n_warn = int(LxmlElement.find_child_with_name(root, 'nrOfAssertions').text)
+            n_err = int(LxmlElement.find_child_with_name(root, 'nrOfErrors').text)
+            n_warn = int(LxmlElement.find_child_with_name(root, 'nrOfWarnings').text)
             profile_id = LxmlElement.find_child_with_name(root, 'profileID').text
             result = LxmlElement.find_child_with_name(root, 'result').text
             date = LxmlElement.find_child_with_name(root, 'date').text
@@ -54,6 +55,7 @@ class ValidatorReport:
         except ValueError as e:
             logger.error(e)
             raise ReporterError(e) from e
+
     @staticmethod
     def create_info_data(response: str) -> List[ValidationInformation]:
         """

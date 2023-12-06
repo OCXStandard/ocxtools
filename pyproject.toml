@@ -25,6 +25,7 @@ click_shell = "*"
 lxml = "*"
 soap = "*"
 typer = "*"
+rich = "*"
 loguru = "*"
 sphinx = "<=6.2.1"
 ocx = "*"
@@ -32,8 +33,10 @@ aiohttp = "*"
 arrow = "*"
 ocx_schema_parser = "*"
 
+
 [tool.poetry.group.development.dependencies]
 pre-commit = "*"
+sourcery = '*'
 
 [tool.poetry.group.test.dependencies]
 pytest = "*"

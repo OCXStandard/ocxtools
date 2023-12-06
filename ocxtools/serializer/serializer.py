@@ -72,3 +72,7 @@ class Serializer:
         """
         serializer = JsonSerializer(context=XmlContext(), config=self._config)
         return serializer.render(self._model)
+
+
+class SerializerError(ValueError):
+    """OCX Serializing errors."""

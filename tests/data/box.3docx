@@ -1,5 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF8"?>
-<ocx:ocxXML xmlns:ocx="http://data.dnvgl.com/Schemas/ocxXMLSchema" schemaVersion="2.8.6" xsi:schemaLocation="http://data.dnvgl.com/Schemas/ocxXMLSchema OCX_Schema.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+﻿<ocx:ocxXML xmlns:ocx="https://3docx.org/fileadmin//ocx_schema//V286//OCX_Schema.xsd"  schemaVersion="2.8.6" xsi:schemaLocation="https://3docx.org/fileadmin//ocx_schema//V286//OCX_Schema.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<ocx:Header name="HCM_BOX/A" author="NAPAA" organization="NAPAO" time_stamp="2023-01-31T11:00:42.8170393+02:00" originating_system="NAPA Steel" documentation="OCX Export" application_version="NAPA Release B32 2022.2 x64 P" />
 	<ocx:Vessel id="nplcid1" name="HCM_BOX/A" ocx:GUIDRef="595660ae-849c-491e-83d1-3a01ceecae53">
 		<ocx:DistanceTolerance numericvalue="1" unit="Umm" />

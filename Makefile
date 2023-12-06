@@ -75,7 +75,7 @@ FAILURES := .pytest_cache/pytest/v/cache/lastfailed
 
 
 test:  ## Run unit and integration tests
-	@pytest --durations=5  --cov-report html --cov ocx_generator .
+	@pytest --durations=5  --cov-report html --cov ocxtools .
 .PHONY: test
 
 test-cov:  ## View the test coverage report

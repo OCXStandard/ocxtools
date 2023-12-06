@@ -12,7 +12,6 @@ from typing import Any, List
 from loguru import logger
 
 ## Project imports
-from ocxtools.exceptions import DynamicLoaderError
 from ocxtools.interfaces.interfaces import IModuleDeclaration
 
 
@@ -77,10 +76,10 @@ class DynamicLoader:
         cls, module_declaration: IModuleDeclaration, class_name: str
     ) -> Any:
         """
-
+        The module import declaration.
         Args:
             class_name: The class name to load form the declared module
-            module_declaration: The declaration of the pyton module to load
+            module_declaration: The declaration of the python module to be loaded
 
         Returns:
             Return the loaded class, None if failed.
@@ -91,10 +90,10 @@ class DynamicLoader:
         try:
             obj = getattr(module, class_name)
             # logger.debug(f"Loaded class {class_name!r}")
-        except AttributeError:
+        except AttributeError as e:
             raise DynamicLoaderError(
                 f"No class with name {class_name!r} in module {module_to_load!r}"
-            )
+            ) from e
         return obj
 
     @classmethod
@@ -120,3 +119,7 @@ class DynamicLoader:
         else:
             logger.error(f"No module with name {module_name!r} and version {version!r}")
         return all_names
+
+
+class DynamicLoaderError(AttributeError):
+    """Dynamic import errors."""
