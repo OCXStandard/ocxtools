@@ -53,7 +53,7 @@ class OcxParser(IParser, ABC):
         self,
         fail_on_unknown_properties: bool = False,
         fail_on_unknown_attributes: bool = False,
-        fail_on_converter_warnings: bool = False,
+        fail_on_converter_warnings: bool = True,
     ):
         self._context = XmlContext()
         self._parser_config = ParserConfig(
@@ -85,6 +85,9 @@ class OcxParser(IParser, ABC):
                 context=self._context,
             )
             return ocx_parser.parse(root, ocx_module.OcxXml)
+        except lxml.etree.XMLSyntaxError as e:
+            logger.error(e)
+            raise XmlParserError(e) from e
         except ImportError as e:
             logger.error(e)
             raise XmlParserError from e

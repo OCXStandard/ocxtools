@@ -2,15 +2,19 @@
 """ Render classes"""
 
 # System imports
-from typing import Dict
+from typing import Dict, List
+from pathlib import Path
 
 # Third party imports
 from tabulate import tabulate
 from lxml import etree
+from rich.table import Table
+from loguru import logger
 
 # Project imports
 from ocxtools.utils.utilities import SourceValidator
-from ocxtools.exceptions import SourceError, RenderError
+from ocxtools.exceptions import SourceError
+from ocxtools.console.console import style_table_header
 
 
 class TableRender:
@@ -32,6 +36,36 @@ class TableRender:
         return tabulate([headers, values], headers="firstrow")
 
 
+class RichTable:
+    """Build a Rich table."""
+
+    @classmethod
+    def render(cls, title: str, data: List, show_header: bool = True, caption: str = None):
+        """
+        Render a rich table
+        Args:
+            show_header: If True render the table header.
+            title: The table title rendered above.
+            data: The table content. List of dictionaries where each dictionary
+            represents a row in the table, and the keys represent column headers.
+            caption: The table caption rendered below.
+
+        Returns:
+            The table
+        """
+        try:
+            table = Table(title=title, header_style=style_table_header, caption=caption, show_header=show_header)
+            headers = list(data[0].keys())
+            for header in headers:
+                table.add_column(header)
+            for row in data:
+                table.add_row(*[str(row[header]) for header in headers])
+            return table
+        except ValueError as e:
+            logger.error(e)
+            raise RenderError(e) from e
+
+
 class XsltTransformer:
     """
         Transform an XML file using an xslt stylesheet.
@@ -43,15 +77,26 @@ class XsltTransformer:
         except SourceError as e:
             raise RenderError(e) from e
 
-    def render(self, data: bytes,  output_file: str):
+    def render(self, data: str, source_file: str, output_folder: str, report_type: str = 'ocx') -> str:
         """
 
         Args:
-            data: the xml data as a byte string
-            output_file: The output file
+            report_type: The report type. ``ocx`` or ``schematron``.
+            output_folder: The report folder.
+            data: the xml data as a string
+            source_file: The source file
+
+        Returns:
+            The path to the output file name
         """
         # Parse XML and XSLT files
-        xml_tree = etree.fromstring(data)
+        file_name = Path(source_file).stem
+        output_file = Path(output_folder) / f'{file_name}_{report_type}_report.html'
+        xml_file = Path(output_folder) / f'{file_name}.xml'
+        with xml_file.open('w') as f:
+            f.write(data)
+
+        xml_tree = etree.parse(xml_file)
         xslt_tree = etree.parse(self._xslt_file)
 
         # Create an XSLT processor
@@ -62,3 +107,9 @@ class XsltTransformer:
 
         # Save the result to a new file
         result_tree.write(output_file, pretty_print=True, encoding='utf-8')
+
+        return str(output_file)
+
+
+class RenderError(ValueError):
+    """Render errors."""

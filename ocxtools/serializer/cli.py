@@ -3,6 +3,7 @@
 # System imports
 from pathlib import Path
 from typing import Any, Tuple
+import warnings
 
 # 3rd party imports
 import typer
@@ -33,6 +34,10 @@ def xml(
         with output.open("w") as fp:
             fp.write(serializer.serialize_xml())
         print(f"Pretty printed file {output!r}")
+        # Check for any warnings issued during serialization
+        # for warning_message in warnings:
+        #     print(f"Warning: {warning_message}")
+
     except XmlParserError as e:
         print(e)
 

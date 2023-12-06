@@ -4,9 +4,11 @@
 from itertools import groupby
 from pathlib import Path
 from urllib.parse import urlparse
+from typing import Generator
 
 # Project imports
 from ocxtools.exceptions import SourceError
+
 
 def all_equal(iterable) -> True:
     """
@@ -50,7 +52,28 @@ class SourceValidator:
             if file_path.exists():
                 return str(file_path.resolve())
             else:
+
                 raise SourceError(f"The {source} does not exist.")
+
+    @staticmethod
+    def is_url(source: str) -> bool:
+        """Return true if ``source`` is a valid url."""
+        parsed_url = urlparse(source)
+        return bool(parsed_url.scheme and parsed_url.netloc)
+
+    @staticmethod
+    def is_directory(source: str) -> bool:
+        """Return True if the source is a directory, False otherwise"""
+        return Path(source).is_dir()
+
+    @staticmethod
+    def filter_files(directory: str, filter_str: str) -> Generator:
+        """Return an iterator over the filtered files in the ``directory``."""
+        if SourceValidator.is_directory(directory):
+            # Specify the folder path
+            folder_path = Path(directory)
+            # Using glob to filter files based on a pattern
+            return folder_path.glob(filter_str)
 
 
 class OcxVersion:
@@ -71,7 +94,7 @@ class OcxVersion:
         content = ocx_model.read_text().split()
         for item in content:
             if "schemaVersion" in item:
-                version = item[item.find("=") + 2 : -1]
+                version = item[item.find("=") + 2: -1]
         return version
 
 
@@ -83,7 +106,7 @@ class OcxNamespace:
         """Return the OCX schema namespace of the model.
 
         Args:
-            model: The sorce path or uri
+            model: The source path or uri
 
         Returns:
               The OCX schema namespace of the model.
@@ -93,5 +116,5 @@ class OcxNamespace:
         content = ocx_model.read_text().split()
         for item in content:
             if "xmlns:ocx" in item:
-                namespace = item[item.find("=") + 2 : -1]
+                namespace = item[item.find("=") + 2: -1]
         return namespace
