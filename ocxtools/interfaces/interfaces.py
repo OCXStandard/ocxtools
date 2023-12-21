@@ -5,10 +5,16 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import Dict, Iterator, List
-
 import packaging.version
+from enum import Enum
 
+# Project imports
 from ocxtools.exceptions import ConverterError
+
+
+class ObservableEvent(Enum):
+    """Events that can be listened to and broadcast."""
+    DATACLASS = 'dataclass'
 
 
 class IModuleDeclaration(ABC):
@@ -20,22 +26,34 @@ class IModuleDeclaration(ABC):
         """Abstract Method: Return the module declaration string."""
         pass
 
-    @abstractmethod
-    def get_version(self) -> str:
-        """Return the target module version."""
-        pass
-
 
 class IObserver(ABC):
     """The observer interface"""
 
     @abstractmethod
-    def update(self, event: str, message):
-        """update method"""
+    def update(self, event: ObservableEvent, payload: Dict):
+        """Interface update method"""
+
+
+class IObservable(ABC):
+    """Interface. The observable object."""
 
     @abstractmethod
-    def listen_to_events(self) -> List:
-        """The events to listen for"""
+    def subscribe(self, observer: IObserver):
+        """subscription"""
+
+    @abstractmethod
+    def unsubscribe(self, observer: IObserver):
+        """unsubscribe"""
+
+    @abstractmethod
+    def update(self, event: ObservableEvent, message: Dict):
+        """
+        update method.
+        Args:
+            event: The event type
+            message: The event message
+        """
 
 
 class IRule(IObserver, ABC):
@@ -77,32 +95,6 @@ class IRule(IObserver, ABC):
     def listen_to_events(self) -> List:
         """Default is to subscribe to no events"""
         return []
-
-
-class IObservable(ABC):
-    """Interface. The observable object."""
-
-    @abstractmethod
-    def convert(self, source_name: str, source_params: Dict) -> Dict:
-        """convert method."""
-        return {}
-
-    @abstractmethod
-    def subscribe(self, observer: IObserver):
-        """subscription"""
-
-    @abstractmethod
-    def unsubscribe(self, observer: IObserver):
-        """unsubscribe"""
-
-    @abstractmethod
-    def update(self, event: str, message: Dict):
-        """
-        update method.
-        Args:
-            event: The event type
-            message: The event message
-        """
 
 
 class IParser(ABC):

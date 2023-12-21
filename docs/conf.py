@@ -27,19 +27,21 @@ extensions = [
     "sphinx.ext.viewcode",
     "sphinx_autodoc_typehints",
 ]
+# Add the following lines to include docstrings from class __init__ methods
+autoclass_content = 'both'
 source_suffix = ".rst"
 master_doc = "index"
-project = "ocx_generator"
+project = "ocxtools"
 year = "2023"
 author = "3Docx.org"
 copyright = "{0}, {1}".format(year, author)
-version = "2.4.0"
+version = "0.1.0"
 release = version
 pygments_style = "trac"
 templates_path = ["_templates"]
 extlinks = {
-    "issue": ("https://github.com/OCXStandard/ocxgenerator/issues/%s", "#"),
-    "pr": ("https://github.com/OCXStandard/ocx-generator/pull/%s", "PR #"),
+    "issue": ("https://github.com/OCXStandard/ocxtools/issues/%s", "#"),
+    "pr": ("https://github.com/OCXStandard/ocxtools/pull/%s", "PR #"),
 }
 # on_rtd is whether we are on readthedocs.org
 on_rtd = os.environ.get("READTHEDOCS", None) == "True"

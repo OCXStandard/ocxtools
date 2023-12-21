@@ -2,7 +2,6 @@
 """The validator report class."""
 
 # System imports
-from typing import Dict
 # Third party imports
 import arrow
 import lxml.etree
@@ -22,9 +21,9 @@ class ValidatorReport:
     @staticmethod
     def create_report(source: str, report_data: str) -> ValidationReport:
         """
-        Create the report
+        Create the validation report.
         Args:
-            source: The source model.
+            source: The source 3Docx model source file name.
             report_data: The validation result.
 
         Returns:
@@ -41,7 +40,7 @@ class ValidatorReport:
             date = LxmlElement.find_child_with_name(root, 'date').text
             validator_name = LxmlElement.find_child_with_name(root, 'validationServiceName').text
             validator_version = LxmlElement.find_child_with_name(root, 'validationServiceVersion').text
-            errors = LxmlElement.find_all_children_with_name(root, 'errors')
+            LxmlElement.find_all_children_with_name(root, 'errors')
             return ValidationReport(source=source,
                                     date=arrow.get(date).format(),
                                     result=result,
@@ -57,7 +56,7 @@ class ValidatorReport:
             raise ReporterError(e) from e
 
     @staticmethod
-    def create_info_data(response: str) -> List[ValidationInformation]:
+    def create_info_report(response: str) -> List[ValidationInformation]:
         """
         The validator information about supported domains and validation types.
         Args:

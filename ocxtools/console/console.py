@@ -2,16 +2,24 @@
 """CLI console"""
 
 # System imports
+
+
 from enum import Enum
-from typing import List
+from typing import List, Union
 import subprocess
+from pathlib import Path
 # Third party imports
 from rich.console import Console
 from rich.table import Table
 from rich.theme import Theme
-
-# Project imports
 from rich.style import Style
+from rich.markdown import Markdown
+# Project imports
+from ocxtools.utils.utilities import get_file_path
+from ocxtools import README_FOLDER
+
+console = Console()
+
 
 # Styling
 
@@ -34,75 +42,87 @@ class Justify(Enum):
     FULL = "full"
 
 
-class CliConsole:
+class CliConsole(Console):
     """
     CLI console
     """
 
     def __init__(self):
-        self.console = Console(theme=console_theme)
+        super().__init__(theme=console_theme)
 
     def print_table(self, table: Table, justify: Justify = Justify.CENTER):
         """
         Console table print method
+
         Args:
             justify: Justify the table in the console. Default = ``center``
             table: A Rich Table to output.
+
         """
-        self.console.print("\n")
-        self.console.print(table, justify=justify.value)
-        self.console.print("\n")
+        self.print("\n")
+        self.print(table, justify=justify.value)
+        self.print("\n")
 
     def print_table_row(self, table: Table, cells: List, justify: Justify = Justify.CENTER):
         """
         Console table print method
+
         Args:
             justify: Justify the table in the console. Default = ``center``
             table: A Rich Table to output.
+
         """
         table.add_row(*[str(cell) for cell in cells])
-        self.console.print(table, justify=justify.value, show_header=False)
+        self.print(table, justify=justify.value, show_header=False)
 
-    def print_error(self, msg: str):
+    def error(self, msg: str):
         """
         Console error print method
+
         Args:
             msg: Output message
-        """
-        text = f'{msg}'
-        self.console.print(f':cross_mark:{PADDING}{msg}', style="error")
 
-    def print(self, msg: str):
+        """
+        self.print(f':cross_mark:{PADDING}{msg}', style="error")
+
+    def info(self, msg: Union[str, Markdown]):
         """
         Console info print method
+
         Args:
             msg: Output message
-        """
-        self.console.print(f':information:{PADDING}{msg}', style="info")
 
-    def print_warning(self, msg: str):
+        """
+        self.print(f':information:{PADDING}{msg}', style="info")
+
+    def warning(self, msg: str):
         """
         Console info print method
+
         Args:
             msg: Output message
-        """
-        self.console.print(f':warning:{PADDING}{msg}', style="warning")
 
-    def print_section(self, title: str, separator: str = "=", style: Style = style_section):
+        """
+        self.print(f':warning:{PADDING}{msg}', style="warning")
+
+    def section(self, title: str, separator: str = "=", style: Style = style_section):
         """
 
         Args:
             style: The rule style
             separator: The rule characters
             title: The section title
+
         """
-        self.console.rule(title=f'[bold black]{title}[/bold black]', characters=separator, style=style)
+        self.rule(title=f'[bold black]{title}[/bold black]', characters=separator, style=style)
 
     def run_sub_process(self, command: str):
         """
         Execute the command in a python subprocess.
+
         Args:
             command: The command to execute.
+
         """
         # Use subprocess.run to execute the command and capture output
         result = subprocess.run(command, shell=True, capture_output=True, text=True)
@@ -111,4 +131,15 @@ class CliConsole:
         if result.returncode == 0:
             self.print(f"Command output:\n{result.stdout}")
         else:
-            self.print_error(f"Command failed with error:\n{result.stderr}")
+            self.error(f"Command failed with error:\n{result.stderr}")
+
+    def readme(self, sub_command: str):
+        """Print the ``sub_command`` readme file to an alternate screen.
+
+        Args:
+            sub_command: The sub_command name
+        """
+        readme_file = f'{README_FOLDER}/{sub_command}.md'
+        file_path = Path(get_file_path(readme_file))
+        md = Markdown(file_path.read_text(encoding='utf-8'))
+        self.print(md)

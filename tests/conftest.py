@@ -2,7 +2,6 @@
 
 import os
 import sys
-
 from loguru import logger
 
 # To make sure that the tests import the modules this has to come before the import statements

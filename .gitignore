@@ -1,5 +1,7 @@
 # Project
 models
+*.log
+.coverage
 # Jetbrains
 .idea
 # Byte-compiled / optimized / DLL files

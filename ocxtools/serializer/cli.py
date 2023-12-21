@@ -3,7 +3,6 @@
 # System imports
 from pathlib import Path
 from typing import Any, Tuple
-import warnings
 
 # 3rd party imports
 import typer
@@ -14,6 +13,9 @@ from ocxtools.parser.parser import OcxParser
 
 # Project imports
 from ocxtools.serializer.serializer import Serializer
+from ocxtools.serializer import __app_name__
+from ocxtools import SERIALIZER_SUFFIX, JSON_INDENT
+from ocxtools.context.context_manager import get_context_manager
 
 serialize = typer.Typer()
 ocx_parser = OcxParser()
@@ -22,9 +24,11 @@ ocx_parser = OcxParser()
 @serialize.command()
 def xml(
     model: Path,
-    post_fix: Annotated[str, typer.Option(help="The model file name post fix")] = "_pp",
+    post_fix: Annotated[str, typer.Option(help="The model file name post fix")] = SERIALIZER_SUFFIX,
 ):
     """Serialize a 3Docx model to file"""
+    context_manager = get_context_manager()
+    console = context_manager.get_console()
     try:
         ocx_obj = ocx_parser.parse(str(model))
         # Serialize
@@ -33,21 +37,23 @@ def xml(
         serializer = Serializer(ocx_obj)
         with output.open("w") as fp:
             fp.write(serializer.serialize_xml())
-        print(f"Pretty printed file {output!r}")
+        console.print(f"Pretty printed file {output!r}")
         # Check for any warnings issued during serialization
         # for warning_message in warnings:
         #     print(f"Warning: {warning_message}")
 
     except XmlParserError as e:
-        print(e)
+        console.error(e)
 
 
 @serialize.command()
 def json(
     model: Path,
-    indent: Annotated[int, typer.Option(help="The JSON indentation level.")] = 4,
+    indent: Annotated[int, typer.Option(help="The JSON indentation level.")] = JSON_INDENT,
 ):
     """Serialize an 3Docx model to json."""
+    context_manager = get_context_manager()
+    console = context_manager.get_console()
     try:
         ocx_obj = ocx_parser.parse(str(model))
         # Serialize
@@ -56,9 +62,9 @@ def json(
         serializer = Serializer(ocx_obj)
         with output.open("w") as fp:
             fp.write(serializer.serialize_json())
-        print(f"Serialised JSON: {output!r}")
+        console.print(f"Serialised JSON: {output!r}")
     except XmlParserError as e:
-        print(e)
+        console.error(e)
 
 
 def cli_plugin() -> Tuple[str, Any]:
@@ -68,4 +74,4 @@ def cli_plugin() -> Tuple[str, Any]:
     Returns the typer command object
     """
     typer_click_object = typer.main.get_command(serialize)
-    return "serialize", typer_click_object
+    return __app_name__, typer_click_object

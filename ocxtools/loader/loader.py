@@ -1,9 +1,8 @@
 #  Copyright (c) 2023. OCX Consortium https://3docx.org. See the LICENSE
 """Dynamically load a python module."""
-
-import importlib
-
 # system imports
+import importlib
+from abc import ABC
 import sys
 from types import ModuleType
 from typing import Any, List
@@ -11,8 +10,27 @@ from typing import Any, List
 # 3rd party imports
 from loguru import logger
 
-## Project imports
+# Project imports
 from ocxtools.interfaces.interfaces import IModuleDeclaration
+
+
+class ModuleDeclaration(IModuleDeclaration, ABC):
+    """General module declaration
+
+    Args:
+        package:the package name
+        sub_module: The submodule name
+        name: The method name
+    """
+
+    def __init__(self, package: str, sub_module: str, name: str):
+        self._module = sub_module
+        self._package = package
+        self._method = name
+
+    def get_declaration(self) -> str:
+        """Return the module import declaration."""
+        return f"{self._package}.{self._module}.{self._method}"
 
 
 class DeclarationOfOcxImport(IModuleDeclaration):
@@ -73,7 +91,7 @@ class DynamicLoader:
 
     @classmethod
     def import_class(
-        cls, module_declaration: IModuleDeclaration, class_name: str
+            cls, module_declaration: IModuleDeclaration, class_name: str
     ) -> Any:
         """
         The module import declaration.
