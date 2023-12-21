@@ -14,40 +14,105 @@ import lxml.etree
 from loguru import logger
 from xsdata.exceptions import ParserError
 from xsdata.formats.dataclass.context import XmlContext, XmlContextError
-from xsdata.formats.dataclass.parsers import UserXmlParser
 from xsdata.formats.dataclass.parsers.config import ParserConfig
 from xsdata.formats.dataclass.parsers.handlers import LxmlEventHandler
-from xsdata.formats.dataclass.parsers.mixins import XmlHandler
+from xsdata.formats.dataclass.parsers import XmlParser
 
 from ocxtools.exceptions import XmlParserError
 
 # Project imports
-from ocxtools.interfaces.interfaces import IParser
+from ocxtools.interfaces.interfaces import IObservable, IParser, ObservableEvent
 from ocxtools.loader.loader import DeclarationOfOcxImport, DynamicLoader
 from ocxtools.utils.utilities import OcxVersion, SourceValidator
 
 
-class OcxXmlParser(UserXmlParser):
-    def __init__(self, config: ParserConfig, context: XmlContext, handler=XmlHandler):
-        super().__init__(config, context, handler)
-        self._object_map = {}
+class OcxNotifyParser(IObservable, ABC):
+    """Ocx notification parser class for 3Docx XML files.
 
-    def end(self, queue: list, objects: list, qname: str, text: str, tail: str) -> bool:
-        """Override method and build the mapping table between XML elements and dataclass names."""
-        if result := super().end(queue, objects, qname, text, tail):
-            # logger.debug(f'QName: {qname}, object_name: {class_name}')
-            self._object_map[qname] = MetaData.class_name(objects[-1][1])
+     Args:
+         fail_on_unknown_properties: Don't bail out on unknown properties.
+         fail_on_unknown_attributes: Don't bail out on unknown attributes
+         fail_on_converter_warnings: bool = Convert warnings to exceptions
 
-    def get_mapping(self) -> Dict:
-        """Obtain the mapping table."""
-        return self._object_map
+     """
 
+    def __init__(
+        self,
+        fail_on_unknown_properties: bool = False,
+        fail_on_unknown_attributes: bool = False,
+        fail_on_converter_warnings: bool = True,
+    ):
+        context = XmlContext()
+        parser_config = ParserConfig(
+            fail_on_unknown_properties=fail_on_unknown_properties,
+            fail_on_unknown_attributes=fail_on_unknown_attributes,
+            fail_on_converter_warnings=fail_on_converter_warnings,
+            class_factory=self.class_factory)
+        self._parser = XmlParser(config=parser_config, context=context)
+        self._subscribers = set()
 
-not_supported = ["FrameTables", "VesselGrid", "CoordinateSystem"]
+    def subscribe(self, observer):
+        self._subscribers.add(observer)
+        return
+
+    def unsubscribe(self, observer):
+        self._subscribers.remove(observer)
+        return
+
+    def update(self, event: ObservableEvent, payload: Dict):
+        for observer in self._subscribers:
+            observer.update(event, payload)
+
+    def class_factory(self, clazz, params):
+        """Custom class factory method"""
+        name = clazz.__name__
+        new_data_class = clazz(**params)
+        # Broadcast an update
+        self.update(ObservableEvent.DATACLASS, {'name': name, 'object': new_data_class})
+        logger.debug(f"Name: {name}, params: {params}")
+        return new_data_class
+
+    def parse(self, xml_file: str) -> dataclass:
+        """Parse a 3Docx XML model and return the root dataclass.
+
+        Args:
+            xml_file: The 3Docx xml file or url to parse.
+
+        Returns:
+            The root dataclass instance of the parsed 3Docx XML.
+        """
+        try:
+            file_path = SourceValidator.validate(xml_file)
+            tree = lxml.etree.parse(xml_file)
+            root = tree.getroot()
+            version = OcxVersion.get_version(file_path)
+            declaration = DeclarationOfOcxImport("ocx", version)
+            # Load target schema version module
+            ocx_module = DynamicLoader.import_module(declaration)
+            return self._parser.parse(root, ocx_module.OcxXml)
+        except lxml.etree.XMLSyntaxError as e:
+            logger.error(e)
+            raise XmlParserError(e) from e
+        except ImportError as e:
+            logger.error(e)
+            raise XmlParserError from e
+        except XmlContextError as e:
+            logger.error(e)
+            raise XmlParserError from e
+        except ParserError as e:
+            logger.error(e)
+            raise XmlParserError from e
 
 
 class OcxParser(IParser, ABC):
-    """IParser class for 3Docx XML files."""
+    """OcxParser class for 3Docx XML files.
+
+    Args:
+        fail_on_unknown_properties: Don't bail out on unknown properties.
+        fail_on_unknown_attributes: Don't bail out on unknown attributes
+        fail_on_converter_warnings: bool = Convert warnings to exceptions
+
+    """
 
     def __init__(
         self,
@@ -79,7 +144,7 @@ class OcxParser(IParser, ABC):
             declaration = DeclarationOfOcxImport("ocx", version)
             # Load target schema version module
             ocx_module = DynamicLoader.import_module(declaration)
-            ocx_parser = OcxXmlParser(
+            ocx_parser = XmlParser(
                 handler=LxmlEventHandler,
                 config=self._parser_config,
                 context=self._context,
@@ -125,7 +190,7 @@ class OcxParser(IParser, ABC):
     #             fail_on_unknown_attributes=False,
     #             class_factory=converter.class_factory,
     #         )
-    #         ocx_parser = OcxXmlParser(
+    #         ocx_parser = OcxEventParser(
     #             handler=LxmlEventHandler, config=parser_config, context=XmlContext()
     #         )
     #         if root is not None and ocx_module is not None:

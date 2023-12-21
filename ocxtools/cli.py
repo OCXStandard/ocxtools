@@ -1,26 +1,32 @@
 #  Copyright (c) 2023. OCX Consortium https://3docx.org. See the LICENSE
 """generator CLI commands."""
+
 # System imports
 from __future__ import annotations
 import sys
 import warnings
 # Third party
-from click import clear, pass_context, secho
-from click_shell import shell, Shell
-
+from click import pass_context
+from click_shell import shell
+import typer
 from loguru import logger
-from rich import print
-from typing import Union, Optional, Type, Callable
+
 # Project imports
-from ocxtools import WIKI_URL
-import ocxtools.serializer.cli
-import ocxtools.validator.cli
-import ocxtools.docker.cli
+from ocxtools import __app_name__, __version__
 from ocxtools.console.console import CliConsole
 from ocxtools.context.context_manager import ContextManager
+from ocxtools.config import config
+from ocxtools.cli_plugin import PluginManager
 
-# Project
-from ocxtools import __app_name__, __version__
+LOG_FILE = config.get('FileLogger', 'log_file')
+RETENTION = config.get('FileLogger', 'retention')
+ROTATION = config.get('FileLogger', 'rotation')
+SINK_LEVEL = config.get('FileLogger', 'level')
+if DEBUG := config.getboolean('Defaults', 'debug'):
+    SINK_LEVEL = 'DEBUG'
+STDOUT_LEVEL = config.get('StdoutLogger', 'level')
+COMMAND_HISTORY = config.get('Defaults', 'command_history')
+EDITOR = config.get('Defaults', 'text_editor')
 
 # https://patorjk.com/software/taag/#p=testall&f=Graffiti&t=OCX-wiki
 # Font: 3D Diagonal + Star Wars
@@ -42,25 +48,39 @@ LOGO = r"""
 """
 
 # Logging config for application
-config = {
+log_config = {
     "handlers": [
         # {"sink": sys.stdout, "format": "{time} - {message}"},
-        {"sink": f"{__app_name__}.log", "serialize": False},
+        {"sink": LOG_FILE, "serialize": False,
+         "retention": RETENTION,
+         "rotation": ROTATION,
+         "level": SINK_LEVEL},
     ],
 }
 logger.remove()  # Remove all handlers added so far, including the default one.
-logger.add(sys.stderr, level="WARNING")
-logger.configure(**config)
-logger.level("WARNING")
+logger.add(sys.stderr, level=STDOUT_LEVEL)
+logger.configure(**log_config)
+logger.level(STDOUT_LEVEL)
 
 
 # Function to capture warnings and log them using Loguru
 # Custom warning handler
 def custom_warning_handler(message, category, filename, lineno, file=None, line=None):
+    """
+    Custom warning formatter.
+    Args:
+        message:
+        category:
+        filename:
+        lineno:
+        file:
+        line:
+    """
     # Log the warning using Loguru
     logger.warning("Custom Warning: {}:{} - {}", filename, lineno, message)
 
-def capture_warnings(record, ):
+
+def capture_warnings(record):
     """
     Capture python warnings
     Args:
@@ -72,9 +92,6 @@ def capture_warnings(record, ):
 # Attach the capture_warnings function to the warnings module
 warnings.showwarning = custom_warning_handler
 
-# Generate a sample warning
-warnings.warn("This is a sample warning")
-
 
 def exit_cli():
     """
@@ -85,44 +102,53 @@ def exit_cli():
 
 # Create the Console and ContextManager instances
 console = CliConsole()
-context_manager = ContextManager()
+context_manager = ContextManager(console=console, config=config)
 
 
-class OcxShell(Shell):
-    def __init__(
-            self,
-            prompt: Optional[Union[str, Callable[..., str]]] = None,
-            intro: Optional[str] = None,
-            hist_file: Optional[str] = None,
-    ):
-        super().__init__(prompt=prompt, intro=intro, hist_file=hist_file)
-
-
-@shell(prompt=f"{__app_name__} >: ", intro=f"Starting {__app_name__}...")
+@shell(prompt=f"{__app_name__} >: ", hist_file=COMMAND_HISTORY, intro=f"Starting {__app_name__}...")
 @pass_context
 def cli(ctx):
     """
     Main CLI
     """
 
-    console.print(LOGO)
+    console.print(LOGO, style='blue')
     console.print(f"Version: {__version__}")
-    console.print("Copyright (c) 2023. OCX Consortium https://3docx.org\n")
+    console.print("Copyright (c) 2023. OCX Consortium (https://3docx.org)\n")
     logger.info(f"{__app_name__} session started.")
-    ctx.call_on_close(exit_cli)
     ctx.obj = context_manager
+    ctx.call_on_close(exit_cli)
 
 
-@cli.command(short_help="Clear the screen")
+@cli.command(short_help="Print the ocxtools version number.")
+def version():
+    """Clear the console window."""
+
+    console.info(__version__)
+
+
+@cli.command(short_help="Clear the console window.")
 def clear():
     """Clear the console window."""
-    # clear()
+    command = f'"cmd /c {clear}"'
+    result = typer.launch(command)
+    typer.echo(result)
 
 
-# Arrange all command groups from Typer
-subcommand, typer_click_object = ocxtools.serializer.cli.cli_plugin()
-cli.add_command(typer_click_object, subcommand)
-subcommand, typer_click_object = ocxtools.validator.cli.cli_plugin()
-cli.add_command(typer_click_object, subcommand)
-subcommand, typer_click_object = ocxtools.docker.cli.cli_plugin()
-cli.add_command(typer_click_object, subcommand)
+# @cli.command(short_help="Load a new app configuration.")
+# def load_config():
+#     """Load a new app configuration."""
+#     config.read()
+#
+#
+# @cli.command()
+# def save_config():
+#     # Save the config file
+#     with open(f'{__app_name__}.ini', 'w') as configfile:
+#         config.write(configfile)
+#
+
+# Add all configured command groups
+plugins = config.get('Plugins', 'modules').split()
+plugin_manager = PluginManager(package=__app_name__, cli=cli)
+plugin_manager.load_plugins(plugins)

@@ -2,8 +2,7 @@
 """Module for server clients."""
 
 # System reports
-import aiohttp
-import asyncio
+import httpx
 import json
 from abc import ABC, abstractmethod
 from enum import Enum
@@ -52,15 +51,15 @@ class IRestClient(ABC):
             timeout: The request timeout
 
         Parameters:
-            _base_url: base url
-            _timeout: Timeout in ms
+            base_url: base url
+            timeout: Timeout in ms
         """
         self._base_url: str = base_url
         self._timeout: int = timeout
 
     @abstractmethod
     def api(
-            self, request_type: RequestType, endpoint: str, payload: Union[Dict, str] = None
+            self, request_type: RequestType, endpoint: str, payload: Union[List, Dict, str] = None
     ) -> str:
         """Abstract api method.
         Arguments:
@@ -70,7 +69,7 @@ class IRestClient(ABC):
             endpoint: API Endpoint. Type - String
             payload: API Request Parameters or Query String.
         Returns:
-            The response string (json or xml depending on the header.
+            The response string (json or xml depending on the header).
         """
 
     @abstractmethod
@@ -170,7 +169,7 @@ class RestClient(IRestClient, ABC):
         Post method.
         Args:
             url: the api resource.
-            data: The request body.
+            payload: The request body.
 
         Returns:
             The JSON request response.
@@ -179,7 +178,6 @@ class RestClient(IRestClient, ABC):
              RequestException if the status code is not 201.
         """
         try:
-            body = json.dumps(payload)
             response = self._session.post(url, headers=self._headers, json=payload, timeout=self._timeout)
             return response.status_code, response.text
         except json.JSONDecodeError as e:
@@ -217,7 +215,7 @@ class CurlRestClient(IRestClient, ABC):
         self._headers = ["Accept: application/json", "Content-Type: application/json"]
 
     def api(
-            self, request_type: RequestType, endpoint: str, payload: Union[Dict, str] = None
+            self, request_type: RequestType, endpoint: str, payload: Union[List, Dict, str] = None
     ) -> json:
         """Function to call the API via the pycurl Library
 
@@ -302,7 +300,7 @@ class CurlRestClient(IRestClient, ABC):
         """
         curl = pycurl.Curl()
         curl.setopt(pycurl.URL, url)
-        curl.setopt(pycurl.TIMEOUT, self._timeout)
+        # curl.setopt(pycurl.TIMEOUT, self._timeout)
         body = json.dumps(payload)
         buffer = BytesIO()
         # Set the HTTP method to POST
@@ -352,10 +350,11 @@ class AsyncRestClient(IRestClient, ABC):
             "Accept": "application/json",
             "Content-Type": "application/json",
         }
+        self._async_client = httpx.AsyncClient()
 
-    def api(
+    async def api(
             self, request_type: RequestType, endpoint: str, payload: Union[Dict, str] = None
-    ) -> str:
+    ) -> Coroutine[Any, Any, str | Any]:
         """Function to call the API via the pycurl Library
 
         Arguments:
@@ -372,9 +371,9 @@ class AsyncRestClient(IRestClient, ABC):
         try:
             match request_type.value:
                 case "GET":
-                    status_code, response = self._get_data(url)
+                    status_code, response = await self._get_data(url)
                 case "POST":
-                    status_code, response = self._post_data(url, payload)
+                    status_code, response = await self._post_data(url, payload)
                 case _:
                     raise (RequestClientError("Not implemented"))
 
@@ -390,7 +389,7 @@ class AsyncRestClient(IRestClient, ABC):
         except RequestClientError as e:
             raise RequestClientError from e
 
-    async def _get_data(self, url: str) -> str:
+    async def _get_data(self, url: str) -> Coroutine[Any, Any, str | Any]:
         """
         Get method.
 
@@ -404,9 +403,10 @@ class AsyncRestClient(IRestClient, ABC):
              RequestException if the status code is not 200.
         """
         try:
-            async with aiohttp.ClientSession() as session:
-                async with session.get(url, timeout=self._timeout) as response:
-                    return await response.text()
+            # async with self._async_client as session:
+            #     async with session.get(url, timeout=self._timeout) as response:
+            server_response = await self._async_client.get(url)
+            return decode_response(server_response)
         except requests.exceptions.HTTPError as errh:
             logger.error(errh)
             raise RequestClientError(errh) from errh
@@ -420,12 +420,12 @@ class AsyncRestClient(IRestClient, ABC):
             logger.error(err)
             raise RequestClientError(err) from err
 
-    async def _post_data(self, url: str, payload: Dict) -> str:
+    async def _post_data(self, url: str, payload: Dict) -> Coroutine[Any, Any, str | Any]:
         """
         Post method.
         Args:
             url: the api resource.
-            data: The request body.
+            payload: The request body.
 
         Returns:
             The JSON request response.
@@ -434,9 +434,10 @@ class AsyncRestClient(IRestClient, ABC):
              RequestException if the status code is not 201.
         """
         try:
-            async with aiohttp.ClientSession() as session:
-                async with session.post(url, headers=self._headers, json=payload, timeout=self._timeout) as response:
-                    return await response.text()
+            # async with self._async_client as session:
+            #     async with session.post(url, headers=self._headers, json=payload, timeout=self._timeout) as response:
+            server_response = await self._async_client.post(url, headers=self._headers, json=payload)
+            return decode_response(server_response)
         except json.JSONDecodeError as e:
             logger.error(e)
             raise RequestClientError(e) from e
@@ -460,3 +461,22 @@ class AsyncRestClient(IRestClient, ABC):
             headers: The headers declaration
         """
         self._headers = headers
+
+
+async def decode_response(self, response: httpx.Response):
+    """
+    Decode the response depending on the content type.
+    Args:
+        response: the httpx response object
+
+    Returns:
+        The decoded response object
+    """
+    content_type = response.headers.get("content-type", "").lower()
+    if "json" in content_type:
+        return response.json()
+    elif "text" in content_type:
+        return response.text
+    else:
+        msg = f"Unsupported content type: {content_type}"
+        raise CurlClientError(msg)

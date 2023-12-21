@@ -4,6 +4,7 @@
 
 SOURCEDIR = ./ocx_generator
 CONDA_ENV = generator
+DATA_SOURCE: C:\PythonDev\ocxtools\readme
 
 # PROJECT setup using conda and powershell
 .PHONY: conda-create
@@ -47,6 +48,10 @@ PHONY: doc
 doc-links: ## Check the internal and external links after building the documentation
 	@sphinx-build docs -W -b linkcheck -d _build/doctrees _build/html
 PHONY: doc-links
+
+build-exe:  ## Build a single Windows executable
+	@pyinstaller --clean --onefile --name ocxtools  --add-data "readme\*:readme"  .\__main__.py
+
 # POETRY ########################################################################
 build:   ## Build the package dist with poetry
 	@poetry update
@@ -69,14 +74,19 @@ run:  ## Run the CLI
 pre-commit:	## Run any pre-commit hooks
 	@pre-commit run --all-files
 
+sourcery:  ## Run sourcery with --fix
 # TESTS #######################################################################
-
+	@sourcery review --fix --no-summary ./ocxtools
 FAILURES := .pytest_cache/pytest/v/cache/lastfailed
 
 
 test:  ## Run unit and integration tests
 	@pytest --durations=5  --cov-report html --cov ocxtools .
 .PHONY: test
+
+test-upd:  ## Run unit and integration tests
+	@pytest --force-regen --durations=5  --cov-report html --cov ocxtools .
+
 
 test-cov:  ## View the test coverage report
 	cmd /c start $(CURDIR)/htmlcov/index.html

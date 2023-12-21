@@ -17,5 +17,6 @@ class XmlParserError(ValueError):
 class SourceError(ValueError):
     """SourceValidator errors."""
 
+
 class ReporterError(ValueError):
     """Reporter errors."""

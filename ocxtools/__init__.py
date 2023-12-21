@@ -1,26 +1,28 @@
 #  Copyright (c) 2023. OCX Consortium https://3docx.org. See the LICENSE
 
-from pathlib import Path
-from ocx_schema_parser.utils import utilities
-
 __version__ = "0.1.0"
 __app_name__ = "ocxtools"
 
+from ocxtools.config import config
 
 # Secrets
 # package configs
-config_file = Path(__file__).parent / "config.yaml"  # The  config yaml
-app_config = utilities.load_yaml_config(config_file)  # safe yaml load
-WIKI_URL = app_config.get("WIKI_URL")
-TEST_WIKI_URL = app_config.get("TEST_WIKI_URL")
-DEFAULT_NSP = app_config.get("DEFAULT_NSP")
-WORKING_DRAFT = app_config.get("WORKING_DRAFT")
-SCHEMA_FOLDER = app_config.get("SCHEMA_FOLDER")
-REPORT_FOLDER = app_config.get("REPORT_FOLDER")
-VALIDATOR = app_config.get("VALIDATOR")
-RESOURCES = app_config.get("RESOURCES")
-XSLT_EN = app_config.get("XSLT_EN")
+# Validator
+REPORT_FOLDER = config.get("ValidatorSettings", "report_folder")
+VALIDATOR = config.get("ValidatorSettings", "validator_url")
 
-DOCKER_CONTAINER = app_config.get("DOCKER_CONTAINER")
-DOCKER_IMAGE = app_config.get("DOCKER_IMAGE")
-DOCKER_DESKTOP = app_config.get("DOCKER_DESKTOP")
+# Docker
+DOCKER_IMAGE = config.get("DockerSettings", "docker_image")
+DOCKER_CONTAINER = config.get("DockerSettings", "container_name",)
+DOCKER_TAG = config.get("DockerSettings", "docker_tag")
+DOCKER_DESKTOP = config.get("DockerSettings", "docker_desktop")
+DOCKER_PORT = int(config.get("DockerSettings", "docker_port"))
+# Renderer
+RESOURCES = config.get("RendererSettings", "resource_folder")
+OCX_XSLT = config.get("RendererSettings", "ocx_xslt")
+SCHEMATRON_XSLT = config.get("RendererSettings", "schematron_xslt")
+# Serializer
+JSON_INDENT = int(config.get("SerializerSettings", "json_indent"))
+SERIALIZER_SUFFIX = config.get("SerializerSettings", "suffix")
+# Defaults
+README_FOLDER = config.get("Defaults", "readme_folder")

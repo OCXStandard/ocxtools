@@ -4,7 +4,7 @@
 # System imports
 from typing import Dict, List
 from pathlib import Path
-
+from enum import Enum
 # Third party imports
 from tabulate import tabulate
 from lxml import etree
@@ -15,6 +15,16 @@ from loguru import logger
 from ocxtools.utils.utilities import SourceValidator
 from ocxtools.exceptions import SourceError
 from ocxtools.console.console import style_table_header
+
+
+class RenderError(ValueError):
+    """Render errors."""
+
+
+class ReportType(Enum):
+    """Validator report types"""
+    OCX = 'ocx'
+    SCHEMATRON = 'schematron'
 
 
 class TableRender:
@@ -77,11 +87,12 @@ class XsltTransformer:
         except SourceError as e:
             raise RenderError(e) from e
 
-    def render(self, data: str, source_file: str, output_folder: str, report_type: str = 'ocx') -> str:
+    def render(self, data: str, source_file: str, output_folder: str,
+               report_type: ReportType = ReportType.SCHEMATRON) -> str:
         """
 
         Args:
-            report_type: The report type. ``ocx`` or ``schematron``.
+            report_type: The report type. ``OCX`` or ``SCHEMATRON``.
             output_folder: The report folder.
             data: the xml data as a string
             source_file: The source file
@@ -91,7 +102,7 @@ class XsltTransformer:
         """
         # Parse XML and XSLT files
         file_name = Path(source_file).stem
-        output_file = Path(output_folder) / f'{file_name}_{report_type}_report.html'
+        output_file = Path(output_folder) / f'{file_name}_{report_type.value}_report.html'
         xml_file = Path(output_folder) / f'{file_name}.xml'
         with xml_file.open('w') as f:
             f.write(data)
@@ -109,7 +120,3 @@ class XsltTransformer:
         result_tree.write(output_file, pretty_print=True, encoding='utf-8')
 
         return str(output_file)
-
-
-class RenderError(ValueError):
-    """Render errors."""

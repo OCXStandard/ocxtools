@@ -29,10 +29,11 @@ rich = "*"
 loguru = "*"
 sphinx = "<=6.2.1"
 ocx = "*"
-aiohttp = "*"
+httpx = "*"
 arrow = "*"
+pandas = "*"
 ocx_schema_parser = "*"
-
+tailer = "*"
 
 [tool.poetry.group.development.dependencies]
 pre-commit = "*"

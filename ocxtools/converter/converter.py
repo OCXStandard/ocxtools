@@ -124,7 +124,7 @@ class CoordinateSystemRule(DefaultRule):
     """Conversion rule for the ``CoordinateSystem`` type."""
 
     def __init__(self):
-        supported_version = DeclarationOfOcxImport("ocx", "3.0.0b4")
+        DeclarationOfOcxImport("ocx", "3.0.0b4")
         super().__init__()
         self._refplane = {}
 

@@ -1,5 +1,7 @@
 # Project
 models
+*.log
+.coverage
 # Jetbrains
 .idea
 # Byte-compiled / optimized / DLL files
@@ -74,6 +76,7 @@ instance/
 
 # Sphinx documentation
 docs/_build/
+_build
 
 # PyBuilder
 .pybuilder/
