@@ -174,7 +174,7 @@ def summary():
 
 @validate.command()
 def details():
-    """List validation summary results."""
+    """List validation detail results."""
     context_manager = get_context_manager()
     console = context_manager.get_console()
     console.section('Validation Details')
@@ -191,7 +191,7 @@ def details():
 
 @validate.command()
 def readme():
-    """Show the ``validate`` html page with usage examples."""
+    """Show the validate html page with usage examples."""
     context_manager = get_context_manager()
     console = context_manager.get_console()
     console.man_page(__app_name__)

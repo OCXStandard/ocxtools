@@ -1,11 +1,8 @@
 # docker CLI
 
 ## Introduction
-<<<<<<< Updated upstream
-The docker CLI provides the user with simple commands to manage the [OCX validator](https://github.com/OCXStandard/ocx-validator) container without the need for the detailed knowledge of how to pull  the OCX validator image from the Docker Hub and start the container.
-=======
+
 The ``docker`` CLI provides the user with simple commands to manage the [OCX validator](https://github.com/OCXStandard/ocx-validator) container without the need for the detailed knowledge of how to pull  the OCX validator image from the Docker Hub and start the container.
->>>>>>> Stashed changes
 A prerequisite is to have a docker service installed and accessible from your computer.
 Currently, the docker CLI only supports [Docker Desktop on Windows]( https://docs.docker.com/desktop/).
 
@@ -19,7 +16,9 @@ key in the JSON settings file:
 ```
 C:\Users\[USERNAME]\AppData\Roaming\Docker\settings.json.
 ```
-
+```json
+  "memoryMiB": 8192,
+```
 Save the file and restart the Docker Desktop.
 
 ## Usage

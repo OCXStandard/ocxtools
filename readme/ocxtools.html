@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>ocxtools</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="=readme/modest.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">ocxtools</h1>
+</header>
+<h1 id="ocxtools">ocxtools</h1>
+<blockquote>
+<h3 id="a-python-cli-to-work-with-3docx-models.">A python CLI to work with 3Docx models.</h3>
+</blockquote>
+<p><code>ocxtools</code> is a configurable Python CLI shell with pluggable subcommands. The CLI combines features from <a href="https://click.palletsprojects.com/en/8.1.x/"><code>click</code></a>, <a href="https://click-shell.readthedocs.io/en/latest/"><code>click-shell</code></a>, <a href="https://typer.tiangolo.com/"><code>typer</code></a> and <a href="https://rich.readthedocs.io/en/stable/introduction.html"><code>Rich</code></a> with emphasis on <strong>Typer</strong> and <strong>Rich</strong> to make a good-looking CLI.</p>
+<h2 id="installation">Installation</h2>
+<h1 id="usage">Usage</h1>
+<h2 id="the-main-cli">The main CLI</h2>
+<pre class="commandline"><code>
+             ,----..
+            /   /   \    ,----..   ,--,     ,--,
+           /   .     :  /   /   \  |&#39;. \   / .`|
+          .   /   ;.  \|   :     : ; \ `\ /&#39; / ;
+         .   ;   /  ` ;.   |  ;. / `. \  /  / .&#39;          ______   ___    ___   _     _____
+         ;   |  ; \ ; |.   ; /--`   \  \/  / ./          |      | /   \  /   \ | |   / ___/
+         |   :  | ; | &#39;;   | ;       \  \.&#39;  /     _____ |      ||     ||     || |  (   \_
+         .   |  &#39; &#39; &#39; :|   : |        \  ;  ;     |     ||_|  |_||  O  ||  O  || |___\__  |
+         &#39;   ;  \; /  |.   | &#39;___    / \  \  \    |_____|  |  |  |     ||     ||     /  \ |
+          \   \  &#39;,  / &#39;   ; : .&#39;|  ;  /\  \  \            |  |  |     ||     ||     \    |
+           ;   :    /  &#39;   | &#39;/  :./__;  \  ;  \           |__|   \___/  \___/ |_____|\___|
+            \   \ .&#39;   |   :    / |   : / \  \  ;
+             `---`      \   \ .&#39;  ;   |/   \  &#39; |
+                         `---`    `---&#39;     `--`
+
+Version: 0.1.0
+Copyright (c) 2023. OCX Consortium (https://3docx.org)
+
+Starting ocxtools...
+ocxtools &gt;: help
+
+Documented commands (type help &lt;topic&gt;):
+========================================
+clear  docker  validate  version
+
+Undocumented commands:
+======================
+exit  help  quit
+
+
+ocxtools &gt;:
+</code></pre>
+<h2 id="generate-shell-completion">Generate Shell Completion</h2>
+<p>Command completion is not supported on Widows installations.</p>
+<h2 id="sub-commands">Sub-commands</h2>
+<h3 id="docker"><a href="readme/docker.md">docker</a></h3>
+<h3 id="validate"><a href="readme/validate.md">validate</a></h3>
+<h2 id="api">API</h2>
+<p>API documentation</p>
+</body>
+</html>

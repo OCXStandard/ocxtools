@@ -1,14 +1,42 @@
-# validate CLI
-
-## Introduction
-The ``validate`` CLI provides the user with CLI commands to validate 3Docx models using the docker OCX validator service.
-
-## Usage
-
-From the command line prompt, type the help command to obtain the information of the available sub-commands:
-
-````commandline
-ocxtools >: help validate
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>validate</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="=readme/modest.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">validate</h1>
+</header>
+<h1 id="validate-cli">validate CLI</h1>
+<h2 id="introduction">Introduction</h2>
+<p>The <code>validate</code> CLI provides the user with CLI commands to validate 3Docx models using the docker OCX validator service.</p>
+<h2 id="usage">Usage</h2>
+<p>From the command line prompt, type the help command to obtain the information of the available sub-commands:</p>
+<pre class="commandline"><code>ocxtools &gt;: help validate
 
  Usage:  [OPTIONS] COMMAND [ARGS]...
 
@@ -28,15 +56,10 @@ ocxtools >: help validate
 │ summary      List validation summary results.                                                                                              │
 ╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 
-ocxtools >:
-````
-
-### info
-
-The ``info`` sub-command will print the current validator resources:
-
-````commandline
-ocxtools >: validate info
+ocxtools &gt;:</code></pre>
+<h3 id="info">info</h3>
+<p>The <code>info</code> sub-command will print the current validator resources:</p>
+<pre class="commandline"><code>ocxtools &gt;: validate info
 =============================================== Validator Information ===============================================
 
                                        Validator server: http://localhost:8080
@@ -55,16 +78,11 @@ ocxtools >: validate info
                                 The validation domains and supported schema versions
 
 
-ocxtools >:
-````
-
-The table displays the available validation domains and the supported schema versions.
-
-### validate one
-
-The ``validate one`` sub-command will accept on 3dDocx file as input with optional options:
-````commandline
-ocxtools >: validate one --help
+ocxtools &gt;:</code></pre>
+<p>The table displays the available validation domains and the supported schema versions.</p>
+<h3 id="validate-one">validate one</h3>
+<p>The <code>validate one</code> sub-command will accept on 3dDocx file as input with optional options:</p>
+<pre class="commandline"><code>ocxtools &gt;: validate one --help
 
  Usage: one [OPTIONS] MODEL
 
@@ -80,18 +98,16 @@ ocxtools >: validate one --help
 │ --force             --no-force                         Validate against the input schema version. [default: no-force]                      │
 │ --save              --no-save                          Save the validation xml to the report folder. [default: no-save]                    │
 │ --help                                                 Show this message and exit.                                                         │
-╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
-````
- - The ``domain`` option allows the specification of the validation domain supported by the validator, see the ''validate info``.
- - The ``schema-version`` allows for specifying a specific schema version. If combined with the ``force``flag, the validator will use the specified schema version for the validation. If the ``force`` flag is not given, the schema version will be based on the schema version in the 3Docx header in the XML file.
- - The ``embedding`` option specifies how the 3Docx file is embedded in the call to the validator. Use the dfault value.
- - The ``save`` option will save tha validation XML report in a ``report`` subdirectory. You don't want to look at it.
-#### Example
-Validate the ``m1.3docx`` using the default options:
-````commandline
-ocxtools >: validate one models/m1.3docx
+╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯</code></pre>
+<ul>
+<li>The <code>domain</code> option allows the specification of the validation domain supported by the validator, see the ’’validate info``.</li>
+<li>The <code>schema-version</code> allows for specifying a specific schema version. If combined with the <code>force</code>flag, the validator will use the specified schema version for the validation. If the <code>force</code> flag is not given, the schema version will be based on the schema version in the 3Docx header in the XML file.</li>
+<li>The <code>embedding</code> option specifies how the 3Docx file is embedded in the call to the validator. Use the dfault value.</li>
+<li>The <code>save</code> option will save tha validation XML report in a <code>report</code> subdirectory. You don’t want to look at it. #### Example Validate the <code>m1.3docx</code> using the default options:</li>
+</ul>
+<pre class="commandline"><code>ocxtools &gt;: validate one models/m1.3docx
 ================================================================ Validate One ================================================================
-ℹ     Created validation report for model 'models/m1.3docx'
+ℹ     Created validation report for model &#39;models/m1.3docx&#39;
 ❌     FAILURE
 
 
@@ -102,14 +118,11 @@ ocxtools >: validate one models/m1.3docx
 ┡━━━━━━━━━━━━━━━╇━━━━━━━━━╇━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━┩
 │ models/m1.3d… │ FAILURE │ 5             │ 0              │ 0             │ ocx-validator  │ 3.0.0b5       │ ocx.v3.0.0b4   │ 2024-01-04    │
 │               │         │               │                │               │                │               │                │ 20:25:13+00:… │
-└───────────────┴─────────┴───────────────┴────────────────┴───────────────┴────────────────┴───────────────┴────────────────┴───────────────┘
-````
-The above command validates the model ``m1.3docx`` in the folder ``models`` and prints the summary table.
-
-### validate many
-The ``validate many`` command will validate several models in one step. The command accepts a directory as input and gives the possibility to select models in the directory:
-````commandline
-validate many --help
+└───────────────┴─────────┴───────────────┴────────────────┴───────────────┴────────────────┴───────────────┴────────────────┴───────────────┘</code></pre>
+<p>The above command validates the model <code>m1.3docx</code> in the folder <code>models</code> and prints the summary table.</p>
+<h3 id="validate-many">validate many</h3>
+<p>The <code>validate many</code> command will validate several models in one step. The command accepts a directory as input and gives the possibility to select models in the directory:</p>
+<pre class="commandline"><code>validate many --help
 
  Usage: many [OPTIONS] DIRECTORY
 
@@ -126,21 +139,18 @@ validate many --help
 │ --force             --no-force                               Validate against the input schema version. [default: no-force]                │
 │ --interactive       --no-interactive                         Interactive mode [default: interactive]                                       │
 │ --help                                                       Show this message and exit.                                                   │
-╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
-````
-The options are the same as for the ``validate one`` command except for the ``filter`` option which gives the possibility to filter the files to be validated.
-
-#### Example
-````commandline
-ocxtools >: validate many models
-Select models (give a list of indexes, separated by spaces): [(0, 'BT118-CH3.3docx'), (1, 'M1.3docx'), (2, 'M2.3docx'), (3, 'M3.3docx'), (4, 'M4.3docx'), (5, 'M4_NURBS.3docx'), (6, 'M5.3docx'), (7, 'M6.3docx'), (8, 'M7.3docx'), (9, 'M8.3docx'), (10, 'M9.3docx')]?: 1 2 3
-Selected files: ['C:\\DNV\\ocxtools\\models\\M1.3docx', 'C:\\DNV\\ocxtools\\models\\M2.3docx', 'C:\\DNV\\ocxtools\\models\\M3.3docx'] [y/N]:y
+╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯</code></pre>
+<p>The options are the same as for the <code>validate one</code> command except for the <code>filter</code> option which gives the possibility to filter the files to be validated.</p>
+<h4 id="example">Example</h4>
+<pre class="commandline"><code>ocxtools &gt;: validate many models
+Select models (give a list of indexes, separated by spaces): [(0, &#39;BT118-CH3.3docx&#39;), (1, &#39;M1.3docx&#39;), (2, &#39;M2.3docx&#39;), (3, &#39;M3.3docx&#39;), (4, &#39;M4.3docx&#39;), (5, &#39;M4_NURBS.3docx&#39;), (6, &#39;M5.3docx&#39;), (7, &#39;M6.3docx&#39;), (8, &#39;M7.3docx&#39;), (9, &#39;M8.3docx&#39;), (10, &#39;M9.3docx&#39;)]?: 1 2 3
+Selected files: [&#39;C:\\DNV\\ocxtools\\models\\M1.3docx&#39;, &#39;C:\\DNV\\ocxtools\\models\\M2.3docx&#39;, &#39;C:\\DNV\\ocxtools\\models\\M3.3docx&#39;] [y/N]:y
 
 =============================================================== Validate Many ================================================================
-ℹ     Selected files: ['C:\\DNV\\ocxtools\\models\\M1.3docx', 'C:\\DNV\\ocxtools\\models\\M2.3docx', 'C:\\DNV\\ocxtools\\models\\M3.3docx']
-ℹ     Created validation report for model 'C:\\DNV\\ocxtools\\models\\M1.3docx'
-ℹ     Created validation report for model 'C:\\DNV\\ocxtools\\models\\M2.3docx'
-ℹ     Created validation report for model 'C:\\DNV\\ocxtools\\models\\M3.3docx'
+ℹ     Selected files: [&#39;C:\\DNV\\ocxtools\\models\\M1.3docx&#39;, &#39;C:\\DNV\\ocxtools\\models\\M2.3docx&#39;, &#39;C:\\DNV\\ocxtools\\models\\M3.3docx&#39;]
+ℹ     Created validation report for model &#39;C:\\DNV\\ocxtools\\models\\M1.3docx&#39;
+ℹ     Created validation report for model &#39;C:\\DNV\\ocxtools\\models\\M2.3docx&#39;
+ℹ     Created validation report for model &#39;C:\\DNV\\ocxtools\\models\\M3.3docx&#39;
 
 
                                                               Validation results
@@ -156,17 +166,12 @@ Selected files: ['C:\\DNV\\ocxtools\\models\\M1.3docx', 'C:\\DNV\\ocxtools\\mode
 │               │         │               │                │               │                │               │                │ 20:49:36+00:… │
 └───────────────┴─────────┴───────────────┴────────────────┴───────────────┴────────────────┴───────────────┴────────────────┴───────────────┘
 
-ocxtools >:
-````
-The above command validates the 3 selected models in the folder ``models`` and prints the summary table.
-
-### validate summary
-The ``validate summary`` command will print the summary validation results for all models that has been validated during this session.
-
-#### Example
-
-````commandline
-ocxtools >: validate summary
+ocxtools &gt;:</code></pre>
+<p>The above command validates the 3 selected models in the folder <code>models</code> and prints the summary table.</p>
+<h3 id="validate-summary">validate summary</h3>
+<p>The <code>validate summary</code> command will print the summary validation results for all models that has been validated during this session.</p>
+<h4 id="example-1">Example</h4>
+<pre class="commandline"><code>ocxtools &gt;: validate summary
 ============================================================= Validation Summary =============================================================
 
 
@@ -186,102 +191,97 @@ ocxtools >: validate summary
 └───────────────┴─────────┴───────────────┴────────────────┴───────────────┴────────────────┴───────────────┴────────────────┴───────────────┘
 
 
-ocxtools >:
-````
-
-### validate details
-The ``validate details`` command will print the detailed validation results for all models that has been validated during this session.
-
-#### Example
-
-````commandline
-ocxtools >: validate details
+ocxtools &gt;:</code></pre>
+<h3 id="validate-details">validate details</h3>
+<p>The <code>validate details</code> command will print the detailed validation results for all models that has been validated during this session.</p>
+<h4 id="example-2">Example</h4>
+<pre class="commandline"><code>ocxtools &gt;: validate details
 ============================================================= Validation Details =============================================================
 
 
-                                                  Error Details for model: 'models/m1.3docx'
+                                                  Error Details for model: &#39;models/m1.3docx&#39;
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━┳━━━━━━━━┓
 ┃ Description                                                                                                                ┃ Line ┃ Column ┃
 ┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━╇━━━━━━━━┩
-│ cvc-complex-type.4: Attribute 'license' must appear on element 'ocx:Header'.                                               │ 12   │ 65     │
-│ cvc-complex-type.2.4.a: Invalid content was found starting with element 'NURBSproperties'. One of 'Description, Length' is │ 164  │ 53     │
+│ cvc-complex-type.4: Attribute &#39;license&#39; must appear on element &#39;ocx:Header&#39;.                                               │ 12   │ 65     │
+│ cvc-complex-type.2.4.a: Invalid content was found starting with element &#39;NURBSproperties&#39;. One of &#39;Description, Length&#39; is │ 164  │ 53     │
 │ expected.                                                                                                                  │      │        │
-│ cvc-complex-type.2.4.a: Invalid content was found starting with element 'NURBSproperties'. One of 'Description, Length' is │ 229  │ 59     │
+│ cvc-complex-type.2.4.a: Invalid content was found starting with element &#39;NURBSproperties&#39;. One of &#39;Description, Length&#39; is │ 229  │ 59     │
 │ expected.                                                                                                                  │      │        │
-│ cvc-complex-type.2.4.a: Invalid content was found starting with element 'Origin'. One of 'Description, Area' is expected.  │ 315  │ 56     │
-│ cvc-complex-type.2.4.a: Invalid content was found starting with element 'NURBSproperties'. One of 'Description, Length' is │ 323  │ 56     │
+│ cvc-complex-type.2.4.a: Invalid content was found starting with element &#39;Origin&#39;. One of &#39;Description, Area&#39; is expected.  │ 315  │ 56     │
+│ cvc-complex-type.2.4.a: Invalid content was found starting with element &#39;NURBSproperties&#39;. One of &#39;Description, Length&#39; is │ 323  │ 56     │
 │ expected.                                                                                                                  │      │        │
 └────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┴──────┴────────┘
 
 
 
 
-                                        Error Details for model: 'C:\\DNV\\ocxtools\\models\\M1.3docx'
+                                        Error Details for model: &#39;C:\\DNV\\ocxtools\\models\\M1.3docx&#39;
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━┳━━━━━━━━┓
 ┃ Description                                                                                                                ┃ Line ┃ Column ┃
 ┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━╇━━━━━━━━┩
-│ cvc-complex-type.4: Attribute 'license' must appear on element 'ocx:Header'.                                               │ 12   │ 65     │
-│ cvc-complex-type.2.4.a: Invalid content was found starting with element 'NURBSproperties'. One of 'Description, Length' is │ 164  │ 53     │
+│ cvc-complex-type.4: Attribute &#39;license&#39; must appear on element &#39;ocx:Header&#39;.                                               │ 12   │ 65     │
+│ cvc-complex-type.2.4.a: Invalid content was found starting with element &#39;NURBSproperties&#39;. One of &#39;Description, Length&#39; is │ 164  │ 53     │
 │ expected.                                                                                                                  │      │        │
-│ cvc-complex-type.2.4.a: Invalid content was found starting with element 'NURBSproperties'. One of 'Description, Length' is │ 229  │ 59     │
+│ cvc-complex-type.2.4.a: Invalid content was found starting with element &#39;NURBSproperties&#39;. One of &#39;Description, Length&#39; is │ 229  │ 59     │
 │ expected.                                                                                                                  │      │        │
-│ cvc-complex-type.2.4.a: Invalid content was found starting with element 'Origin'. One of 'Description, Area' is expected.  │ 315  │ 56     │
-│ cvc-complex-type.2.4.a: Invalid content was found starting with element 'NURBSproperties'. One of 'Description, Length' is │ 323  │ 56     │
+│ cvc-complex-type.2.4.a: Invalid content was found starting with element &#39;Origin&#39;. One of &#39;Description, Area&#39; is expected.  │ 315  │ 56     │
+│ cvc-complex-type.2.4.a: Invalid content was found starting with element &#39;NURBSproperties&#39;. One of &#39;Description, Length&#39; is │ 323  │ 56     │
 │ expected.                                                                                                                  │      │        │
 └────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┴──────┴────────┘
 
 
 
 
-                                        Error Details for model: 'C:\\DNV\\ocxtools\\models\\M2.3docx'
+                                        Error Details for model: &#39;C:\\DNV\\ocxtools\\models\\M2.3docx&#39;
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━┳━━━━━━━━┓
 ┃ Description                                                                                                                ┃ Line ┃ Column ┃
 ┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━╇━━━━━━━━┩
-│ cvc-complex-type.4: Attribute 'license' must appear on element 'ocx:Header'.                                               │ 12   │ 65     │
-│ cvc-complex-type.2.4.a: Invalid content was found starting with element 'NURBSproperties'. One of 'Description, Length' is │ 160  │ 54     │
+│ cvc-complex-type.4: Attribute &#39;license&#39; must appear on element &#39;ocx:Header&#39;.                                               │ 12   │ 65     │
+│ cvc-complex-type.2.4.a: Invalid content was found starting with element &#39;NURBSproperties&#39;. One of &#39;Description, Length&#39; is │ 160  │ 54     │
 │ expected.                                                                                                                  │      │        │
-│ cvc-complex-type.2.4.a: Invalid content was found starting with element 'NURBSproperties'. One of 'Description, Length' is │ 2114 │ 60     │
+│ cvc-complex-type.2.4.a: Invalid content was found starting with element &#39;NURBSproperties&#39;. One of &#39;Description, Length&#39; is │ 2114 │ 60     │
 │ expected.                                                                                                                  │      │        │
-│ cvc-complex-type.2.4.a: Invalid content was found starting with element 'NURBSproperties'. One of 'Description, Length' is │ 4082 │ 63     │
+│ cvc-complex-type.2.4.a: Invalid content was found starting with element &#39;NURBSproperties&#39;. One of &#39;Description, Length&#39; is │ 4082 │ 63     │
 │ expected.                                                                                                                  │      │        │
 └────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┴──────┴────────┘
 
 
 
 
-                                        Error Details for model: 'C:\\DNV\\ocxtools\\models\\M3.3docx'
+                                        Error Details for model: &#39;C:\\DNV\\ocxtools\\models\\M3.3docx&#39;
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━┳━━━━━━━━┓
 ┃ Description                                                                                                                ┃ Line ┃ Column ┃
 ┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━╇━━━━━━━━┩
-│ cvc-complex-type.4: Attribute 'license' must appear on element 'ocx:Header'.                                               │ 12   │ 65     │
-│ cvc-complex-type.2.4.a: Invalid content was found starting with element 'NURBSproperties'. One of 'Description, Length' is │ 266  │ 53     │
+│ cvc-complex-type.4: Attribute &#39;license&#39; must appear on element &#39;ocx:Header&#39;.                                               │ 12   │ 65     │
+│ cvc-complex-type.2.4.a: Invalid content was found starting with element &#39;NURBSproperties&#39;. One of &#39;Description, Length&#39; is │ 266  │ 53     │
 │ expected.                                                                                                                  │      │        │
-│ cvc-complex-type.2.4.a: Invalid content was found starting with element 'NURBSproperties'. One of 'Description, Length' is │ 330  │ 59     │
+│ cvc-complex-type.2.4.a: Invalid content was found starting with element &#39;NURBSproperties&#39;. One of &#39;Description, Length&#39; is │ 330  │ 59     │
 │ expected.                                                                                                                  │      │        │
-│ cvc-complex-type.2.4.b: The content of element 'ocx:SectionRef' is not complete. One of 'OffsetU, OffsetV' is expected.    │ 424  │ 63     │
-│ cvc-complex-type.2.4.a: Invalid content was found starting with element 'StartPoint'. One of 'Description, Length' is      │ 427  │ 69     │
+│ cvc-complex-type.2.4.b: The content of element &#39;ocx:SectionRef&#39; is not complete. One of &#39;OffsetU, OffsetV&#39; is expected.    │ 424  │ 63     │
+│ cvc-complex-type.2.4.a: Invalid content was found starting with element &#39;StartPoint&#39;. One of &#39;Description, Length&#39; is      │ 427  │ 69     │
 │ expected.                                                                                                                  │      │        │
-│ cvc-complex-type.2.4.b: The content of element 'ocx:SectionRef' is not complete. One of 'OffsetU, OffsetV' is expected.    │ 450  │ 63     │
-│ cvc-complex-type.2.4.a: Invalid content was found starting with element 'StartPoint'. One of 'Description, Length' is      │ 453  │ 69     │
+│ cvc-complex-type.2.4.b: The content of element &#39;ocx:SectionRef&#39; is not complete. One of &#39;OffsetU, OffsetV&#39; is expected.    │ 450  │ 63     │
+│ cvc-complex-type.2.4.a: Invalid content was found starting with element &#39;StartPoint&#39;. One of &#39;Description, Length&#39; is      │ 453  │ 69     │
 │ expected.                                                                                                                  │      │        │
-│ cvc-complex-type.2.4.b: The content of element 'ocx:SectionRef' is not complete. One of 'OffsetU, OffsetV' is expected.    │ 476  │ 63     │
-│ cvc-complex-type.2.4.a: Invalid content was found starting with element 'StartPoint'. One of 'Description, Length' is      │ 479  │ 69     │
+│ cvc-complex-type.2.4.b: The content of element &#39;ocx:SectionRef&#39; is not complete. One of &#39;OffsetU, OffsetV&#39; is expected.    │ 476  │ 63     │
+│ cvc-complex-type.2.4.a: Invalid content was found starting with element &#39;StartPoint&#39;. One of &#39;Description, Length&#39; is      │ 479  │ 69     │
 │ expected.                                                                                                                  │      │        │
-│ cvc-complex-type.2.4.b: The content of element 'ocx:SectionRef' is not complete. One of 'OffsetU, OffsetV' is expected.    │ 514  │ 33     │
-│ cvc-complex-type.2.4.a: Invalid content was found starting with element 'StartPoint'. One of 'Description, Length' is      │ 517  │ 69     │
+│ cvc-complex-type.2.4.b: The content of element &#39;ocx:SectionRef&#39; is not complete. One of &#39;OffsetU, OffsetV&#39; is expected.    │ 514  │ 33     │
+│ cvc-complex-type.2.4.a: Invalid content was found starting with element &#39;StartPoint&#39;. One of &#39;Description, Length&#39; is      │ 517  │ 69     │
 │ expected.                                                                                                                  │      │        │
-│ cvc-complex-type.2.4.a: Invalid content was found starting with element 'StartPoint'. One of 'Description, Length' is      │ 546  │ 69     │
+│ cvc-complex-type.2.4.a: Invalid content was found starting with element &#39;StartPoint&#39;. One of &#39;Description, Length&#39; is      │ 546  │ 69     │
 │ expected.                                                                                                                  │      │        │
-│ cvc-complex-type.2.4.a: Invalid content was found starting with element 'StartPoint'. One of 'Description, Length' is      │ 575  │ 69     │
+│ cvc-complex-type.2.4.a: Invalid content was found starting with element &#39;StartPoint&#39;. One of &#39;Description, Length&#39; is      │ 575  │ 69     │
 │ expected.                                                                                                                  │      │        │
-│ cvc-complex-type.2.4.a: Invalid content was found starting with element 'StartPoint'. One of 'Description, Length' is      │ 604  │ 69     │
+│ cvc-complex-type.2.4.a: Invalid content was found starting with element &#39;StartPoint&#39;. One of &#39;Description, Length&#39; is      │ 604  │ 69     │
 │ expected.                                                                                                                  │      │        │
 └────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┴──────┴────────┘
 
 
-ocxtools >:
-````
-The detailed report lists each error, assertion or warning found and the its location in the XML file.
-
-### validation readme
-The ``validation readme`` command displays this page in the browser.
+ocxtools &gt;:</code></pre>
+<p>The detailed report lists each error, assertion or warning found and the its location in the XML file.</p>
+<h3 id="validation-readme">validation readme</h3>
+<p>The <code>validation readme</code> command displays this page in the browser.</p>
+</body>
+</html>
