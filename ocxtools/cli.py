@@ -153,15 +153,18 @@ def clear():
 
 
 # Arrange all command groups from Typer
-subcommand, typer_click_object = ocxtools.serializer.cli.cli_plugin()
-cli.add_command(typer_click_object, subcommand)
-subcommand, typer_click_object = ocxtools.validator.cli.cli_plugin()
-cli.add_command(typer_click_object, subcommand)
-subcommand, typer_click_object = ocxtools.docker.cli.cli_plugin()
-cli.add_command(typer_click_object, subcommand)
-subcommand, typer_click_object = ocxtools.reporter.cli.cli_plugin()
-cli.add_command(typer_click_object, subcommand)
-subcommand, typer_click_object = ocxtools.renderer.cli.cli_plugin()
-cli.add_command(typer_click_object, subcommand)
-subcommand, typer_click_object = ocxtools.reporter.cli.cli_plugin()
-cli.add_command(typer_click_object, subcommand)
+if config.getboolean('Plugins', 'serializer'):
+    subcommand, typer_click_object = ocxtools.serializer.cli.cli_plugin()
+    cli.add_command(typer_click_object, subcommand)
+if config.getboolean('Plugins', 'validator'):
+    subcommand, typer_click_object = ocxtools.validator.cli.cli_plugin()
+    cli.add_command(typer_click_object, subcommand)
+if config.getboolean('Plugins', 'docker'):
+    subcommand, typer_click_object = ocxtools.docker.cli.cli_plugin()
+    cli.add_command(typer_click_object, subcommand)
+if config.getboolean('Plugins', 'reporter'):
+    subcommand, typer_click_object = ocxtools.reporter.cli.cli_plugin()
+    cli.add_command(typer_click_object, subcommand)
+if config.getboolean('Plugins', 'renderer'):
+    subcommand, typer_click_object = ocxtools.renderer.cli.cli_plugin()
+    cli.add_command(typer_click_object, subcommand)
