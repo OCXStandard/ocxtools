@@ -19,7 +19,6 @@ packages = [{include = "ocxtools"}]
 python = "^3.11"
 packaging = "^23.1"
 tbump = '*'
-xsdata = "*"
 click ="*"
 click_shell = "*"
 lxml = "*"
@@ -27,13 +26,12 @@ soap = "*"
 typer = "*"
 rich = "*"
 loguru = "*"
-sphinx = "<=6.2.1"
-ocx = "*"
 httpx = "*"
 arrow = "*"
 pandas = "*"
+ocx = "3.00b5"
 ocx_schema_parser = "*"
-tailer = "*"
+
 
 [tool.poetry.group.development.dependencies]
 pre-commit = "*"

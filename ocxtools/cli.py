@@ -4,7 +4,6 @@
 # System imports
 from __future__ import annotations
 import sys
-import warnings
 # Third party
 from click import pass_context
 from click_shell import shell
@@ -13,10 +12,15 @@ from loguru import logger
 
 # Project imports
 from ocxtools import __app_name__, __version__
+import ocxtools.serializer.cli
+import ocxtools.validator.cli
+import ocxtools.docker.cli
+import ocxtools.reporter.cli
+import ocxtools.renderer.cli
+import ocxtools.reporter.cli
 from ocxtools.console.console import CliConsole
 from ocxtools.context.context_manager import ContextManager
 from ocxtools.config import config
-from ocxtools.cli_plugin import PluginManager
 
 LOG_FILE = config.get('FileLogger', 'log_file')
 RETENTION = config.get('FileLogger', 'retention')
@@ -90,7 +94,7 @@ def capture_warnings(record):
 
 
 # Attach the capture_warnings function to the warnings module
-warnings.showwarning = custom_warning_handler
+# warnings.showwarning = custom_warning_handler
 
 
 def exit_cli():
@@ -112,9 +116,9 @@ def cli(ctx):
     Main CLI
     """
 
-    console.print(LOGO, style='blue')
+    console.print(LOGO)
     console.print(f"Version: {__version__}")
-    console.print("Copyright (c) 2023. OCX Consortium (https://3docx.org)\n")
+    console.print("Copyright (c) 2024. OCX Consortium (https://3docx.org)\n")
     logger.info(f"{__app_name__} session started.")
     ctx.obj = context_manager
     ctx.call_on_close(exit_cli)
@@ -122,14 +126,13 @@ def cli(ctx):
 
 @cli.command(short_help="Print the ocxtools version number.")
 def version():
-    """Clear the console window."""
-
+    """Print the ``ocxtools`` version number"""
     console.info(__version__)
 
 
 @cli.command(short_help="Clear the console window.")
 def clear():
-    """Clear the console window."""
+    """Clear the console window"""
     command = f'"cmd /c {clear}"'
     result = typer.launch(command)
     typer.echo(result)
@@ -148,7 +151,17 @@ def clear():
 #         config.write(configfile)
 #
 
-# Add all configured command groups
-plugins = config.get('Plugins', 'modules').split()
-plugin_manager = PluginManager(package=__app_name__, cli=cli)
-plugin_manager.load_plugins(plugins)
+
+# Arrange all command groups from Typer
+subcommand, typer_click_object = ocxtools.serializer.cli.cli_plugin()
+cli.add_command(typer_click_object, subcommand)
+subcommand, typer_click_object = ocxtools.validator.cli.cli_plugin()
+cli.add_command(typer_click_object, subcommand)
+subcommand, typer_click_object = ocxtools.docker.cli.cli_plugin()
+cli.add_command(typer_click_object, subcommand)
+subcommand, typer_click_object = ocxtools.reporter.cli.cli_plugin()
+cli.add_command(typer_click_object, subcommand)
+subcommand, typer_click_object = ocxtools.renderer.cli.cli_plugin()
+cli.add_command(typer_click_object, subcommand)
+subcommand, typer_click_object = ocxtools.reporter.cli.cli_plugin()
+cli.add_command(typer_click_object, subcommand)

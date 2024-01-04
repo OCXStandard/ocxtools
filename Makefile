@@ -2,8 +2,8 @@
 # You can set these variables from the command line, and also
 # from the environment for the first two.
 
-SOURCEDIR = ./ocx_generator
-CONDA_ENV = generator
+SOURCEDIR = ./ocxtools
+CONDA_ENV = ocxtools
 DATA_SOURCE: C:\PythonDev\ocxtools\readme
 
 # PROJECT setup using conda and powershell
@@ -13,11 +13,10 @@ conda-create:  ## Create a new conda environment with the python version and bas
 
 conda-upd:  ## Update the conda development environment when environment.yml has changed
 	@conda env update -f environment.yml
-.PHONY:conda-upd
+
 
 conda-clean: ## Purge all conda tarballs, log files and caches
 	conda clean -a -y
-.PHONY: conda-clean
 
 conda-activate: ## Activate the conda environment for the project
 	@conda activate $(CONDA_ENV)
@@ -39,37 +38,35 @@ doc-serve: ## Open the the html docs built by Sphinx
 	@cmd /c start "_build/index.html"
 
 ds: doc-serve
-.PHINY: ds
 
 doc: ## Build the html docs using Sphinx. For other Sphinx options, run make in the docs folder
 	@sphinx-build docs _build
-PHONY: doc
 
 doc-links: ## Check the internal and external links after building the documentation
 	@sphinx-build docs -W -b linkcheck -d _build/doctrees _build/html
-PHONY: doc-links
+
+u-m: ## Create the user manual converting markdown files to html
+	@pandoc -c=readme/modest.css --wrap=none --standalone -o ./readme/ocxtools.html README.md --metadata=title:"ocxtools"
+	@pandoc -c=readme/modest.css --wrap=none --standalone -o ./readme/docker.html ./readme/docker.md --metadata=title:"docker"
+	@pandoc -c=readme/modest.css --wrap=none --standalone -o ./readme/validate.html ./readme/validate.md --metadata=title:"validate"
 
 build-exe:  ## Build a single Windows executable
-	@pyinstaller --clean --onefile --name ocxtools  --add-data "readme\*:readme"  .\__main__.py
+	@pyinstaller --clean --onefile --name ocxtools  --add-data "readme\*:readme"  ./__main__.py
 
 # POETRY ########################################################################
 build:   ## Build the package dist with poetry
 	@poetry update
 	@poetry build
-.PHONY: build
 
 poetry-fix:  ## Force pip poetry re-installation
 	@pip install poetry --upgrade
-.PHONY: poetry-fix
 
 export:   ## Export the dependencies to docs/requirements.txt
 	@poetry export --with=docs -o ./docs/requirements.txt
-.PHONY: publish
 
 #  Run CLI
 run:  ## Run the CLI
 	python __main__.py
-.PHONY: run
 # pre-commit ######################################################################
 pre-commit:	## Run any pre-commit hooks
 	@pre-commit run --all-files
@@ -77,12 +74,10 @@ pre-commit:	## Run any pre-commit hooks
 sourcery:  ## Run sourcery with --fix
 # TESTS #######################################################################
 	@sourcery review --fix --no-summary ./ocxtools
-FAILURES := .pytest_cache/pytest/v/cache/lastfailed
 
 
 test:  ## Run unit and integration tests
 	@pytest --durations=5  --cov-report html --cov ocxtools .
-.PHONY: test
 
 test-upd:  ## Run unit and integration tests
 	@pytest --force-regen --durations=5  --cov-report html --cov ocxtools .
@@ -90,7 +85,6 @@ test-upd:  ## Run unit and integration tests
 
 test-cov:  ## View the test coverage report
 	cmd /c start $(CURDIR)/htmlcov/index.html
-.PHONY: test-cov
 
 # REST API #######################################################################
 swagger:  ## Swagger api documentation

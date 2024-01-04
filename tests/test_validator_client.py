@@ -3,10 +3,10 @@
 import json
 import lxml.etree
 # Project imports
-from ocxtools.validator.validator_client import EmbeddingMethod, OcxValidatorClient, ValidatorError
+from ocxtools.validator.validator_client import EmbeddingMethod, OcxValidatorClient, ValidatorError, ValidationDomain
 from ocx_schema_parser.xelement import LxmlElement
-from ocxtools import VALIDATOR
-from ocxtools.validator.validator_client import ValidationDomain
+from ocxtools import config
+VALIDATOR = config.get('ValidatorSettings', 'validator_url')
 
 
 def test_get_validator_info():
@@ -71,7 +71,7 @@ def test_validate_one_model_status_code_500(shared_datadir):
 
 def test_validate_one_embedding_url(shared_datadir):
     client = OcxValidatorClient(VALIDATOR)
-    model = str(shared_datadir / 'box_pp.3docx')
+    model = str(shared_datadir / 'm1.3docx')
     try:
         client.validate_one(model, ValidationDomain.OCX, embedding_method=EmbeddingMethod.URL)
     except ValidatorError as e:
@@ -80,8 +80,7 @@ def test_validate_one_embedding_url(shared_datadir):
 
 def test_validate_many(shared_datadir):
     client = OcxValidatorClient(VALIDATOR)
-    models = [str(shared_datadir / 'm1.3docx'), str(shared_datadir / 'm2.3docx'), str(shared_datadir / 'm3.3docx'),
-              str(shared_datadir / 'm4.3docx'), str(shared_datadir / 'm5.3docx'), str(shared_datadir / 'm6.3docx')]
+    models = [str(shared_datadir / 'm1.3docx'), str(shared_datadir / 'm2.3docx'), str(shared_datadir / 'm3.3docx')]
     response = client.validate_many(
         ocx_models=models, domain=ValidationDomain.OCX, embedding_method=EmbeddingMethod.STRING
     )

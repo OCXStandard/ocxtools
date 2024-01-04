@@ -157,7 +157,7 @@ class TestRestClient:
 
     def test_rest_post_data_base64_embedding(self, shared_datadir):
         client = RestClient(VALIDATOR)
-        model = shared_datadir / "box.3Docx"
+        model = shared_datadir / "m1.3Docx"
         tree = lxml.etree.parse(str(model.resolve()))
         byte_string = lxml.etree.tostring(tree)
         base64_bytes = base64.b64encode(byte_string)

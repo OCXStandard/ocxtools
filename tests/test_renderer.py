@@ -5,7 +5,11 @@ from ocxtools.validator.validator_client import OcxValidatorClient, ValidationDo
 from ocxtools.renderer.renderer import XsltTransformer
 from ocxtools.validator.validator_report import ValidatorReport
 
-from ocxtools import OCX_XSLT, SCHEMATRON_XSLT, VALIDATOR, RESOURCES
+from ocxtools import config
+RESOURCES = config.get("RendererSettings", "resource_folder")
+OCX_XSLT = config.get("RendererSettings", "ocx_xslt")
+SCHEMATRON_XSLT = config.get("RendererSettings", "schematron_xslt")
+VALIDATOR = config.get('ValidatorSettings', 'validator_url')
 
 
 class TestXsltRenderer:

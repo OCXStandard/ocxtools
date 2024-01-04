@@ -3,7 +3,8 @@
 
 from ocxtools.validator.validator_client import EmbeddingMethod, OcxValidatorClient, ValidationDomain
 from ocxtools.validator.validator_report import ValidatorReport
-from ocxtools import VALIDATOR
+from ocxtools import config
+VALIDATOR = config.get('ValidatorSettings', 'validator_url')
 
 
 def test_create_report(shared_datadir):

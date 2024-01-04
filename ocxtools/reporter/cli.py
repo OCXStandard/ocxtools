@@ -13,7 +13,7 @@ from ocxtools.reporter.reporter import OcxReporter
 from ocxtools.context.context_manager import get_context_manager
 from ocxtools.reporter import __app_name__
 
-report = typer.Typer()
+report = typer.Typer(help="Reporting of 3Docx attributes")
 
 
 @report.command()

@@ -14,10 +14,14 @@ from ocxtools.parser.parser import OcxParser
 # Project imports
 from ocxtools.serializer.serializer import Serializer
 from ocxtools.serializer import __app_name__
-from ocxtools import SERIALIZER_SUFFIX, JSON_INDENT
+from ocxtools import config
 from ocxtools.context.context_manager import get_context_manager
 
-serialize = typer.Typer()
+JSON_INDENT = int(config.get("SerializerSettings", "json_indent"))
+SERIALIZER_SUFFIX = config.get("SerializerSettings", "suffix")
+
+
+serialize = typer.Typer(help="Serialisation of 3Docx models.")
 ocx_parser = OcxParser()
 
 
@@ -49,7 +53,6 @@ def xml(
 @serialize.command()
 def json(
     model: Path,
-    indent: Annotated[int, typer.Option(help="The JSON indentation level.")] = JSON_INDENT,
 ):
     """Serialize an 3Docx model to json."""
     context_manager = get_context_manager()

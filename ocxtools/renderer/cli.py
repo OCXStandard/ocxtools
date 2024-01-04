@@ -12,9 +12,13 @@ from ocxtools.renderer import __app_name__
 from ocxtools.parser.parser import OcxParser
 from ocxtools.renderer.renderer import XsltTransformer
 from ocxtools.context.context_manager import get_context_manager
-from ocxtools import RESOURCES, SCHEMATRON_XSLT
+from ocxtools import config
+# # Renderer
+RESOURCES = config.get("RendererSettings", "resource_folder")
+OCX_XSLT = config.get("RendererSettings", "ocx_xslt")
+SCHEMATRON_XSLT = config.get("RendererSettings", "schematron_xslt")
 
-render = typer.Typer()
+render = typer.Typer(help="Rendering of 3Docx models.")
 ocx_parser = OcxParser()
 
 

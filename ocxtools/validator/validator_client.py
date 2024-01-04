@@ -14,7 +14,6 @@ from typing import Dict
 # 3rd party imports
 import lxml.etree
 from loguru import logger
-
 # Project
 from ocxtools.clients.clients import CurlClientError, CurlRestClient, AsyncRestClient, RequestClientError, RequestType
 from ocxtools.exceptions import SourceError

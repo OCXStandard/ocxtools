@@ -1,8 +1,6 @@
 #  Copyright (c) 2023. OCX Consortium https://3docx.org. See the LICENSE
 """Validator CLI."""
 # System imports
-import asyncio
-from functools import wraps
 import json
 import base64
 from typing import Any, Tuple
@@ -15,7 +13,7 @@ from typing_extensions import Annotated
 import click
 
 # Project imports
-from ocxtools import VALIDATOR
+from ocxtools import config
 from ocxtools.validator import __app_name__
 from ocxtools.validator.validator_report import ValidatorReport
 from ocxtools.validator.validator_client import (
@@ -25,22 +23,15 @@ from ocxtools.validator.validator_client import (
 from ocxtools.renderer.renderer import RichTable
 from ocxtools.utils.utilities import SourceValidator
 from ocxtools.context.context_manager import get_context_manager
-from ocxtools import REPORT_FOLDER
 
-validate = typer.Typer()
-
-
-def typer_async(f):
-    @wraps(f)
-    def wrapper(*args, **kwargs):
-        return asyncio.run(f(*args, **kwargs))
-
-    return wrapper
+REPORT_FOLDER = config.get('ValidatorSettings', 'report_folder')
+SUFFIX = config.get('ValidatorSettings', 'report_suffix')
+VALIDATOR = config.get('ValidatorSettings', 'validator_url')
+validate = typer.Typer(help="Validation of 3Docx models.")
 
 
-# @typer_async
 @validate.command()
-def one_model(
+def one(
         model: str,
         domain: Annotated[ValidationDomain, typer.Option(help="The validator domain.")] = ValidationDomain.OCX.value,
         schema_version: Annotated[str, typer.Option(help="Input schema version.")] = "3.0.0",
@@ -48,7 +39,7 @@ def one_model(
             EmbeddingMethod, typer.Option(help="The embedding method.")
         ] = EmbeddingMethod.BASE64.value,
         force: Annotated[bool, typer.Option(help="Validate against the input schema version.")] = False,
-        save: Annotated[bool, typer.Option(help="Save the validation xml to the report folder.")] = True,
+        save: Annotated[bool, typer.Option(help="Save the validation xml to the report folder.")] = False,
 ):
     """Validate one 3Docx XML file with the docker validator."""
     context_manager = get_context_manager()
@@ -62,7 +53,7 @@ def one_model(
             )
         console.section('Validate One')
         report_data = ValidatorReport.create_report(model, response)
-        table = report_data.to_dict(exclude='Report')
+        table = report_data.to_dict(exclude=['Report', 'Errors', 'Warnings', 'Assertions'])
         logger.info(f'Validated model {model} with result: {report_data.result}. '
                     f'Errors: {report_data.errors} '
                     f'Warnings: {report_data.warnings} '
@@ -77,7 +68,9 @@ def one_model(
         summary = RichTable.render('Validation results', [table])
         console.print_table(summary)
         if save:
-            validation_report = Path(REPORT_FOLDER) / f'{Path(model).stem}_{domain.value}_validation.xml'
+            report_folder = Path(REPORT_FOLDER)
+            report_folder.mkdir(parents=True, exist_ok=True)
+            validation_report = report_folder / f'{Path(model).stem}_{domain.value}{SUFFIX}'
             with open(validation_report.resolve(), 'w') as f:
                 f.write(report_data.report)
             console.info(f'Saved validation report {str(validation_report.resolve())!r}')
@@ -87,7 +80,7 @@ def one_model(
 
 # @typer_async
 @validate.command()
-def many_models(
+def many(
         directory: str,
         filter: Annotated[str, typer.Option(help="Filter models to validate.")] = "*.3docx",
         domain: Annotated[ValidationDomain, typer.Option(help="The validator domain.")] = ValidationDomain.OCX.value,
@@ -126,15 +119,15 @@ def many_models(
             decoded_bytes = base64.b64decode(encoded_report)
             report = decoded_bytes.decode('utf-8')
             report_data = ValidatorReport.create_report(selected_files[indx], report)
-            logger.info(f'Validated model {files[indx]} with result: {report_data.result}. '
+            logger.info(f'Validated model {selected_files[indx]} with result: {report_data.result}. '
                         f'Errors: {report_data.errors} '
                         f'Warnings: {report_data.warnings} '
                         f'Assertions: {report_data.assertions}')
-            tables.append(report_data.to_dict(exclude='Report'))
+            tables.append(report_data.to_dict(exclude=['Report', 'Errors', 'Warnings', 'Assertions']))
             ctx = click.get_current_context()
             context_manager = ctx.obj
             context_manager.add_report(domain=domain, report=report_data)
-            console.info(f'Created validation report for model {str(files[indx].resolve())!r}')
+            console.info(f'Created validation report for model {str(selected_files[indx])!r}')
     except ValidatorError as e:
         console.error(f'{e}')
     summary = RichTable.render('Validation results', tables)
@@ -163,20 +156,45 @@ def info():
 
 
 @validate.command()
-def list_reports():
-    """List validated models with summary results.."""
+def summary():
+    """List validation summary results."""
     context_manager = get_context_manager()
     console = context_manager.get_console()
-    console.section('Validation Summaries')
+    console.section('Validation Summary')
     validated = list(context_manager.get_ocx_reports())
     validated.extend(list(context_manager.get_schematron_reports()))
     tables = []
     for model in validated:
         report = context_manager.get_report(model)
         if report is not None:
-            tables.append(report.to_dict(exclude='Report'))
+            tables.append(report.to_dict(exclude=['Report', 'Errors', 'Warnings', 'Assertions']))
     summary = RichTable.render('Validation results', tables)
     console.print_table(summary)
+
+
+@validate.command()
+def details():
+    """List validation summary results."""
+    context_manager = get_context_manager()
+    console = context_manager.get_console()
+    console.section('Validation Details')
+    validated = list(context_manager.get_ocx_reports())
+    validated.extend(list(context_manager.get_schematron_reports()))
+    for model in validated:
+        tables = []
+        report = context_manager.get_report(model)
+        if report is not None:
+            tables.extend(error.to_dict() for error in report.error_details)
+        detail_table = RichTable.render(f'Error Details for model: {report.source!r}', tables)
+        console.print_table(detail_table)
+
+
+@validate.command()
+def readme():
+    """Show the ``validate`` html page with usage examples."""
+    context_manager = get_context_manager()
+    console = context_manager.get_console()
+    console.man_page(__app_name__)
 
 
 def cli_plugin() -> Tuple[str, Any]:

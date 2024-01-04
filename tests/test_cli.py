@@ -24,5 +24,5 @@ def test_cli_validate_info():
 def test_cli_validate_one_model(shared_datadir):
     runner = CliRunner()
     model = shared_datadir / "m1.3Docx"
-    result = runner.invoke(cli,['validate','one-model', str(model.resolve())])
+    result = runner.invoke(cli,['validate','one', str(model.resolve())])
     assert result.exit_code == 0

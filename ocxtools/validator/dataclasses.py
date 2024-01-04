@@ -6,6 +6,7 @@ from dataclasses import dataclass, field, fields
 from typing import Dict
 
 
+
 @dataclass
 class BaseDataClass:
     """Base class for OCX dataclasses.
@@ -39,6 +40,7 @@ class BaseDataClass:
         return {k: v for k, v in self._to_dict().items() if k != exclude}
 
 
+
 @dataclass
 class ValidationReport(BaseDataClass):
     """Validation Report"""
@@ -52,6 +54,7 @@ class ValidationReport(BaseDataClass):
     validation_type: str = field(metadata={"header": "Validation type"})
     date: str = field(metadata={"header": "Date"})
     report: str = field(metadata={"header": "Report"})
+
 
 
 @dataclass

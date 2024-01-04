@@ -7,11 +7,18 @@ import typer
 from typing_extensions import Annotated
 
 # Project imports
-from ocxtools import DOCKER_IMAGE, DOCKER_CONTAINER, DOCKER_DESKTOP, DOCKER_TAG, DOCKER_PORT
+from ocxtools import config
 from ocxtools.context.context_manager import get_context_manager
 from ocxtools.docker import __app_name__
 
-docker = typer.Typer()
+# # Docker
+DOCKER_IMAGE = config.get("DockerSettings", "docker_image")
+DOCKER_CONTAINER = config.get("DockerSettings", "container_name", )
+DOCKER_TAG = config.get("DockerSettings", "docker_tag")
+DOCKER_DESKTOP = config.get("DockerSettings", "docker_desktop")
+DOCKER_PORT = int(config.get("DockerSettings", "docker_port"))
+
+docker = typer.Typer(help="Commands for managing the docker OCX validator.")
 
 
 @docker.command()
@@ -51,10 +58,10 @@ def start(
 @docker.command()
 def readme(
 ):
-    """Sow the docker readme with usage examples."""
+    """Show the ``docker`` html page with usage examples."""
     context_manager = get_context_manager()
     console = context_manager.get_console()
-    console.readme(__app_name__)
+    console.man_page(__app_name__)
 
 
 @docker.command()

@@ -2,6 +2,7 @@
 """The validator report class."""
 
 # System imports
+import re
 # Third party imports
 import arrow
 import lxml.etree
@@ -10,7 +11,7 @@ from typing import List
 import json
 # Project imports
 
-from ocxtools.validator.dataclasses import ValidationReport, ValidationInformation
+from ocxtools.validator.dataclasses import ValidationReport, ValidationInformation, ValidationDetails
 from ocx_schema_parser.xelement import LxmlElement
 from ocxtools.exceptions import ReporterError
 
@@ -41,6 +42,30 @@ class ValidatorReport:
             validator_name = LxmlElement.find_child_with_name(root, 'validationServiceName').text
             validator_version = LxmlElement.find_child_with_name(root, 'validationServiceVersion').text
             LxmlElement.find_all_children_with_name(root, 'errors')
+            # Iterate over error elements and create the detailed report
+            errors = []
+            for error in LxmlElement.iter(root,'{*}error'):
+                description = LxmlElement.find_child_with_name(error, 'description').text
+                text = description
+                if '{' in description:
+                    text = ''
+                    sub_str = '"https'
+                    start_indices = [i.start() for i in re.finditer(sub_str, description)]
+                    sub_str = '":'
+                    end_indices = [i.start() for i in re.finditer(sub_str, description)]
+                    end_indices = [index + 2 for index in end_indices]
+                    slices = map(slice,start_indices,end_indices)
+                    for s in slices:
+                        text = description.replace(description[s], '')
+                    text = text.replace('{', '')
+                    text = text.replace('}', '')
+                location = LxmlElement.find_child_with_name(error,'location')
+                # Define the regex pattern to extract numbers between colons
+                pattern = re.compile(r'(?<=:)\d+(?=:|$)')
+                # Find all matches in the input string
+                matches = pattern.findall(location.text)
+                detailed_report = ValidationDetails(description=text, line=matches[0], column=matches[1])
+                errors.append(detailed_report)
             return ValidationReport(source=source,
                                     date=arrow.get(date).format(),
                                     result=result,
@@ -50,7 +75,10 @@ class ValidatorReport:
                                     errors=n_err,
                                     warnings=n_warn,
                                     assertions=n_assert,
-                                    report=report_data)
+                                    report=report_data,
+                                    error_details=errors,
+                                    warning_details=[],
+                                    assertion_details=[])
         except ValueError as e:
             logger.error(e)
             raise ReporterError(e) from e

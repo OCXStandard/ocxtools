@@ -35,15 +35,24 @@ ocxtools >: help
 
 Documented commands (type help <topic>):
 ========================================
-clear  docker  render  report  serialize  show-log  validate  version
+clear  docker  validate  version
 
 Undocumented commands:
 ======================
 exit  help  quit
 
+
 ocxtools >:
 
 ````
+## Generate Shell Completion
+Command completion is not supported on Widows installations.
 
 ## Sub-commands
-[### docker](ocxtools/docker/readme.md)
+### [docker](readme/docker.md)
+
+### [validate](readme/validate.md)
+
+## API
+
+API documentation

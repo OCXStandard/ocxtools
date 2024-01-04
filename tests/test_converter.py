@@ -5,7 +5,9 @@ from ocxtools.converter.converter import Point3DRule
 from ocxtools.loader.loader import DeclarationOfOcxImport
 
 
-def test_point3d_params():
+# Excluded test
+def test_point3d_params():  # ToDo: Fix import failure
+    # sourcery skip: avoid-builtin-shadow
     params = {
         "x": X(numericvalue=1.0, unit="Um"),
         "y": Y(numericvalue=2.0, unit="Um"),
