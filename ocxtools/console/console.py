@@ -16,7 +16,10 @@ from rich.style import Style
 from rich.markdown import Markdown
 # Project imports
 from ocxtools.utils.utilities import get_file_path
-from ocxtools import README_FOLDER
+from ocxtools import config
+# # Defaults
+README_FOLDER = config.get("Defaults", "readme_folder")
+
 
 console = Console()
 
@@ -143,3 +146,13 @@ class CliConsole(Console):
         file_path = Path(get_file_path(readme_file))
         md = Markdown(file_path.read_text(encoding='utf-8'))
         self.print(md)
+
+    def man_page(self, sub_command: str):
+        """Display the ``sub_command`` html file.
+
+        Args:
+            sub_command: The sub_command name
+        """
+        readme_file = f'{README_FOLDER}/{sub_command}.html'
+        file_path = Path(get_file_path(readme_file))
+        self.run_sub_process(f'cmd /c start {file_path.resolve()}')

@@ -3,8 +3,7 @@
 
 # System imports
 from dataclasses import dataclass, field, fields
-from typing import Dict
-
+from typing import Dict, List
 
 
 @dataclass
@@ -28,17 +27,26 @@ class BaseDataClass:
             for i, (key, value) in enumerate(self.__dict__.items())
         }
 
-    def to_dict(self, exclude: str = None):
+    def to_dict(self, exclude: List = None):
         """
             Dictionary of dataclass attributes with ``metadata["header"]`` as keys.
         Args:
-            exclude: Exclude the header with the given value. Output all attributes if ``None``.
+            exclude: Exclude all headers in the ``exclude`` list. Output all attributes if ``None``.
 
         Returns:
             The dictionary of the dataclass attributes.
         """
-        return {k: v for k, v in self._to_dict().items() if k != exclude}
+        if exclude is None:
+            exclude = []
+        return {k: v for k, v in self._to_dict().items() if k not in exclude}
 
+
+@dataclass
+class ValidationDetails(BaseDataClass):
+    """Validation Details"""
+    description: str = field(metadata={"header": "Description"})
+    line: int = field(metadata={"header": "Line"})
+    column: int = field(metadata={"header": "Column"})
 
 
 @dataclass
@@ -54,7 +62,9 @@ class ValidationReport(BaseDataClass):
     validation_type: str = field(metadata={"header": "Validation type"})
     date: str = field(metadata={"header": "Date"})
     report: str = field(metadata={"header": "Report"})
-
+    error_details: List[ValidationDetails] = field(metadata={"header": "Errors"})
+    assertion_details: List[ValidationDetails] = field(metadata={"header": "Assertions"})
+    warning_details: List[ValidationDetails] = field(metadata={"header": "Warnings"})
 
 
 @dataclass

@@ -25,8 +25,10 @@ config["WikiSettings"] = {
 
 config["ValidatorSettings"] = {
     "validator_url": "http://localhost:8080",
-    # The validator stor validation reports here
+    # The validator stores validation reports in this sub-folder
     "report_folder": "reports",
+    # The file suffix for the reports
+    "report_suffix": '_validation.xml',
 }
 
 config["DockerSettings"] = {
@@ -60,8 +62,11 @@ config["FileLogger"] = {
 config["StdoutLogger"] = {
     "level": 'WARNING',
 }
-
+# Plugins to include
 config["Plugins"] = {
-    "modules": "docker validator reporter serializer",
-    # "modules": ""
+    "serializer": 'no',
+    "validator": 'yes',
+    "reporter": 'no',
+    "docker": 'yes',
+    "renderer": 'no',
 }
