@@ -3,7 +3,6 @@
 
 # System imports
 from __future__ import annotations
-import sys
 # Third party
 from click import pass_context
 from click_shell import shell
@@ -31,6 +30,7 @@ if DEBUG := config.getboolean('Defaults', 'debug'):
 STDOUT_LEVEL = config.get('StdoutLogger', 'level')
 COMMAND_HISTORY = config.get('Defaults', 'command_history')
 EDITOR = config.get('Defaults', 'text_editor')
+REGISTER_ISSUE = config.get('Defaults', 'register_issue')
 
 # https://patorjk.com/software/taag/#p=testall&f=Graffiti&t=OCX-wiki
 # Font: 3D Diagonal + Star Wars
@@ -52,19 +52,9 @@ LOGO = r"""
 """
 
 # Logging config for application
-log_config = {
-    "handlers": [
-        # {"sink": sys.stdout, "format": "{time} - {message}"},
-        {"sink": LOG_FILE, "serialize": False,
-         "retention": RETENTION,
-         "rotation": ROTATION,
-         "level": SINK_LEVEL},
-    ],
-}
+logger.enable(__app_name__)
 logger.remove()  # Remove all handlers added so far, including the default one.
-logger.add(sys.stderr, level=STDOUT_LEVEL)
-logger.configure(**log_config)
-logger.level(STDOUT_LEVEL)
+logger.add(LOG_FILE, level=SINK_LEVEL)
 
 
 # Function to capture warnings and log them using Loguru
@@ -124,6 +114,12 @@ def cli(ctx):
     ctx.call_on_close(exit_cli)
 
 
+@cli.command()
+def readme():
+    """Show the validate html page with usage examples."""
+    console.man_page(__app_name__)
+
+
 @cli.command(short_help="Print the ocxtools version number.")
 def version():
     """Print the ``ocxtools`` version number"""
@@ -134,22 +130,13 @@ def version():
 def clear():
     """Clear the console window"""
     command = f'"cmd /c {clear}"'
-    result = typer.launch(command)
-    typer.echo(result)
+    typer.launch(command)
 
 
-# @cli.command(short_help="Load a new app configuration.")
-# def load_config():
-#     """Load a new app configuration."""
-#     config.read()
-#
-#
-# @cli.command()
-# def save_config():
-#     # Save the config file
-#     with open(f'{__app_name__}.ini', 'w') as configfile:
-#         config.write(configfile)
-#
+@cli.command(short_help="Clear the console window.")
+def issues():
+    """Register an issue with the ocxtools CLI"""
+    console.html_page(REGISTER_ISSUE)
 
 
 # Arrange all command groups from Typer

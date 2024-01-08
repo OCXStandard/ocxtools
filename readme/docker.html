@@ -104,7 +104,7 @@
 <div class="sourceCode" id="cb2"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>  <span class="er">&quot;memoryMiB&quot;:</span> <span class="er">8192,</span></span></code></pre></div>
 <p>Save the file and restart the Docker Desktop.</p>
 <h2 id="usage">Usage</h2>
-<p>From the command line prompt, type the help command for the docker CLI to obtain the information of the available commands:</p>
+<p>From the command line prompt, use the <code>--help</code> option for the <code>docker</code> CLI to obtain the information of the available commands:</p>
 <pre><code>ocxtools &gt;: docker --help
 
  Usage:  [OPTIONS] COMMAND [ARGS]...
@@ -122,7 +122,7 @@
 ╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 
 ocxtools &gt;:</code></pre>
-<h3 id="check">check</h3>
+<h2 id="check"><code>check</code></h2>
 <p>The <code>check</code> command will check if the docker runtime is up:</p>
 <pre class="commandline"><code>ocxtools &gt;: docker check
 ❌     Command failed with error:
@@ -130,13 +130,13 @@ error during connect: this error may indicate that the docker daemon is not runn
 &quot;http://%2F%2F.%2Fpipe%2Fdocker_engine/v1.24/containers/json?all=1&quot;: open //./pipe/docker_engine: The system cannot find
 the file specified.</code></pre>
 <p>If the check fails as shown above, issue the <code>start</code> command to start the Docker Desktop</p>
-<h3 id="start">start</h3>
+<h2 id="start"><code>start</code></h2>
 <p>The <code>start</code> command wil start the Docker Desktop:</p>
 <pre class="commandline"><code>ocxtools &gt;: docker start
 0
 ocxtools &gt;:</code></pre>
 <p>Wait for the desktop to start before running the OCX Validator container.</p>
-<h3 id="run">run</h3>
+<h2 id="run"><code>run</code></h2>
 <p>The <code>run</code> command wil start the OCX Validator container:</p>
 <pre class="commandline"><code>ocxtools &gt;: docker run
 ❌     Command failed with error:
@@ -152,7 +152,7 @@ ee7c6abc5271   3docx/validator:3.0.0b5   &quot;java -XX:+ExitOnOut…&quot;   2 
 </code></pre>
 <p>The above result shows us two things happening in the background: 1. The <code>run</code> command will pull the latest docker image from the repository on Docker Hub. In the case above, there is an uptodate version already available in the runtime environment. This is perfectly fine. 2. The next response is an error message when the command tries to create the <code>validator</code> container from the pulled image. Since there is already a container named <code>validator</code> the command fails.</p>
 <p>In order to come around this problem, you need to remove the container first.</p>
-<h2 id="stop">stop</h2>
+<h2 id="stop"><code>stop</code></h2>
 <p>The <code>stop</code> command will do two things: 1. stop a running <code>validator</code> container 2. remove the container</p>
 <pre class="commandline"><code>ocxtools &gt;: docker stop
 ℹ     Command output:
@@ -173,5 +173,7 @@ d0c1409927be   3docx/validator:3.0.0b5   &quot;java -XX:+ExitOnOut…&quot;   1 
 
 ocxtools &gt;:</code></pre>
 <p>Now the OCX Validator is ready. See the <code>validator</code> commands for how to validate the 3Docx models.</p>
+<h3 id="docker-readme"><code>docker readme</code></h3>
+<p>The <code>docker readme</code> command displays this page in the browser.</p>
 </body>
 </html>

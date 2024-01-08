@@ -78,7 +78,18 @@ def one(
         console.error(f'{e}')
 
 
-# @typer_async
+@validate.command()
+def gui(
+        domain: Annotated[ValidationDomain, typer.Option(help="The validator domain.")] = ValidationDomain.OCX.value,
+):
+    """Use the docker GUI to validate a 3Docx model."""
+    context_manager = get_context_manager()
+    console = context_manager.get_console()
+    url = f'{VALIDATOR}/{domain.value}/upload'
+    console.html_page(url)
+
+
+
 @validate.command()
 def many(
         directory: str,

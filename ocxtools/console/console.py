@@ -14,15 +14,15 @@ from rich.table import Table
 from rich.theme import Theme
 from rich.style import Style
 from rich.markdown import Markdown
+from loguru import logger
 # Project imports
 from ocxtools.utils.utilities import get_file_path
 from ocxtools import config
+
 # # Defaults
 README_FOLDER = config.get("Defaults", "readme_folder")
 
-
 console = Console()
-
 
 # Styling
 
@@ -97,6 +97,7 @@ class CliConsole(Console):
 
         """
         self.print(f':information:{PADDING}{msg}', style="info")
+        logger.info(msg)
 
     def warning(self, msg: str):
         """
@@ -107,6 +108,7 @@ class CliConsole(Console):
 
         """
         self.print(f':warning:{PADDING}{msg}', style="warning")
+        logger.warning(msg)
 
     def section(self, title: str, separator: str = "=", style: Style = style_section):
         """
@@ -129,15 +131,13 @@ class CliConsole(Console):
         """
         # Use subprocess.run to execute the command and capture output
         result = subprocess.run(command, shell=True, capture_output=True, text=True)
-
         # Check if the command was successful
-        if result.returncode == 0:
-            self.print(f"Command output:\n{result.stdout}")
-        else:
-            self.error(f"Command failed with error:\n{result.stderr}")
+        if result.returncode != 0:
+            self.error(f"Command failed with error:\n{result.stderr!r}")
+            logger.error(f"Command {command!r} failed with error:\n{result.stderr!r}")
 
     def readme(self, sub_command: str):
-        """Print the ``sub_command`` readme file to an alternate screen.
+        """Print the ``sub_command`` readme file in the console window.
 
         Args:
             sub_command: The sub_command name
@@ -148,7 +148,7 @@ class CliConsole(Console):
         self.print(md)
 
     def man_page(self, sub_command: str):
-        """Display the ``sub_command`` html file.
+        """Display the ``sub_command`` html file in a browser.
 
         Args:
             sub_command: The sub_command name
@@ -156,3 +156,11 @@ class CliConsole(Console):
         readme_file = f'{README_FOLDER}/{sub_command}.html'
         file_path = Path(get_file_path(readme_file))
         self.run_sub_process(f'cmd /c start {file_path.resolve()}')
+
+    def html_page(self, url: str):
+        """Display the `a web page in a browser window.
+
+        Args:
+            url: The address to the web page
+        """
+        self.run_sub_process(f'cmd /c start {url}')

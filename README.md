@@ -7,6 +7,11 @@ with emphasis on **Typer** and **Rich** to make a good-looking CLI.
 
 ## Installation
 
+install from pypi:
+````commandline
+pip install ocxtools
+````
+
 # Usage
 ## The main CLI
 
@@ -27,8 +32,8 @@ with emphasis on **Typer** and **Rich** to make a good-looking CLI.
              `---`      \   \ .'  ;   |/   \  ' |
                          `---`    `---'     `--`
 
-Version: 0.1.0
-Copyright (c) 2023. OCX Consortium (https://3docx.org)
+Version: 1.1.0
+Copyright (c) 2024. OCX Consortium (https://3docx.org)
 
 Starting ocxtools...
 ocxtools >: help
@@ -45,13 +50,16 @@ exit  help  quit
 ocxtools >:
 
 ````
-## Generate Shell Completion
-Command completion is not supported on Widows installations.
+## Shell Completion
+Command completion is not supported on Windows installations.
 
 ## Sub-commands
 ### [docker](readme/docker.md)
 
 ### [validate](readme/validate.md)
+
+# Changelog
+[CHANGELOG.md](changelog.md)
 
 ## API
 

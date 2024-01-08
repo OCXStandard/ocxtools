@@ -15,7 +15,8 @@ config["Defaults"] = {
     "command_history": f"{__app_name__}.hist",
     "text_editor": "notepad",
     "debug": False,
-    "readme_folder": "readme"
+    "readme_folder": "readme",
+    "register_issue": "https://github.com/OCXStandard/ocxtools/issues"
 }
 
 config["WikiSettings"] = {
@@ -54,13 +55,13 @@ config["SerializerSettings"] = {
 
 config["FileLogger"] = {
     'log_file': f'{__app_name__}.log',
-    "level": 'WARNING',
-    "retention": "1 days",
+    "level": 'INFO',
+    "retention": "14 days",
     "rotation": "10 MB",
 }
 
 config["StdoutLogger"] = {
-    "level": 'WARNING',
+    "level": 'INFO',
 }
 # Plugins to include
 config["Plugins"] = {

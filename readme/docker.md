@@ -23,7 +23,7 @@ Save the file and restart the Docker Desktop.
 
 ## Usage
 
-From the command line prompt, type the help command for the docker CLI to obtain the information of the available commands:
+From the command line prompt, use the ``--help`` option for the ``docker`` CLI to obtain the information of the available commands:
 
 ```
 ocxtools >: docker --help
@@ -44,7 +44,7 @@ ocxtools >: docker --help
 
 ocxtools >:
 ```
-### check
+## ``check``
 
 The ``check`` command will check if the docker runtime is up:
 
@@ -57,7 +57,7 @@ the file specified.
 ```
 If the check fails as shown above, issue the ``start`` command to start the Docker Desktop
 
-### start
+## ``start``
 
 The ``start`` command wil start the Docker Desktop:
 
@@ -68,7 +68,7 @@ ocxtools >:
 ````
 Wait for the desktop to start before running the OCX Validator container.
 
-### run
+## ``run``
 The ``run`` command wil start the OCX Validator container:
 ````commandline
 ocxtools >: docker run
@@ -90,7 +90,7 @@ The above result shows us two things happening in the background:
 
 In order to come around this problem, you need to remove the container first.
 
-## stop
+## ``stop``
 The ``stop`` command will do two things:
 1. stop a running ``validator`` container
 2. remove the container
@@ -120,3 +120,6 @@ d0c1409927be   3docx/validator:3.0.0b5   "java -XX:+ExitOnOut…"   1 second ago
 ocxtools >:
 ````
 Now the OCX Validator is ready. See the ``validator`` commands for how to validate the 3Docx models.
+
+### ``docker readme``
+The ``docker readme`` command displays this page in the browser.

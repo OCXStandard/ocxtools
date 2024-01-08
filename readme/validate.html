@@ -42,22 +42,22 @@
 
  Validation of 3Docx models.
 
-╭─ Options ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ --install-completion          Install completion for the current shell.                                                                    │
-│ --show-completion             Show completion for the current shell, to copy it or customize the installation.                             │
-│ --help                        Show this message and exit.                                                                                  │
-╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
-╭─ Commands ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ details      List validation detail results.                                                                                              │
-│ info         Verify that the Docker validator is alive and obtain the available validation options.                                        │
-│ many         Validate many 3Docx XML files with the docker validator.                                                                      │
-│ one          Validate one 3Docx XML file with the docker validator.                                                                        │
-│ readme       Show the validate html page with usage examples.                                                                          │
-│ summary      List validation summary results.                                                                                              │
-╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Options ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ --install-completion          Install completion for the current shell.                                                    │
+│ --show-completion             Show completion for the current shell, to copy it or customize the installation.             │
+│ --help                        Show this message and exit.                                                                  │
+╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Commands ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ details      List validation detail results.                                                                               │
+│ info         Verify that the Docker validator is alive and obtain the available validation options.                        │
+│ many         Validate many 3Docx XML files with the docker validator.                                                      │
+│ one          Validate one 3Docx XML file with the docker validator.                                                        │
+│ readme       Show the validate html page with usage examples.                                                              │
+│ summary      List validation summary results.                                                                              │
+╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 
 ocxtools &gt;:</code></pre>
-<h3 id="info">info</h3>
+<h3 id="info"><code>info</code></h3>
 <p>The <code>info</code> sub-command will print the current validator resources:</p>
 <pre class="commandline"><code>ocxtools &gt;: validate info
 =============================================== Validator Information ===============================================
@@ -80,7 +80,7 @@ ocxtools &gt;:</code></pre>
 
 ocxtools &gt;:</code></pre>
 <p>The table displays the available validation domains and the supported schema versions.</p>
-<h3 id="validate-one">validate one</h3>
+<h3 id="validate-one"><code>validate one</code></h3>
 <p>The <code>validate one</code> sub-command will accept on 3dDocx file as input with optional options:</p>
 <pre class="commandline"><code>ocxtools &gt;: validate one --help
 
@@ -100,10 +100,10 @@ ocxtools &gt;:</code></pre>
 │ --help                                                 Show this message and exit.                                                         │
 ╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯</code></pre>
 <ul>
-<li>The <code>domain</code> option allows the specification of the validation domain supported by the validator, see the ’’validate info``.</li>
+<li>The <code>domain</code> option allows the specification of the validation domain supported by the validator, see the <code>validate info</code>.</li>
 <li>The <code>schema-version</code> allows for specifying a specific schema version. If combined with the <code>force</code>flag, the validator will use the specified schema version for the validation. If the <code>force</code> flag is not given, the schema version will be based on the schema version in the 3Docx header in the XML file.</li>
 <li>The <code>embedding</code> option specifies how the 3Docx file is embedded in the call to the validator. Use the dfault value.</li>
-<li>The <code>save</code> option will save tha validation XML report in a <code>report</code> subdirectory. You don’t want to look at it. #### Example Validate the <code>m1.3docx</code> using the default options:</li>
+<li>The <code>save</code> option will save tha validation XML report in a <code>report</code> subdirectory. You don’t want to look at it. #### Example Validate the <code>m1.3docx</code> using default options:</li>
 </ul>
 <pre class="commandline"><code>ocxtools &gt;: validate one models/m1.3docx
 ================================================================ Validate One ================================================================
@@ -120,7 +120,7 @@ ocxtools &gt;:</code></pre>
 │               │         │               │                │               │                │               │                │ 20:25:13+00:… │
 └───────────────┴─────────┴───────────────┴────────────────┴───────────────┴────────────────┴───────────────┴────────────────┴───────────────┘</code></pre>
 <p>The above command validates the model <code>m1.3docx</code> in the folder <code>models</code> and prints the summary table.</p>
-<h3 id="validate-many">validate many</h3>
+<h3 id="validate-many"><code>validate many</code></h3>
 <p>The <code>validate many</code> command will validate several models in one step. The command accepts a directory as input and gives the possibility to select models in the directory:</p>
 <pre class="commandline"><code>validate many --help
 
@@ -192,7 +192,7 @@ ocxtools &gt;:</code></pre>
 
 
 ocxtools &gt;:</code></pre>
-<h3 id="validate-details">validate details</h3>
+<h3 id="validate-details"><code>validate details</code></h3>
 <p>The <code>validate details</code> command will print the detailed validation results for all models that has been validated during this session.</p>
 <h4 id="example-2">Example</h4>
 <pre class="commandline"><code>ocxtools &gt;: validate details
@@ -280,8 +280,8 @@ ocxtools &gt;:</code></pre>
 
 
 ocxtools &gt;:</code></pre>
-<p>The detailed report lists each error, assertion or warning found and the its location in the XML file.</p>
-<h3 id="validation-readme">validation readme</h3>
+<p>The detailed report lists each error, assertion or warning found and its location in the XML file.</p>
+<h3 id="validation-readme"><code>validation readme</code></h3>
 <p>The <code>validation readme</code> command displays this page in the browser.</p>
 </body>
 </html>

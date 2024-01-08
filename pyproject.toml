@@ -97,6 +97,26 @@ src = "./ocxtools/__init__.py"
 [[tool.tbump.file]]
 src = "./docs/conf.py"
 
+[[tool.tbump.before_commit]]
+name = "Generate README html pages."
+cmd = "pandoc -c=readme/modest.css --wrap=none --standalone -o ./readme/ocxtools.html README.md --metadata=title:'ocxtools'"
+
+[[tool.tbump.before_commit]]
+name = "Generate DOCKER html pages."
+cmd = "pandoc -c=readme/modest.css --wrap=none --standalone -o ./readme/docker.html readme/docker.md --metadata=title:'docker'"
+
+[[tool.tbump.before_commit]]
+name = "Generate VALIDATE html pages."
+cmd = "pandoc -c=readme/modest.css --wrap=none --standalone -o ./readme/validate.html readme/validate.md --metadata=title:'validate'"
+
+[[tool.tbump.before_commit]]
+name = "Generate CHANGELOG html pages."
+cmd = "pandoc -c=readme/modest.css --wrap=none --standalone -o ./readme/changelog.html CHANGELOG.md --metadata=title:'changelog'"
+
+[[tool.tbump.before_commit]]
+name = "Insert html links"
+cmd = "python html_links.py"
+
 # You can specify a list of commands to
 # run after the files have been patched
 # and before the git commit is made

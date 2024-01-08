@@ -14,24 +14,24 @@ ocxtools >: help validate
 
  Validation of 3Docx models.
 
-╭─ Options ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ --install-completion          Install completion for the current shell.                                                                    │
-│ --show-completion             Show completion for the current shell, to copy it or customize the installation.                             │
-│ --help                        Show this message and exit.                                                                                  │
-╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
-╭─ Commands ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ details      List validation detail results.                                                                                              │
-│ info         Verify that the Docker validator is alive and obtain the available validation options.                                        │
-│ many         Validate many 3Docx XML files with the docker validator.                                                                      │
-│ one          Validate one 3Docx XML file with the docker validator.                                                                        │
-│ readme       Show the validate html page with usage examples.                                                                          │
-│ summary      List validation summary results.                                                                                              │
-╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Options ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ --install-completion          Install completion for the current shell.                                                    │
+│ --show-completion             Show completion for the current shell, to copy it or customize the installation.             │
+│ --help                        Show this message and exit.                                                                  │
+╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Commands ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ details      List validation detail results.                                                                               │
+│ info         Verify that the Docker validator is alive and obtain the available validation options.                        │
+│ many         Validate many 3Docx XML files with the docker validator.                                                      │
+│ one          Validate one 3Docx XML file with the docker validator.                                                        │
+│ readme       Show the validate html page with usage examples.                                                              │
+│ summary      List validation summary results.                                                                              │
+╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 
 ocxtools >:
 ````
 
-### info
+### ``info``
 
 The ``info`` sub-command will print the current validator resources:
 
@@ -60,7 +60,7 @@ ocxtools >:
 
 The table displays the available validation domains and the supported schema versions.
 
-### validate one
+### ``validate one``
 
 The ``validate one`` sub-command will accept on 3dDocx file as input with optional options:
 ````commandline
@@ -82,12 +82,12 @@ ocxtools >: validate one --help
 │ --help                                                 Show this message and exit.                                                         │
 ╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ````
- - The ``domain`` option allows the specification of the validation domain supported by the validator, see the ''validate info``.
+ - The ``domain`` option allows the specification of the validation domain supported by the validator, see the ``validate info``.
  - The ``schema-version`` allows for specifying a specific schema version. If combined with the ``force``flag, the validator will use the specified schema version for the validation. If the ``force`` flag is not given, the schema version will be based on the schema version in the 3Docx header in the XML file.
  - The ``embedding`` option specifies how the 3Docx file is embedded in the call to the validator. Use the dfault value.
  - The ``save`` option will save tha validation XML report in a ``report`` subdirectory. You don't want to look at it.
 #### Example
-Validate the ``m1.3docx`` using the default options:
+Validate the ``m1.3docx`` using default options:
 ````commandline
 ocxtools >: validate one models/m1.3docx
 ================================================================ Validate One ================================================================
@@ -106,7 +106,7 @@ ocxtools >: validate one models/m1.3docx
 ````
 The above command validates the model ``m1.3docx`` in the folder ``models`` and prints the summary table.
 
-### validate many
+### ``validate many``
 The ``validate many`` command will validate several models in one step. The command accepts a directory as input and gives the possibility to select models in the directory:
 ````commandline
 validate many --help
@@ -189,7 +189,7 @@ ocxtools >: validate summary
 ocxtools >:
 ````
 
-### validate details
+### ``validate details``
 The ``validate details`` command will print the detailed validation results for all models that has been validated during this session.
 
 #### Example
@@ -281,7 +281,7 @@ ocxtools >: validate details
 
 ocxtools >:
 ````
-The detailed report lists each error, assertion or warning found and the its location in the XML file.
+The detailed report lists each error, assertion or warning found and its location in the XML file.
 
-### validation readme
+### ``validation readme``
 The ``validation readme`` command displays this page in the browser.
