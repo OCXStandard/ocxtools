@@ -1,6 +1,12 @@
 # ``ocxtools``: Changelog
 
 
+## 1.2.1 2024.01.08
+
+### Changes
+Fix missing printout of stdout when running a sub process.
+
+
 ## 1.2.0 2024.01.08
 
 ### Changes

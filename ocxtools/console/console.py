@@ -135,6 +135,9 @@ class CliConsole(Console):
         if result.returncode != 0:
             self.error(f"Command failed with error:\n{result.stderr!r}")
             logger.error(f"Command {command!r} failed with error:\n{result.stderr!r}")
+        else:
+            logger.info(f"Command {command!r}: with return code{result.returncode}")
+            self.info(result.stdout)
 
     def readme(self, sub_command: str):
         """Print the ``sub_command`` readme file in the console window.
