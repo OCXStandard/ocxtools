@@ -59,7 +59,7 @@ Command completion is not supported on Windows installations.
 ### [validate](readme/validate.md)
 
 # Changelog
-[CHANGELOG.md](changelog.md)
+[Changelog](CHANGELOG.md)
 
 ## API
 
