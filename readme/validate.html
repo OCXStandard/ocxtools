@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>'validate'</title>
+  <title>validate</title>
   <style>
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
@@ -29,32 +29,33 @@
 </head>
 <body>
 <header id="title-block-header">
-<h1 class="title">'validate'</h1>
+<h1 class="title">validate</h1>
 </header>
 <h1 id="validate-cli">validate CLI</h1>
 <h2 id="introduction">Introduction</h2>
 <p>The <code>validate</code> CLI provides the user with CLI commands to validate 3Docx models using the docker OCX validator service.</p>
 <h2 id="usage">Usage</h2>
 <p>From the command line prompt, type the help command to obtain the information of the available sub-commands:</p>
-<pre class="commandline"><code>ocxtools &gt;: help validate
+<pre class="commandline"><code>ocxtools &gt;: validate --help
 
  Usage:  [OPTIONS] COMMAND [ARGS]...
 
  Validation of 3Docx models.
 
-╭─ Options ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ --install-completion          Install completion for the current shell.                                                    │
-│ --show-completion             Show completion for the current shell, to copy it or customize the installation.             │
-│ --help                        Show this message and exit.                                                                  │
-╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
-╭─ Commands ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ details      List validation detail results.                                                                               │
-│ info         Verify that the Docker validator is alive and obtain the available validation options.                        │
-│ many         Validate many 3Docx XML files with the docker validator.                                                      │
-│ one          Validate one 3Docx XML file with the docker validator.                                                        │
-│ readme       Show the validate html page with usage examples.                                                              │
-│ summary      List validation summary results.                                                                              │
-╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Options ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ --install-completion          Install completion for the current shell.                                                      │
+│ --show-completion             Show completion for the current shell, to copy it or customize the installation.               │
+│ --help                        Show this message and exit.                                                                    │
+╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Commands ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ details     List validation detail results.                                                                                  │
+│ gui         Use the docker GUI to validate a 3Docx model.                                                                    │
+│ info        Verify that the Docker validator is alive and obtain the available validation options.                           │
+│ many        Validate many 3Docx XML files with the docker validator.                                                         │
+│ one         Validate one 3Docx XML file with the docker validator.                                                           │
+│ readme      Show the validate html page with usage examples.                                                                 │
+│ summary     List validation summary results.                                                                                 │
+╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 
 ocxtools &gt;:</code></pre>
 <h3 id="info"><code>info</code></h3>
@@ -281,7 +282,23 @@ ocxtools &gt;:</code></pre>
 
 ocxtools &gt;:</code></pre>
 <p>The detailed report lists each error, assertion or warning found and its location in the XML file.</p>
-<h3 id="validation-readme"><code>validation readme</code></h3>
-<p>The <code>validation readme</code> command displays this page in the browser.</p>
+<h3 id="validate-gui"><code>validate gui</code></h3>
+<p>The <code>validate gui</code> command will open the docker validation UI and provide the option to validate 3Docx files using the UI as a replacement for the CLI.</p>
+<pre class="commandline"><code>ocxtools &gt;: validate gui --help
+
+ Usage: gui [OPTIONS]
+
+ Use the docker GUI to validate a 3Docx model.
+
+╭─ Options ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ --domain        [ocx|schematron]  The validator domain. [default: ocx]                                                       │
+│ --help                            Show this message and exit.                                                                │
+╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯</code></pre>
+<h3 id="example-3">Example</h3>
+<pre class="commandline"><code>ocxtools &gt;: validate gui</code></pre>
+<p><img src=".validate_images/validator_ui.png" width="900"></p>
+<p>The above commands opens the docker UI in a browser using the default <code>domain</code> validator. Use the <code>--domain</code> option to specify an alternative validation domain.</p>
+<h3 id="validate-readme"><code>validate readme</code></h3>
+<p>The <code>validate readme</code> command displays this page in the browser.</p>
 </body>
 </html>

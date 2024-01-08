@@ -8,25 +8,26 @@ The ``validate`` CLI provides the user with CLI commands to validate 3Docx model
 From the command line prompt, type the help command to obtain the information of the available sub-commands:
 
 ````commandline
-ocxtools >: help validate
+ocxtools >: validate --help
 
  Usage:  [OPTIONS] COMMAND [ARGS]...
 
  Validation of 3Docx models.
 
-╭─ Options ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ --install-completion          Install completion for the current shell.                                                    │
-│ --show-completion             Show completion for the current shell, to copy it or customize the installation.             │
-│ --help                        Show this message and exit.                                                                  │
-╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
-╭─ Commands ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ details      List validation detail results.                                                                               │
-│ info         Verify that the Docker validator is alive and obtain the available validation options.                        │
-│ many         Validate many 3Docx XML files with the docker validator.                                                      │
-│ one          Validate one 3Docx XML file with the docker validator.                                                        │
-│ readme       Show the validate html page with usage examples.                                                              │
-│ summary      List validation summary results.                                                                              │
-╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Options ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ --install-completion          Install completion for the current shell.                                                      │
+│ --show-completion             Show completion for the current shell, to copy it or customize the installation.               │
+│ --help                        Show this message and exit.                                                                    │
+╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Commands ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ details     List validation detail results.                                                                                  │
+│ gui         Use the docker GUI to validate a 3Docx model.                                                                    │
+│ info        Verify that the Docker validator is alive and obtain the available validation options.                           │
+│ many        Validate many 3Docx XML files with the docker validator.                                                         │
+│ one         Validate one 3Docx XML file with the docker validator.                                                           │
+│ readme      Show the validate html page with usage examples.                                                                 │
+│ summary     List validation summary results.                                                                                 │
+╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 
 ocxtools >:
 ````
@@ -283,5 +284,29 @@ ocxtools >:
 ````
 The detailed report lists each error, assertion or warning found and its location in the XML file.
 
-### ``validation readme``
-The ``validation readme`` command displays this page in the browser.
+### ``validate gui``
+The ``validate gui`` command will open the docker validation UI and provide the option to validate 3Docx files using the UI as a replacement for the CLI.
+
+````commandline
+ocxtools >: validate gui --help
+
+ Usage: gui [OPTIONS]
+
+ Use the docker GUI to validate a 3Docx model.
+
+╭─ Options ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ --domain        [ocx|schematron]  The validator domain. [default: ocx]                                                       │
+│ --help                            Show this message and exit.                                                                │
+╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+````
+### Example
+````commandline
+ocxtools >: validate gui
+````
+<img src=".validate_images/validator_ui.png" width="900">
+
+The above commands opens the docker UI in a browser using the default ``domain`` validator.
+Use the ``--domain`` option to specify an alternative validation domain.
+
+### ``validate readme``
+The ``validate readme`` command displays this page in the browser.

@@ -30,17 +30,20 @@ ocxtools >: docker --help
 
  Usage:  [OPTIONS] COMMAND [ARGS]...
 
-╭─ Options ────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ --install-completion          Install completion for the current shell.                                              │
-│ --show-completion             Show completion for the current shell, to copy it or customize the installation.       │
-│ --help                        Show this message and exit.                                                            │
-╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
-╭─ Commands ───────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ check        Check the status of the docker validator container.                                                     │
-│ run          Start the docker validator container.                                                                   │
-│ start        Start the docker Desktop (Windows only).                                                                │
-│ stop         Stop and remove the validator container.                                                                │
-╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+ Commands for managing the docker OCX validator.
+
+╭─ Options ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ --install-completion          Install completion for the current shell.                                                      │
+│ --show-completion             Show completion for the current shell, to copy it or customize the installation.               │
+│ --help                        Show this message and exit.                                                                    │
+╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Commands ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ check           Check the status of the docker validator container.                                                          │
+│ readme          Show the ``docker`` html page with usage examples.                                                           │
+│ run             Start the docker validator container.                                                                        │
+│ start           Start the docker Desktop (Windows only).                                                                     │
+│ stop            Stop and remove the validator container.                                                                     │
+╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 
 ocxtools >:
 ```

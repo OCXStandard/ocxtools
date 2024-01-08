@@ -50,6 +50,7 @@ u-m: ## Create the user manual converting markdown files to html
 	@pandoc -c=readme/modest.css --wrap=none --standalone -o ./readme/docker.html ./readme/docker.md --metadata=title:"docker"
 	@pandoc -c=readme/modest.css --wrap=none --standalone -o ./readme/validate.html ./readme/validate.md --metadata=title:"validate"
 	@pandoc -c=readme/modest.css --wrap=none --standalone -o ./readme/changelog.html CHANGELOG.md --metadata=title:"changelog"
+	@python html_links.py
 
 build-exe:  ## Build a single Windows executable
 	@pyinstaller --clean --onefile --name ocxtools  --add-data "readme\*:readme"  ./__main__.py
