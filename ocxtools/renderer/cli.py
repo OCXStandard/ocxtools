@@ -13,6 +13,7 @@ from ocxtools.parser.parser import OcxParser
 from ocxtools.renderer.renderer import XsltTransformer
 from ocxtools.context.context_manager import get_context_manager
 from ocxtools import config
+from ocxtools.utils.utilities import SourceValidator
 # # Renderer
 RESOURCES = config.get("RendererSettings", "resource_folder")
 OCX_XSLT = config.get("RendererSettings", "ocx_xslt")
@@ -30,7 +31,7 @@ def schematron():
     console = context_manager.get_console()
     reports = context_manager.get_schematron_reports()
     config = context_manager.get_config()
-    REPORT_FOLDER = config.get("ValidatorSettings", "report_folder")
+    REPORT_FOLDER = SourceValidator.mkdir(config.get("ValidatorSettings", "report_folder"))
 
     if models := list(reports):
         indx = typer.prompt(f'Select a model report number: {list(enumerate(models))}')

@@ -29,7 +29,7 @@ class TestCurlClient:
         payload = {
             "contentToValidate": content,
             "embeddingMethod": EmbeddingMethod.STRING.value,
-            "validationType": "ocx.v3.0.0b3",
+            "validationType": "ocx.v3.0.0b4",
             "locationAsPath": False,
             "addInputToReport": False,
             "wrapReportDataInCDATA": False,
@@ -53,7 +53,7 @@ class TestCurlClient:
         payload = {
             "contentToValidate": content,
             "embeddingMethod": EmbeddingMethod.BASE64.value,
-            "validationType": "ocx.v3.0.0b3",
+            "validationType": "ocx.v3.0.0b4",
             "locationAsPath": False,
             "addInputToReport": False,
             "wrapReportDataInCDATA": False,
@@ -77,7 +77,7 @@ class TestCurlClient:
         payload = {
             "contentToValidate": content,
             "embeddingMethod": EmbeddingMethod.STRING.value,
-            "validationType": "ocx.v3.0.0b3",
+            "validationType": "ocx.v3.0.0b4",
             "locationAsPath": False,
             "addInputToReport": True,
             "wrapReportDataInCDATA": False,
@@ -114,7 +114,7 @@ class TestRestClient:
         payload = {
             "contentToValidate": content,
             "embeddingMethod": EmbeddingMethod.STRING.value,
-            "validationType": "ocx.v3.0.0b3",
+            "validationType": "ocx.v3.0.0b4",
             "locationAsPath": False,
             "addInputToReport": True,
             "wrapReportDataInCDATA": False,
@@ -141,7 +141,7 @@ class TestRestClient:
         payload = {
             "contentToValidate": content,
             "embeddingMethod": EmbeddingMethod.STRING.value,
-            "validationType": "ocx.v3.0.0b3",
+            "validationType": "ocx.v3.0.0b4",
             "locationAsPath": False,
             "addInputToReport": True,
             "wrapReportDataInCDATA": False,

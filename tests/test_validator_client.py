@@ -36,7 +36,7 @@ def test_validate_one_model_status_force_version_succeed(shared_datadir):
     client = OcxValidatorClient(VALIDATOR)
     model = str(shared_datadir / 'm1.3docx')
     response = client.validate_one(
-        ocx_model=model, domain=ValidationDomain.OCX, schema_version='3.0.0b3',
+        ocx_model=model, domain=ValidationDomain.OCX, schema_version='3.0.0b4',
         embedding_method=EmbeddingMethod.STRING,
         force_version=True
     )

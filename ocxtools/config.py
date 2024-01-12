@@ -14,7 +14,7 @@ config = configparser.ConfigParser()
 config["Defaults"] = {
     "command_history": f"{__app_name__}.hist",
     "text_editor": "notepad",
-    "debug": False,
+    "debug": True,
     "readme_folder": "readme",
     "register_issue": "https://github.com/OCXStandard/ocxtools/issues"
 }
@@ -35,7 +35,7 @@ config["ValidatorSettings"] = {
 config["DockerSettings"] = {
     "container_name": "validator",
     "docker_image": "3docx/validator",
-    "docker_tag": "3.0.0b5",
+    "docker_tag": "latest",
     "docker_desktop": "C:/Program Files/Docker/Docker/Docker Desktop.exe",
     "docker_port": 8080
 }

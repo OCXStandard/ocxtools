@@ -12,7 +12,7 @@ from ocxtools.exceptions import XmlParserError
 from ocxtools.parser.parser import OcxParser
 
 # Project imports
-from ocxtools.serializer.serializer import Serializer
+from ocxtools.serializer.serializer import OcxSerializer
 from ocxtools.serializer import __app_name__
 from ocxtools import config
 from ocxtools.context.context_manager import get_context_manager
@@ -38,7 +38,7 @@ def xml(
         # Serialize
         output = model.parent.joinpath(f"{model.stem}{post_fix}{model.suffix}")
         output = output.resolve()
-        serializer = Serializer(ocx_obj)
+        serializer = OcxSerializer(ocx_obj)
         with output.open("w") as fp:
             fp.write(serializer.serialize_xml())
         console.print(f"Pretty printed file {output!r}")
@@ -62,10 +62,10 @@ def json(
         # Serialize
         output = model.parent.joinpath(f"{model.stem}.json")
         output = output.resolve()
-        serializer = Serializer(ocx_obj)
+        serializer = OcxSerializer(ocx_obj)
         with output.open("w") as fp:
             fp.write(serializer.serialize_json())
-        console.print(f"Serialised JSON: {output!r}")
+        console.info(f"Serialised JSON to file {str(output)!r}")
     except XmlParserError as e:
         console.error(e)
 

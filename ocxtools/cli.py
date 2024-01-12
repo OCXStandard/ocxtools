@@ -3,6 +3,8 @@
 
 # System imports
 from __future__ import annotations
+import logging
+import warnings
 # Third party
 from click import pass_context
 from click_shell import shell
@@ -52,26 +54,30 @@ LOGO = r"""
 """
 
 # Logging config for application
-logger.enable(__app_name__)
-logger.remove()  # Remove all handlers added so far, including the default one.
-logger.add(LOG_FILE, level=SINK_LEVEL)
-
-
 # Function to capture warnings and log them using Loguru
 # Custom warning handler
-def custom_warning_handler(message, category, filename, lineno, file=None, line=None):
-    """
-    Custom warning formatter.
-    Args:
-        message:
-        category:
-        filename:
-        lineno:
-        file:
-        line:
-    """
-    # Log the warning using Loguru
-    logger.warning("Custom Warning: {}:{} - {}", filename, lineno, message)
+logger.remove()
+showwarning_ = warnings.showwarning
+
+
+def showwarning(message, *args, **kwargs):
+    logger.warning(message)
+    showwarning_(message, *args, **kwargs)
+
+
+# Python main logger
+# Attach the cli handler to the python warnings logger
+logger.enable(__app_name__)
+logger.enable('xsdata')
+# py_warnings = logging.getLogger("py.warnings")
+# py_warnings.handlers = [custom_warning_handler]
+# py_warnings.propagate = True
+logging.captureWarnings(True)
+
+# logger.remove()  # Remove all handlers added so far, including the default one.
+logger.add(LOG_FILE, level=SINK_LEVEL)
+warnings.simplefilter('default')
+warnings.showwarning = showwarning
 
 
 def capture_warnings(record):
@@ -110,6 +116,7 @@ def cli(ctx):
     console.print(f"Version: {__version__}")
     console.print("Copyright (c) 2024. OCX Consortium (https://3docx.org)\n")
     logger.info(f"{__app_name__} session started.")
+    logger.info(f"Logging level is {logger.level}")
     ctx.obj = context_manager
     ctx.call_on_close(exit_cli)
 

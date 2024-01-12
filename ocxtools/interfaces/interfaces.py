@@ -127,7 +127,7 @@ class IParser(ABC):
 
 
 class ISerializer(ABC):
-    """Serializer interface"""
+    """OcxSerializer interface"""
 
     def __init__(self, model: dataclass):
         self.model = model

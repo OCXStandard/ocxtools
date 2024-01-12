@@ -49,7 +49,7 @@ class ValidatorReport:
                 text = description
                 if '{' in description:
                     text = ''
-                    sub_str = '"https'
+                    sub_str = '"http'
                     start_indices = [i.start() for i in re.finditer(sub_str, description)]
                     sub_str = '":'
                     end_indices = [i.start() for i in re.finditer(sub_str, description)]

@@ -1,8 +1,11 @@
 #  Copyright (c) 2023. OCX Consortium https://3docx.org. See the LICENSE
-"""Serializer module."""
+"""OcxSerializer module."""
 
 # system imports
 from dataclasses import dataclass
+import csv
+from typing import Dict, List
+from enum import Enum
 
 # 3rd party imports
 from xsdata.formats.dataclass.context import XmlContext
@@ -13,15 +16,21 @@ from xsdata.formats.dataclass.serializers.config import SerializerConfig
 from ocxtools.parser.parser import MetaData
 
 
-class Serializer:
-    """Serializer class for 3Docx XML models."""
+class ReportFormat(Enum):
+    """Serialisation formats"""
+    CSV = 'csv'
+    EXCEL = 'xlsx'
+
+
+class OcxSerializer:
+    """OcxSerializer class for 3Docx XML models."""
 
     def __init__(
-        self,
-        ocx_model: dataclass,
-        pretty_print: bool = True,
-        pretty_print_indent: str = "  ",
-        encoding: str = "utf-8",
+            self,
+            ocx_model: dataclass,
+            pretty_print: bool = True,
+            pretty_print_indent: str = "  ",
+            encoding: str = "utf-8",
     ):
         """
         Args:
@@ -72,6 +81,35 @@ class Serializer:
         """
         serializer = JsonSerializer(context=XmlContext(), config=self._config)
         return serializer.render(self._model)
+
+
+class Serializer:
+    """A general serializer for dict type data structures"""
+
+    @staticmethod
+    def serialize_to_csv(table: List, file_name: str):
+        """
+        Serialize a list of dictionaries to a csv file. Each dictionary is a row with ``key:value`` pairs
+        where the key is the column header and the value is the data value.
+        Args:
+            table: The table to serialize
+            file_name: the output file name
+        """
+        with open(file_name, 'w', newline='') as csvfile:
+            fieldnames = table[0].keys()
+            writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+            writer.writeheader()
+            writer.writerows(table)
+
+    @staticmethod
+    def serialize_to_excel(sheets: List[Dict], file_name: str):
+        """
+        Serialize a dictionary to an Excel file.
+        Args:
+            sheets: List of dictionaries to serialize. Each dictionary will be a separate sheet
+            file_name: the output file name
+        """
+        raise SerializerError("To be implemented)")
 
 
 class SerializerError(ValueError):

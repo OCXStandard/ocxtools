@@ -260,6 +260,21 @@ class SourceValidator:
         return Path(source).is_dir()
 
     @staticmethod
+    def mkdir(source: str) -> str:
+        """Create the directory and any parent folders if missing.
+
+        Args:
+            source: The folder name
+
+        Returns:
+            The folder name
+        """
+        folder = Path(source)
+        if not folder.exists():
+            folder.mkdir(parents=True, exist_ok=True)
+        return source
+
+    @staticmethod
     def filter_files(directory: str, filter_str: str) -> Generator:
         """Return an iterator over the filtered files in the ``directory``."""
         if SourceValidator.is_directory(directory):

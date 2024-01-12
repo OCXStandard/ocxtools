@@ -23,8 +23,9 @@ from ocxtools.validator.validator_client import (
 from ocxtools.renderer.renderer import RichTable
 from ocxtools.utils.utilities import SourceValidator
 from ocxtools.context.context_manager import get_context_manager
+from ocxtools.serializer.serializer import ReportFormat, Serializer
 
-REPORT_FOLDER = config.get('ValidatorSettings', 'report_folder')
+REPORT_FOLDER = SourceValidator.mkdir(config.get('ValidatorSettings', 'report_folder'))
 SUFFIX = config.get('ValidatorSettings', 'report_suffix')
 VALIDATOR = config.get('ValidatorSettings', 'validator_url')
 validate = typer.Typer(help="Validation of 3Docx models.")
@@ -69,7 +70,6 @@ def one(
         console.print_table(summary)
         if save:
             report_folder = Path(REPORT_FOLDER)
-            report_folder.mkdir(parents=True, exist_ok=True)
             validation_report = report_folder / f'{Path(model).stem}_{domain.value}{SUFFIX}'
             with open(validation_report.resolve(), 'w') as f:
                 f.write(report_data.report)
@@ -87,7 +87,6 @@ def gui(
     console = context_manager.get_console()
     url = f'{VALIDATOR}/{domain.value}/upload'
     console.html_page(url)
-
 
 
 @validate.command()
@@ -184,7 +183,11 @@ def summary():
 
 
 @validate.command()
-def details():
+def details(
+        save: Annotated[bool, typer.Option(help="Save the detailed report to file")] = False,
+        report_format: Annotated[ReportFormat, typer.Option(help="File format")] = ReportFormat.CSV.value,
+
+):
     """List validation detail results."""
     context_manager = get_context_manager()
     console = context_manager.get_console()
@@ -197,6 +200,14 @@ def details():
         if report is not None:
             tables.extend(error.to_dict() for error in report.error_details)
         detail_table = RichTable.render(f'Error Details for model: {report.source!r}', tables)
+        if save:
+            file_name = Path(REPORT_FOLDER) / f'{Path(model).stem}.{report_format.value}'
+            match report_format.value:
+                case ReportFormat.CSV.value:
+                    Serializer.serialize_to_csv(tables, str(file_name.resolve()))
+                    console.info(f'Saved detailed report to file {str(file_name.resolve())!r}')
+                case ReportFormat.EXCEL.value:
+                    console.error(f'Option {ReportFormat.EXCEL.value!r} is not implemented')
         console.print_table(detail_table)
 
 

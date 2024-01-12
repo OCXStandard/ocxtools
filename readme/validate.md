@@ -193,6 +193,22 @@ ocxtools >:
 ### ``validate details``
 The ``validate details`` command will print the detailed validation results for all models that has been validated during this session.
 
+````commandline
+ocxtools >: validate details --help
+
+ Usage: details [OPTIONS]
+
+ List validation detail results.
+
+╭─ Options ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ --save             --no-save                Save the detailed report to file [default: no-save]                                            │
+│ --report-format                 [csv|xlsx]  File format [default: csv]                                                                     │
+│ --help                                      Show this message and exit.                                                                    │
+╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+
+````
+If the command is supplied with the ``--save`` flag the detailed report will be saved to a ``csv`` file with the same name as the model file.
+Currently only the ``csv`` format is supported.
 #### Example
 
 ````commandline
