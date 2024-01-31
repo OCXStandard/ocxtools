@@ -3,7 +3,7 @@
 from pathlib import Path
 from ocxtools.validator.validator_client import OcxValidatorClient, ValidationDomain
 from ocxtools.renderer.renderer import XsltTransformer
-from ocxtools.validator.validator_report import ValidatorReport
+from ocxtools.validator.validator_report import ValidatorReportFactory
 
 from ocxtools import config
 RESOURCES = config.get("RendererSettings", "resource_folder")
@@ -18,8 +18,8 @@ class TestXsltRenderer:
         xslt_file = shared_datadir / RESOURCES / OCX_XSLT
         transformer = XsltTransformer(str(xslt_file.resolve()))
         validator = OcxValidatorClient(base_url=VALIDATOR)
-        response = validator.validate_one(str(model.resolve()), domain=ValidationDomain.OCX)
-        report_data = ValidatorReport.create_report(model, response)
+        response, header = validator.validate_one(str(model.resolve()), domain=ValidationDomain.OCX)
+        report_data = ValidatorReportFactory.create_report(model, response, header)
         report = report_data.report
         output_file = Path(transformer.render(data=report, source_file=str(model), output_folder=shared_datadir))
         assert output_file.exists()
@@ -30,8 +30,8 @@ class TestXsltRenderer:
         xslt_file = shared_datadir / RESOURCES / SCHEMATRON_XSLT
         transformer = XsltTransformer(str(xslt_file.resolve()))
         validator = OcxValidatorClient(base_url=VALIDATOR)
-        response = validator.validate_one(str(model.resolve()), domain=ValidationDomain.SCHEMATRON)
-        report_data = ValidatorReport.create_report(model, response)
+        response, header = validator.validate_one(str(model.resolve()), domain=ValidationDomain.SCHEMATRON)
+        report_data = ValidatorReportFactory.create_report(model, response, header)
         report = report_data.report
         output_file = Path(transformer.render(data=report, source_file=str(model), output_folder=shared_datadir))
         assert output_file.exists()

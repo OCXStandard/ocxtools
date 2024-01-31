@@ -11,21 +11,22 @@ from typing import List
 import json
 # Project imports
 
-from ocxtools.validator.dataclasses import ValidationReport, ValidationInformation, ValidationDetails
+from ocxtools.dataclass.dataclasses import ValidationReport, ValidationInformation, ValidationDetails, OcxHeader
 from ocx_schema_parser.xelement import LxmlElement
 from ocxtools.exceptions import ReporterError
 
 
-class ValidatorReport:
+class ValidatorReportFactory:
     """Validator report."""
 
     @staticmethod
-    def create_report(source: str, report_data: str) -> ValidationReport:
+    def create_report(source: str, report_data: str, header: OcxHeader) -> ValidationReport:
         """
         Create the validation report.
         Args:
             source: The source 3Docx model source file name.
             report_data: The validation result.
+            header: The 3Docx Header information
 
         Returns:
             The report dataclass
@@ -78,7 +79,8 @@ class ValidatorReport:
                                     report=report_data,
                                     error_details=errors,
                                     warning_details=[],
-                                    assertion_details=[])
+                                    assertion_details=[],
+                                    ocx_header=header)
         except ValueError as e:
             logger.error(e)
             raise ReporterError(e) from e

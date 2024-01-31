@@ -68,7 +68,7 @@ def readme(
 def stop(
         container: Annotated[str, typer.Option(help="The container name")] = DOCKER_CONTAINER,
 ):
-    "Stop and remove the validator container."
+    """Stop and remove the validator container."""
     context_manager = get_context_manager()
     console = context_manager.get_console()
     console.run_sub_process(f'docker stop {container}')

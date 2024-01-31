@@ -15,6 +15,8 @@ from ocxtools.exceptions import ConverterError
 class ObservableEvent(Enum):
     """Events that can be listened to and broadcast."""
     DATACLASS = 'dataclass'
+    REPORT = 'report'
+    SERIALIZE = 'serialize'
 
 
 class IModuleDeclaration(ABC):

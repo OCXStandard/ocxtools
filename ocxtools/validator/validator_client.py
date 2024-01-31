@@ -7,7 +7,7 @@ import base64
 import json
 from enum import Enum
 from collections import defaultdict
-from typing import List
+from typing import List, Tuple
 import itertools
 
 from typing import Dict
@@ -18,7 +18,9 @@ from loguru import logger
 from ocxtools.clients.clients import CurlClientError, CurlRestClient, AsyncRestClient, RequestClientError, RequestType
 from ocxtools.exceptions import SourceError
 from ocxtools.utils.utilities import OcxVersion, SourceValidator
-from ocxtools.validator.validator_report import ValidatorReport
+from ocxtools.validator.validator_report import ValidatorReportFactory
+from ocxtools.dataclass.dataclasses import OcxHeader
+from ocxtools.reporter.reporter import OcxReportFactory
 
 
 class ValidatorError(ValueError):
@@ -47,7 +49,7 @@ class OcxValidatorClient(CurlRestClient, ABC):
         self._validation_types = defaultdict(list)
         try:
             response = self.get_validator_info()
-            report = ValidatorReport.create_info_report(response)
+            report = ValidatorReportFactory.create_info_report(response)
             for info in report:
                 self._validation_types[info.domain].append(info.validation_type)
         except RequestClientError as e:
@@ -83,7 +85,7 @@ class OcxValidatorClient(CurlRestClient, ABC):
             add_input_to_report: bool = True,
             wrap_report_data_in_cdata: bool = False,
             locale: str = "en",
-    ) -> json:
+    ) -> Tuple[json, OcxHeader]:
         """Internal method. Validate a single OCX model.
 
         Args:
@@ -127,8 +129,8 @@ class OcxValidatorClient(CurlRestClient, ABC):
             ocx_model: str,
             domain: ValidationDomain = ValidationDomain.OCX,
             schema_version: str = '3.0.0',
-            embedding_method: EmbeddingMethod = EmbeddingMethod.BASE64, force_version: bool = False) -> str:
-        """Validate a single 3Docx XML file. The XML file will be pretty-print formatted before validation.
+            embedding_method: EmbeddingMethod = EmbeddingMethod.BASE64, force_version: bool = False) -> tuple:
+        """Validate a single 3Docx XML file..
 
         Args:
             ocx_model: The model source path
@@ -138,7 +140,7 @@ class OcxValidatorClient(CurlRestClient, ABC):
             embedding_method: The source embedding method. Valid Types are ``STRING`` or ``BASE64``.
 
         Returns:
-            The validator response as xml or json string
+            The validator response as xml or json string and the 3Docx Header information
 
         Raises:
             ValidatorError on a bad response.
@@ -150,6 +152,9 @@ class OcxValidatorClient(CurlRestClient, ABC):
                 version = schema_version
             validation_type = f"{domain.value}.v{version}"
             tree = lxml.etree.parse(ocx_model)
+            # Parse the 3Docx Header information
+            root = tree.getroot()
+            header = OcxReportFactory.create_header(root, ocx_model)
             byte_string = lxml.etree.tostring(tree)
             decoded_string = byte_string.decode("utf-8")
             match embedding_method.value:
@@ -170,7 +175,7 @@ class OcxValidatorClient(CurlRestClient, ABC):
                 validation_type,
                 embedding_method.value,
                 location_as_path,
-            )
+            ), header
         except lxml.etree.XMLSyntaxError as e:
             logger.error(e)
             raise ValidatorError(e) from e
@@ -187,18 +192,18 @@ class OcxValidatorClient(CurlRestClient, ABC):
             ocx_models: List,
             domain: ValidationDomain = ValidationDomain.OCX,
             schema_version: str = '3.0.0',
-            embedding_method: EmbeddingMethod = EmbeddingMethod.BASE64, force_version: bool = False) -> str:
-        """Validate a single 3Docx XML file. The XML file will be pretty-print formatted before validation.
+            embedding_method: EmbeddingMethod = EmbeddingMethod.BASE64, force_version: bool = False) -> Tuple[str, List[OcxHeader]]:
+        """Validate many 3Docx XML files.
 
         Args:
             ocx_models: List of models to validate.
             domain: The validator validation domain
             schema_version: Schema version to use in the validation
-            force_version: True if ``version`` shall be used irrespective of the source 3Docx version            embedding_method: The content embedding method.
+            force_version: True if ``version`` shall be used irrespective of the source 3Docx version
             embedding_method: The source embedding method. Valid Types are ``STRING`` or ``BASE64``.
 
         Returns:
-            The validator response as xml or json string
+            The validator response as xml or json string and a list of OcxHeader dataclasses
 
         Raises:
             ValidatorError on a bad response.
@@ -206,6 +211,7 @@ class OcxValidatorClient(CurlRestClient, ABC):
         self.set_headers({"accept": "application/json", "Content-Type": "application/json"})
         endpoint = f"rest/{domain.value}/api/validateMultiple"
         params = []
+        headers = []
         try:
             for ocx_model in ocx_models:
                 Path(SourceValidator.validate(ocx_model))
@@ -218,6 +224,9 @@ class OcxValidatorClient(CurlRestClient, ABC):
                                          f'Valid validations: {self.get_validation_types()}. '
                                          'Try validate to one of the available types')
                 tree = lxml.etree.parse(ocx_model)
+                root = tree.getroot()
+                header = OcxReportFactory.create_header(root, ocx_model)
+                headers.append(header)
                 byte_string = lxml.etree.tostring(tree)
                 decoded_string = byte_string.decode("utf-8")
                 match embedding_method.value:
@@ -244,8 +253,9 @@ class OcxValidatorClient(CurlRestClient, ABC):
                         "locale": 'en',
                     }
                 )
+
             return self.api(
-                request_type=RequestType.POST, endpoint=endpoint, payload=params)
+                request_type=RequestType.POST, endpoint=endpoint, payload=params), headers
         except lxml.etree.XMLSyntaxError as e:
             logger.error(e)
             raise ValidatorError(e) from e
@@ -295,7 +305,7 @@ class OcxValidatorAsyncClient(AsyncRestClient, ABC):
         self._validation_types = defaultdict(list)
         try:
             response = self.get_validator_info()
-            report = ValidatorReport.create_info_report(response)
+            report = ValidatorReportFactory.create_info_report(response)
             for info in report:
                 self._validation_types[info.domain].append(info.validation_type)
         except RequestClientError as e:

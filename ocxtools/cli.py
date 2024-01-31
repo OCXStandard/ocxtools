@@ -56,15 +56,26 @@ LOGO = r"""
 # Logging config for application
 # Function to capture warnings and log them using Loguru
 # Custom warning handler
-logger.remove()
+# logger.remove()
 showwarning_ = warnings.showwarning
 
 
 def showwarning(message, *args, **kwargs):
+    """
+    Show warnings.
+    Args:
+        message:
+        *args:
+        **kwargs:
+    """
     logger.warning(message)
     showwarning_(message, *args, **kwargs)
 
 
+logger.add(LOG_FILE, level=SINK_LEVEL)
+logger.remove()  # Remove all handlers added so far, including the default one.
+warnings.simplefilter('default')
+warnings.showwarning = showwarning
 # Python main logger
 # Attach the cli handler to the python warnings logger
 logger.enable(__app_name__)
@@ -123,7 +134,7 @@ def cli(ctx):
 
 @cli.command()
 def readme():
-    """Show the validate html page with usage examples."""
+    """Show the README html page with usage examples."""
     console.man_page(__app_name__)
 
 

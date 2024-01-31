@@ -8,7 +8,7 @@ import click
 from configparser import ConfigParser
 # Project
 from ocxtools.console.console import CliConsole
-from ocxtools.validator.validator_report import ValidationReport
+from ocxtools.dataclass.dataclasses import ValidationReport, OcxHeader
 from ocxtools.validator.validator_client import ValidationDomain
 
 
@@ -27,14 +27,28 @@ class ContextManager:
         self._schematron_reports: Dict = {}
         self._console = console
         self._config = config
+        self._headers: Dict = {}
+
+    def add_header(self, header: OcxHeader):
+        """
+            Add the 3Docx header information.
+        Args:
+            header: The header dataclass
+
+        """
+        self._headers[header.source] = header
+
+    def get_headers(self) -> Dict:
+        """Return 3Docx header information."""
+        return self._headers
+
 
     def add_report(self, domain: ValidationDomain, report: ValidationReport):
         """
-            Add a new source model and report html file
+            Add a new source model and report dataclass
         Args:
             domain: The validation domain
-            source: The path to the source model
-            report: The validation report
+            report: The validation report dataclass
 
         """
         match domain:
