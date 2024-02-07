@@ -2,14 +2,14 @@
 """The report manager implementation."""
 # System imports
 from collections import defaultdict
+import os
 
-
-from typing import Dict
+from typing import Dict, List
 
 
 # Third party
 # project imports
-from ocxtools.dataclass.dataclasses import Report
+from ocxtools.dataclass.dataclasses import Report, ReportType
 
 
 class OcxReportManager:
@@ -20,59 +20,85 @@ class OcxReportManager:
     def __init__(self):
         self._reports = defaultdict(list)
 
-    def add_report(self, model: str, report: Report):
+    def add_report(self, report: Report):
         """
-
+        Add a new report.
         Args:
-            model:
-            report:
+            report: The report to add
         """
-        self._reports[model].append(report)
+        self._reports[report.type.value].append(report)
 
-    def get_reports(self) -> Dict:
+    def delete_report(self, model: str) -> int:
         """
+        Delete all reports for the source ``model``
+        Args:
+            model: The model reports to be deleted
+        """
+        count = 0
+        for report_type, reports in self._reports.items():
+            for report in reports:
+                if os.path.normpath(report.source) == os.path.normpath(model):
+                    self._reports[report_type].remove(report)
+                    count += 1
+        return count
+
+
+    def get_report(self, report_type: ReportType) -> List[Report]:
+        """
+        Return the list of reports of ``report_type``
+        Args:
+            report_type: The report type
+        """
+        if report_type.value in self._reports:
+            return self._reports[report_type.value]
+        else:
+            return []
+
+    def get_all_reports(self) -> Dict:
+        """
+        Retrieve all available reports.
 
         Returns:
-
+            All reports
         """
         return self._reports
 
-    def report_detail(self, model) -> [Report]:
+    def report_detail(self, report_type: ReportType) -> [Report]:
         """
-
+        Return the detailed reports of ``report_type``
         Args:
-            model:
+            report_type: The report type
 
         Returns:
-
+            The list of reports of ``report_type``.
         """
-        if model in self._reports.keys():
-            return [report.detail() for report in self._reports[model] if report.type != 'OcxHeader']
+        if report_type.value in self._reports.keys():
+            return [report.detail() for report in self._reports[report_type.value] if report.type != ReportType.HEADER.value]
         else:
             return []
 
     def report_summary(self):
         """
-        Report summary for all models.
+        Report summary for all reports.
         """
         table = []
-        for model, reports in self._reports.items():
+        for report_type, reports in self._reports.items():
             table.extend(
                 report.summary()
                 for report in reports
-                if report.type != 'OcxHeader'
+                # if report.type.value != ReportType.HEADER.value
             )
         return table
 
     def report_headers(self):
         """
-        Report summary for all models.
+        Return the header information of all parsed models.
         """
         table = []
-        for model, reports in self._reports.items():
+        for report_type, reports in self._reports.items():
             table.extend(
                 report.to_dict(exclude=['Report'])
                 for report in reports
-                if report.type == 'OcxHeader'
+                if report.type.value == ReportType.HEADER.value
             )
         return table

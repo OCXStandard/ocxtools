@@ -297,13 +297,16 @@ class OcxVersion:
         Returns:
             The schema version of the 3Docx XML model.
         """
-        version = "NA"
-        ocx_model = Path(model).resolve()
-        content = ocx_model.read_text().split()
-        for item in content:
-            if "schemaVersion" in item:
-                version = item[item.find("=") + 2: -1]
-        return version
+        try:
+            version = "NA"
+            ocx_model = Path(SourceValidator.validate(model))
+            content = ocx_model.read_text().split()
+            for item in content:
+                if "schemaVersion" in item:
+                    version = item[item.find("=") + 2: -1]
+            return version
+        except SourceError as e:
+            raise SourceError(e) from e
 
 
 class OcxNamespace:

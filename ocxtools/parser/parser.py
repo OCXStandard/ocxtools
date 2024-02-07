@@ -9,6 +9,7 @@ from dataclasses import dataclass
 from typing import Dict, Iterator
 
 import lxml.etree
+from lxml.etree import Element
 
 # 3rd party imports
 from loguru import logger
@@ -26,6 +27,53 @@ from ocxtools.loader.loader import DeclarationOfOcxImport, DynamicLoader
 from ocxtools.utils.utilities import OcxVersion, SourceValidator
 
 
+class MetaData:
+    """Dataclass metadata."""
+
+    @staticmethod
+    def meta_class_fields(data_class: dataclass) -> Dict:
+        """
+        Return the dataclass metadata.
+
+        Args:
+            data_class: The dataclass instance
+
+        Returns:
+            The metadata of the class
+        """
+        return dict(data_class.Meta.__dict__.items())
+
+    @staticmethod
+    def class_name(data_class: dataclass) -> str:
+        """Return the name of the class"""
+        declaration = str(data_class.__class__)
+        return declaration[declaration.rfind(".") + 1: -2]
+
+    @staticmethod
+    def namespace(data_class: dataclass) -> str:
+        """Get the OCX namespace
+
+        Args:
+            data_class: The dataclass instance
+
+        Returns:
+            The namespace of the dataclass
+        """
+        return MetaData.meta_class_fields(data_class).get("namespace")
+
+    @staticmethod
+    def name(data_class: dataclass) -> str:
+        """Get the OCX name
+
+        Args:
+            data_class: The dataclass instance
+
+        Returns:
+            The name of the OCX type
+        """
+        return MetaData.meta_class_fields(data_class).get("name")
+
+
 class OcxNotifyParser(IObservable, ABC):
     """Ocx notification parser class for 3Docx XML files.
 
@@ -37,10 +85,10 @@ class OcxNotifyParser(IObservable, ABC):
      """
 
     def __init__(
-        self,
-        fail_on_unknown_properties: bool = False,
-        fail_on_unknown_attributes: bool = False,
-        fail_on_converter_warnings: bool = True,
+            self,
+            fail_on_unknown_properties: bool = False,
+            fail_on_unknown_attributes: bool = False,
+            fail_on_converter_warnings: bool = True,
     ):
         context = XmlContext()
         parser_config = ParserConfig(
@@ -68,8 +116,12 @@ class OcxNotifyParser(IObservable, ABC):
         name = clazz.__name__
         new_data_class = clazz(**params)
         # Broadcast an update
-        self.update(ObservableEvent.DATACLASS, {'name': name, 'object': new_data_class})
-        logger.debug(f"Name: {name}, params: {params}")
+        namespace = MetaData.namespace(clazz)
+        # name = MetaData.name(clazz)
+        fields = MetaData.meta_class_fields(clazz)
+        logger.debug(f'Meta fields: {fields}')
+        tag = '{' + namespace + '}' + name
+        self.update(ObservableEvent.DATACLASS, {'name': tag, 'object': new_data_class})
         return new_data_class
 
     def parse(self, xml_file: str) -> dataclass:
@@ -104,6 +156,31 @@ class OcxNotifyParser(IObservable, ABC):
             raise XmlParserError from e
 
 
+    def parse_element(self, element: Element, ocx_module) -> dataclass:
+        """Parse a 3Docx XML element and return the dataclass.
+
+        Args:
+            element: The 3Docx XML Element to parse.
+
+        Returns:
+            The element dataclass instance.
+        """
+        try:
+            return self._parser.parse(element, ocx_module)
+        except lxml.etree.XMLSyntaxError as e:
+            logger.error(e)
+            raise XmlParserError(e) from e
+        except ImportError as e:
+            logger.error(e)
+            raise XmlParserError from e
+        except XmlContextError as e:
+            logger.error(e)
+            raise XmlParserError from e
+        except ParserError as e:
+            logger.error(e)
+            raise XmlParserError from e
+
+
 class OcxParser(IParser, ABC):
     """OcxParser class for 3Docx XML files.
 
@@ -115,10 +192,10 @@ class OcxParser(IParser, ABC):
     """
 
     def __init__(
-        self,
-        fail_on_unknown_properties: bool = False,
-        fail_on_unknown_attributes: bool = False,
-        fail_on_converter_warnings: bool = True,
+            self,
+            fail_on_unknown_properties: bool = False,
+            fail_on_unknown_attributes: bool = False,
+            fail_on_converter_warnings: bool = True,
     ):
         self._context = XmlContext()
         self._parser_config = ParserConfig(
@@ -210,38 +287,3 @@ class OcxParser(IParser, ABC):
         data_class = self.parse(ocx_model)
         # print(MetaData.meta_class_fields(data_class))
         return iter(dataclasses.asdict(data_class))
-
-
-class MetaData:
-    """Dataclass metadata."""
-
-    @staticmethod
-    def meta_class_fields(data_class: dataclass) -> Dict:
-        """
-        Return the dataclass metadata.
-
-        Args:
-            data_class: The dataclass instance
-
-        Returns:
-            The metadata of the class
-        """
-        return dict(data_class.Meta.__dict__.items())
-
-    @staticmethod
-    def class_name(data_class: dataclass) -> str:
-        """Return the name of the class"""
-        declaration = str(data_class.__class__)
-        return declaration[declaration.rfind(".") + 1 : -2]
-
-    @staticmethod
-    def namespace(data_class: dataclass) -> str:
-        """Get the OCX namespace
-
-        Args:
-            data_class: The dataclass instance
-
-        Returns:
-            The namespace of the dataclass
-        """
-        return MetaData.meta_class_fields(data_class).get("namespace")
