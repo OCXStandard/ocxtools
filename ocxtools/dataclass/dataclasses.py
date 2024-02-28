@@ -5,12 +5,14 @@
 from dataclasses import dataclass, field, fields
 from enum import Enum
 from typing import Dict, List, Union
-from abc import abstractmethod, ABC
+from abc import ABC
 import pandas as pd
-import re
 
+# Third party imports
+from xsdata.utils.text import snake_case
 
 # Project imports
+from ocxtools.exceptions import ReporterError
 
 
 class ReportType(Enum):
@@ -30,17 +32,25 @@ class ReportType(Enum):
     ReportType.COMPARTMENTS: Represents a report for compartments.
     """
 
-    ELEMENT_COUNT = 'ElementCount'
-    HEADER = 'OcxHeader'
-    SUMMARY = 'Summary'
+    # ELEMENT_COUNT = 'ElementCount'
+    HEADER = 'Header'
     PLATE = 'Plate'
     STIFFENER = 'Stiffener'
     BRACKET = 'Bracket'
     PILLAR = 'Pillar'
     EDGE_REINFORCEMENT = 'EdgeReinforcement'
-    VESSEL = 'Vessel'
+    PARTICULARS = 'PrincipalParticulars'
     PANEL = 'Panel'
-    COMPARTMENTS = 'Compartments'
+    COMPARTMENT = 'Compartment'
+    PHYSICAL_SPACE = 'PhysicalSpace'
+    DESIGN_VIEW = 'DesignView'
+    COORDINATE_SYSTEM = 'CoordinateSystem'
+    UNIT = 'Unit'
+    MATERIAL_CATALOGUE = 'MaterialCatalogue'
+    SECTION_CATALOGUE = 'XsectionCatalogue'
+    HOLE_CATALOGUE = 'HoleShapeCatalogue'
+    COUNT = 'ElementCount'  # Count of elements in the 3Docx file
+    ALL = "All"  # Use "All" to include all report types.
 
 
 @dataclass
@@ -82,27 +92,207 @@ class BaseDataClass:
 class Report(ABC):
     """Abstract interface."""
 
-    @abstractmethod
-    def summary(self) -> Dict:
-        """
-        Interface for the Report class
-        """
-        pass
+    type: ReportType = field(metadata={"header": "Report"})
 
-    @abstractmethod
-    def detail(self) -> List:
-        """
-        Interface for the Report class
-        """
-        pass
+    def __eq__(self, other):
+        return self.type == other.type if isinstance(other, self.__class__) else False
 
 
 @dataclass
 class SummaryReport(BaseDataClass, ABC):
+    """
+    Summary:
+        Represents a summary report with basic attributes.
+
+    Explanation:
+        This class represents a summary report and provides attributes to store basic information about the report.
+        It includes the type of the report, its source, the number of columns in the table,
+        the levels of the table, the count of items, and the count of unique items.
+        The class inherits from the `BaseDataClass` class and is designed to be used as a base class for other report
+        classes.
+
+    Args:
+        type (str): The type of the report.
+        source (str): The source of the report.
+        columns (int): The number of columns in the table.
+        levels (Union[int, str]): The levels of the table.
+        count (Union[int, str]): The count of items.
+        unique (Union[int, str]): The count of unique items.
+
+    Returns:
+        None
+
+    """
+
     type: str = field(metadata={"header": "Report"})
     source: str = field(metadata={"header": "Source"})
-    count: Union[int, str] = field(metadata={"header": "Count"})
-    unique: Union[int, str] = field(metadata={"header": "Unique"})
+    columns: int = field(metadata={"header": "Table Columns"})
+    levels: Union[int, str] = field(metadata={"header": "Table levels"})
+    count: Union[int, str] = field(metadata={"header": "Items"})
+    unique: Union[int, str] = field(metadata={"header": "Unique Items"})
+
+
+@dataclass
+class DetailedReport(SummaryReport):
+    """
+        Summary:
+            Represents a detailed report with additional content.
+
+        Explanation:
+            This class extends the `SummaryReport` class and represents a detailed report.
+            It includes all the attributes of the `SummaryReport` class, as well as an additional attribute called
+            `content`. The `content` attribute stores a list of dictionaries representing the detailed content of
+            the report.
+
+        Args:
+            content (List[Dict]): The detailed content of the report.
+
+        Returns:
+            None
+
+    """
+
+    content: List[Dict] = field(metadata={"header": "Content"})
+
+
+@dataclass
+class ElementCount(BaseDataClass, ABC):
+    """The element count data."""
+    namespace: str = field(metadata={"header": "Namespace"})
+    name: str = field(metadata={"header": "Name"})
+    count: int = field(metadata={"header": "Count"})
+
+
+@dataclass
+class ReportElementCount(BaseDataClass, Report, ABC):
+    """
+    Represents a report element count.
+
+    Args:
+        source (str): The source of the 3Docx model.
+        count (int): The number of elements in the report.
+        elements (List[ElementCount]): The list of element counts.
+        type (str, optional): The type of the report. Defaults to ReportType.ELEMENT_COUNT.
+
+    """
+
+    source: str = field(metadata={"header": "Source"})
+    count: int = field(metadata={"header": "Count"})
+    unique: int = field(metadata={"header": "Unique Types"})
+    elements: List[ElementCount] = field(metadata={"header": "Elements"})
+    type: ReportType = field(metadata={"header": "Report"})
+
+    def summary(self) -> SummaryReport:
+        """
+        Element count report summary.
+
+        Returns:
+            The summary of the element count report.
+        """
+        return SummaryReport(source=self.source, type=self.type.value, count=self.count, levels=1,
+                             unique=self.unique, columns=3)
+
+    def detail(self, level: int, member: str, max_col: int, guid: str = '') -> DetailedReport:
+        """
+        The element count details'
+        Returns:
+        The detailed element count report
+        """
+        table = []
+        if member.lower() == 'all':
+            table = [item.to_dict() for item in self.elements]
+        else:
+            table.extend(
+                item.to_dict()
+                for item in self.elements
+                if item.to_dict().get('Name') == member
+            )
+        summary = self.summary()
+        return DetailedReport(**summary.__dict__, content=table)
+
+
+@dataclass
+class ReportDataFrame(Report, BaseDataClass, ABC):
+    """
+    Represents a Pandas DataFrame report.
+
+    Args:
+        source (str): The source of the 3Docx model.
+        count (int): The number of elements in the report.
+        unique(int): The number of elements with unique GUIDs
+        elements (List[ElementCount]): The list of element counts.
+        type (str, optional): The type of the report. Defaults to ReportType.ELEMENT_COUNT.
+
+    """
+
+    source: str = field(metadata={"header": "Source"})
+    count: int = field(metadata={"header": "Count"})
+    unique: int = field(metadata={"header": "Unique Types"})
+    columns: int = field(metadata={"header": "Columns"})
+    levels: int = field(metadata={"header": "Levels"})
+    elements: pd.DataFrame = field(metadata={"header": "Elements"})
+    type: ReportType = field(metadata={"header": "Report"})
+
+    def summary(self) -> SummaryReport:
+        """
+        DataFrame report summary.
+
+        Returns:
+            The summary of the dataframe.
+        """
+        return SummaryReport(source=self.source, type=self.type.value, count=self.count, unique=self.count,
+                             columns=self.columns, levels=self.levels)
+
+    def detail(self, level: int, member: str, max_col: int, guid: str = '') -> DetailedReport:
+        """
+        Summary:
+            Generates a detailed report based on specified criteria.
+
+        Explanation:
+            This function generates a detailed report by filtering and selecting columns from the existing report.
+            It takes in the level of detail, the member to filter on, the maximum number of columns to include in the detailed report,
+            and an optional GUID to further filter the report content.
+            The function filters the columns based on the member and level criteria, and then extracts the content of the filtered columns.
+            If a GUID is provided, it filters the report content based on the matching GUID.
+            The function also includes the summary information from the original report.
+            It returns a `DetailedReport` instance with the extracted content and summary information.
+
+        Args:
+            level (int): The level of detail for the report.
+            member (str): The member to filter on. Use 'all' to include all columns.
+            max_col (int): The maximum number of columns to include in the detailed report.
+            guid (str, optional): The GUID to filter the report content. Defaults to ''.
+
+        Returns:
+            DetailedReport: A detailed report instance with the extracted content and summary information.
+
+        Raises:
+            ReporterError: If the specified member is not found in the report or if no matching GUID is found.
+
+        Examples:
+            N/A
+        """
+
+        df = self.elements
+        # Report content matching guid
+        if guid != '' and 'guidref' in df.columns:
+            mask = df['guidref'].isin([guid])
+            if mask is None:
+                raise ReporterError(f'No matching GUIDref for objects of type {self.type!r}')
+            else:
+                df = df[mask]
+        # Filter on columns matching member and ignore levels
+        if member.lower() != 'all':
+            columns = [column for column in df.columns.tolist() if snake_case(member) in column]
+            if not columns:
+                raise ReporterError(f'No OCX subtype {member!r} in report {self.type.value!r}')
+        else:
+            columns = df.columns.tolist()
+            columns = [col_id for col_id in columns if col_id.count('.') <= level]
+        max_col = min(max_col, len(columns))
+        content = df[columns].iloc[:, 0:max_col].to_dict(orient='records')
+        summary = self.summary()
+        return DetailedReport(**summary.__dict__, content=content)
 
 
 @dataclass
@@ -118,19 +308,17 @@ class OcxHeader(BaseDataClass, Report, ABC):
     originating_system: str = field(metadata={"header": "System"})
     application_version: str = field(metadata={"header": "Version"})
     documentation: str = field(metadata={"header": "Documentation"}, default='')
-    type: ReportType = field(metadata={"header": "Report"}, default=ReportType.HEADER)
 
-    def summary(self) -> Dict:
-        summary = SummaryReport(source=self.source, type=self.type.value, count='NA', unique='NA')
-        return summary.to_dict()
+    def summary(self) -> SummaryReport:
+        return SummaryReport(source=self.source, type=self.type.value, count='NA', unique='NA', levels=1)
 
-    def detail(self) -> List:
+    def detail(self, number_of_columns: int) -> DetailedReport:
         """
         Detailed missing guid report.
         Returns:
         Returns the list of missing guids.
         """
-        return [self.to_dict()]
+        return DetailedReport(**self.summary().__dict__, content=[])
 
 
 @dataclass
@@ -166,175 +354,3 @@ class ValidationInformation(BaseDataClass):
     domain: str = field(metadata={"header": "Domain"})
     validation_type: str = field(metadata={"header": "Validation type"})
     description: str = field(metadata={"header": "Description"})
-
-
-@dataclass
-class References(BaseDataClass):
-    """The GUIDRef report details."""
-    tag: str = field(metadata={"header": "Tag"})
-    local_ref: str = field(metadata={"header": "Local Reference"})
-    guid: str = field(metadata={"header": "GUID"})
-    source_line: int = field(metadata={"header": "Line Number"})
-
-
-@dataclass
-class Guids(BaseDataClass):
-    """The GUIDRef report details."""
-    tag: str = field(metadata={"header": "Tag"})
-    name: str = field(metadata={"header": "Name"})
-    id: str = field(metadata={"header": "Id"})
-    guid: str = field(metadata={"header": "GUID"})
-    source_line: int = field(metadata={"header": "Line Number"})
-
-
-@dataclass
-class ReportMissingReferences(BaseDataClass, Report, ABC):
-    """The content report data."""
-    source: str = field(metadata={"header": "Source"})
-    errors: int = field(metadata={"header": "Number"})
-    missing_references: List[Guids] = field(metadata={"header": "Missing"})
-    type: ReportType = field(metadata={"header": "Report"}, default='MissingGuids')
-
-    def summary(self) -> Dict:
-        return self.to_dict(exclude=['Missing'])
-
-    def detail(self) -> Union[None, List]:
-        """
-        Detailed missing guid report.
-        Returns:
-        Returns the list of missing guids.
-        """
-        if len(self.missing_references) > 0:
-            return [missing.to_dict() for missing in self.missing_references]
-        else:
-            return None
-
-
-@dataclass
-class ReportDuplicateGuids(BaseDataClass, Report, ABC):
-    """The content report data."""
-    source: str = field(metadata={"header": "Source"})
-    errors: int = field(metadata={"header": "Number"})
-    duplicate_guids: List[Guids] = field(metadata={"header": "Duplicates"})
-    type: ReportType = field(metadata={"header": "Report"}, default='DuplicateGuids')
-
-    def summary(self) -> Dict:
-        return self.to_dict(exclude=['Duplicates'])
-
-    def detail(self) -> Union[None, List]:
-        """
-        Detailed missing guid report.
-        Returns:
-        Returns the list of missing guids or None if .
-        """
-        if len(self.duplicate_guids) > 0:
-            return [duplicate.to_dict() for duplicate in self.duplicate_guids]
-        else:
-            return None
-
-
-@dataclass
-class ElementCount(BaseDataClass, ABC):
-    """The element count data."""
-    namespace: str = field(metadata={"header": "Namespace"})
-    name: str = field(metadata={"header": "Name"})
-    count: int = field(metadata={"header": "Count"})
-
-
-@dataclass
-class ReportElementCount(BaseDataClass, Report, ABC):
-    """
-    Represents a report element count.
-
-    Args:
-        source (str): The source of the 3Docx model.
-        number_of_elements (int): The number of elements in the report.
-        elements (List[ElementCount]): The list of element counts.
-        type (str, optional): The type of the report. Defaults to ReportType.ELEMENT_COUNT.
-
-    """
-
-    source: str = field(metadata={"header": "Source"})
-    count: int = field(metadata={"header": "Count"})
-    unique: int = field(metadata={"header": "Unique Types"})
-    elements: List[ElementCount] = field(metadata={"header": "Elements"})
-    type: ReportType = field(metadata={"header": "Report"}, default=ReportType.ELEMENT_COUNT)
-
-    def summary(self) -> Dict:
-        """
-        Element count report summary.
-
-        Returns:
-            The summary of the element count report.
-        """
-        summary = SummaryReport(source=self.source, type=self.type.value, count=self.count, unique=self.unique)
-        return summary.to_dict()
-
-    def detail(self) -> List:
-        """
-        The element count details'
-        Returns:
-        The detailed element count report
-        """
-        return [item.to_dict() for item in self.elements]
-
-
-@dataclass
-class ReportDataFrame(BaseDataClass, Report, ABC):
-    """
-    Represents a Pandas DataFrame report.
-
-    Args:
-        source (str): The source of the 3Docx model.
-        number_of_elements (int): The number of elements in the report.
-        elements (List[ElementCount]): The list of element counts.
-        type (str, optional): The type of the report. Defaults to ReportType.ELEMENT_COUNT.
-
-    """
-
-    source: str = field(metadata={"header": "Source"})
-    count: int = field(metadata={"header": "Count"})
-    unique: int = field(metadata={"header": "Unique Types"})
-    elements: pd.DataFrame = field(metadata={"header": "Elements"})
-    type: ReportType = field(metadata={"header": "Report"})
-
-    def summary(self) -> Dict:
-        """
-        TataFrame report summary.
-
-        Returns:
-            The summary of the dataframe.
-        """
-        summary = SummaryReport(source=self.source, type=self.type.value, count=self.count, unique=self.count)
-        return summary.to_dict()
-
-    def detail(self) -> List:
-        """
-        The dataframe content details'
-        Returns:
-        The detailed dataframe content
-        """
-        match self.type.value:
-            case ReportType.PLATE.value:
-                df = self.elements
-                # Throw away lower level ids
-                columns = df.columns.tolist()
-                columns = [id for id in columns if id.count('.') <= 2]
-                columns = [
-                    id
-                    for id in columns
-                    if not any(
-                        re.search(word, id)
-                        for word in [
-                            'outer_contour',
-                            'inner_contour',
-                            'limited_by',
-                            'unbounded_geometry',
-                            'cut_by',
-                        ]
-                    )
-                ]
-                data = df[columns].to_dict(orient='records')
-                return data[0] if len(data) == 1 else data
-            case _:
-                return []

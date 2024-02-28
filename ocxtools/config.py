@@ -40,6 +40,15 @@ config["DockerSettings"] = {
     "docker_port": 8080
 }
 
+config["JupyterSettings"] = {
+    "container_name": "jupyter",
+    "docker_image": "jupyter/scipy-notebook",
+    "docker_tag": "latest",
+    "jupyter_mount": "/home/jovyan/work",
+    "docker_port": 8888,
+    "mount_folder": './reports'
+}
+
 config["RendererSettings"] = {
     # XSLT Style sheet resource folder
     "resource_folder": "resources",
@@ -70,4 +79,5 @@ config["Plugins"] = {
     "reporter": 'yes',
     "docker": 'yes',
     "renderer": 'no',
+    "jupyter": 'yes'
 }

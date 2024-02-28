@@ -4,9 +4,9 @@
 # system imports
 from dataclasses import dataclass
 import csv
-from typing import Dict, List
+from typing import List
 from enum import Enum
-
+from pathlib import Path
 # 3rd party imports
 from xsdata.formats.dataclass.context import XmlContext
 from xsdata.formats.dataclass.serializers import JsonSerializer, XmlSerializer
@@ -14,12 +14,13 @@ from xsdata.formats.dataclass.serializers.config import SerializerConfig
 
 # Project imports
 from ocxtools.parser.parser import MetaData
+from ocxtools.dataclass.dataclasses import ReportDataFrame
 
 
 class ReportFormat(Enum):
     """Serialisation formats"""
     CSV = 'csv'
-    EXCEL = 'xlsx'
+    PARQUET = 'parquet'
 
 
 class OcxSerializer:
@@ -102,14 +103,18 @@ class Serializer:
             writer.writerows(table)
 
     @staticmethod
-    def serialize_to_excel(sheets: List[Dict], file_name: str):
+    def serialize_to_parquet(report: ReportDataFrame, report_folder: str):
         """
-        Serialize a dictionary to an Excel file.
+        Serialize a dataframe report to a parquet file
         Args:
-            sheets: List of dictionaries to serialize. Each dictionary will be a separate sheet
-            file_name: the output file name
+            report: Dataclass containing the dataframe to serialize
+            report_folder: the output directory
         """
-        raise SerializerError("To be implemented)")
+        stem = Path(report.source).stem
+        ocx_type = report.type.value.lower()
+        file_name = Path(report_folder).joinpath(f'{stem}_{ocx_type}.parquet')
+        df = report.elements
+        df.to_parquet(file_name)
 
 
 class SerializerError(ValueError):

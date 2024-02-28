@@ -121,12 +121,13 @@ class CliConsole(Console):
         """
         self.rule(title=f'[bold black]{title}[/bold black]', characters=separator, style=style)
 
-    def run_sub_process(self, command: str):
+    def run_sub_process(self, command: str, silent:bool = False) -> str:
         """
         Execute the command in a python subprocess.
 
         Args:
             command: The command to execute.
+            silent: If True, don't output anything to the console.
 
         """
         # Use subprocess.run to execute the command and capture output
@@ -138,9 +139,13 @@ class CliConsole(Console):
         else:
             logger.info(f"Command {result.args!r}: with return code{result.returncode}")
             if result.stderr == '':
-                self.info(result.stdout)
+                if not silent:
+                    self.info(result.stdout)
+                return result.stdout
             else:
-                self.info(result.stderr)
+                if not silent:
+                    self.info(result.stderr)
+                return result.stderr
 
     def readme(self, sub_command: str):
         """Print the ``sub_command`` readme file in the console window.

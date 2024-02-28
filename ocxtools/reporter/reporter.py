@@ -8,6 +8,7 @@ from pathlib import Path
 from itertools import groupby
 from dataclasses import dataclass, is_dataclass
 import pandas as pd
+from enum import Enum
 
 
 # Third party
@@ -18,42 +19,44 @@ import arrow
 from xsdata.formats.dataclass.parsers import XmlParser
 from xsdata.formats.dataclass.parsers.handlers import LxmlEventHandler
 from xsdata.exceptions import ParserError
+
 # project imports
 from ocxtools.parser.parser import OcxNotifyParser
-from ocxtools.dataclass.dataclasses import (OcxHeader, ReportElementCount, ElementCount, ReportDataFrame,
+from ocxtools.dataclass.dataclasses import (OcxHeader, ReportDataFrame, ReportElementCount, ElementCount,
                                             ReportType)
 from ocxtools.interfaces.interfaces import ABC, IObserver, ObservableEvent
-from ocxtools.utils.utilities import SourceValidator, OcxVersion
+from ocxtools.utils.utilities import SourceValidator, OcxVersion, is_substring_in_list
 from ocxtools.exceptions import ReporterError, SourceError
 from ocx_schema_parser.xelement import LxmlElement
 from ocxtools.loader.loader import DeclarationOfOcxImport, DynamicLoader, DynamicLoaderError
 
 
-def is_substring_in_list(substring, string_list):
+def all_empty_array(column: pd.Series) -> bool:
     """
+    Check if all elements in a column are empty arrays.
 
     Args:
-        substring: The search string
-        string_list: List of strings
+        column: A pandas Series representing a column of data.
 
     Returns:
-        True if the substring is found, False otherwise.
+        bool: True if all elements in the column are empty arrays, False otherwise.
+
     """
-    return any(substring in string for string in string_list)
+    if column.dtype == object:
+        if not column.isna().any():
+            lengths = column.apply(len)
+            if lengths.max() == 0:
+                return True
+    return False
 
 
-def flatten_data(
-        data: Any, parent_key: str = '',
-        max_depth: int = float('inf'),
-        depth: int = 0, sep: str = '.') -> Dict[str, Any]:
+def flatten_data(data: Any, parent_key: str = '', sep: str = '.') -> Dict[str, Any]:
     """
     Flattens nested data structures into a dictionary.
 
     Args:
         data (Any): The data to be flattened.
         parent_key (str): The parent key to be prepended to the flattened keys. Defaults to an empty string.
-        max_depth (int): The maximum depth to flatten the data. Defaults to infinity.
-        depth (int): The current depth of recursion. Defaults to 0.
         sep (str): The separator to use between keys. Defaults to '.'.
 
     Returns:
@@ -64,26 +67,44 @@ def flatten_data(
         >>> flatten_data(data)
         {'a.b.c': 1, 'd': [2, 3]}
     """
-    flat_data = {}
-    if is_dataclass(data):
-        data = data.__dict__
-    for key, value in data.items():
-        if is_dataclass(value):
-            value = value.__dict__
-        if isinstance(value, dict):
-            if depth < max_depth:
-                flat_data.update(flatten_data(value, parent_key + key + sep, max_depth, depth + 1))
+    try:
+        flat_data = {}
+        if is_dataclass(data):
+            data = data.__dict__
+        for key, value in data.items():
+            if is_dataclass(value):
+                value = value.__dict__
+            if isinstance(value, Enum):
+                value = value.value  # Convert Enum instance to its value
+                if not isinstance(value, str):  # If the Enum value is not a string, it is a QName.text
+                    value = value.text
+            if isinstance(value, dict):
+                flat_data.update(flatten_data(value, parent_key + key + sep))
+            elif isinstance(value, list):
+                if all(isinstance(item, (int, float, str)) for item in value):
+                    flat_data[parent_key + key] = value
+                else:
+                    for item in value:
+                        flat_data.update(flatten_data(item, f"{parent_key}{key}{sep}"))
             else:
                 flat_data[parent_key + key] = value
-        elif isinstance(value, list):
-            if all(isinstance(item, (int, float, str)) for item in value) or depth == max_depth:
-                flat_data[parent_key + key] = value
-            else:
-                for i, item in enumerate(value):
-                    flat_data.update(flatten_data(item, f"{parent_key}{key}{i}{sep}", max_depth, depth + 1))
-        else:
-            flat_data[parent_key + key] = value
-    return flat_data
+        return flat_data
+    except ValueError as e:
+        logger.error(e)
+        raise ReporterError(e) from e
+
+
+def duplicate_values(df: pd.DataFrame, col_name: str) -> List:
+    """
+    Find duplicates in a dataframe column.
+    Args:
+        df: DatFrame
+        col_name: The specified column.
+
+    Returns:
+
+    """
+    return df[df.duplicated(col_name)] if col_name in df.columns else []
 
 
 class OcxReportFactory:
@@ -113,27 +134,54 @@ class OcxReportFactory:
             originating_system=xml_header.get('originating_system'),
             organization=xml_header.get('organization'),
             application_version=xml_header.get('application_version'),
+            type=ReportType.HEADER
         )
 
     @staticmethod
-    def element_count(model: str, objects: Dict) -> ReportElementCount:
+    def element_count_2(model: str, objects: List) -> ReportElementCount:
         """
-        Element count report
+        Element count report.
         Args:
             model: The source XML file
-            objects: List of 3Docx objects
+            objects: List of tuples (tag, count) of 3Docx objects.
 
         Returns:
             The element count report.
         """
         try:
             elements = [ElementCount(namespace=QName(key).namespace, name=LxmlElement.strip_namespace_tag(key),
-                                     count=len(objects[key])) for key in sorted(objects)]
+                                     count=count) for key, count in objects]
             return ReportElementCount(
                 source=model,
                 elements=elements,
                 count=sum(element.count for element in elements),
-                unique=len(elements)
+                unique=len(elements),
+                type=ReportType.COUNT
+            )
+        except TypeError as e:
+            logger.error(f'{e}')
+            raise ReporterError(e) from e
+
+    @staticmethod
+    def element_count(model: str, objects: List) -> ReportElementCount:
+        """
+        Element count report
+        Args:
+            model: The source XML file
+            objects: List of tuples (tag, count) of 3Docx objects.
+
+        Returns:
+            The element count report.
+        """
+        try:
+            elements = [ElementCount(namespace=QName(key).namespace, name=LxmlElement.strip_namespace_tag(key),
+                                     count=count) for key, count in objects]
+            return ReportElementCount(
+                source=model,
+                elements=elements,
+                count=sum(element.count for element in elements),
+                unique=len(elements),
+                type=ReportType.COUNT
             )
         except TypeError as e:
             logger.error(f'{e}')
@@ -157,7 +205,7 @@ class OcxReportFactory:
         }
 
     @staticmethod
-    def element_to_dataframe(model: str, report_type: ReportType, data: List[dataclass], depth: int) -> ReportDataFrame:
+    def element_to_dataframe(model: str, report_type: ReportType, data: List[dataclass]) -> ReportDataFrame:
         """
         Converts a list of dataclass objects into a pandas DataFrame by flattening the data.
 
@@ -177,16 +225,33 @@ class OcxReportFactory:
             0  1  2
             1  3  4
         """
+        try:
+            # create a flattened dict from all dataclasses
+            flattened_data = [flatten_data(obj) for obj in data]
+            data_frame = pd.DataFrame(flattened_data)
+            # Drop columns with only empty lists
+            # Find columns to drop
+            logger.debug(f'Dataframe shape before dropped columns: {data_frame.shape}')
+            for col in data_frame.columns:
+                if all_empty_array(data_frame[col]):
+                    data_frame.drop(col, axis=1, inplace=True)
+            logger.debug(f'Dataframe shape after dropped columns: {data_frame.shape}')
+            return ReportDataFrame(
+                source=model,
+                type=report_type,
+                count=data_frame.shape[0],
+                unique=data_frame.shape[0] - len(duplicate_values(data_frame, col_name='guidref')),
+                columns=data_frame.shape[1],
+                levels=max([col.count('.') for col in data_frame.columns]),
+                elements=data_frame
+            )
+        except (IndexError, ValueError) as e:
+            logger.error(e)
+            raise ReporterError(e) from e
 
-        flattened_data = [flatten_data(obj, max_depth=depth) for obj in data]
-        data_frame = pd.DataFrame(flattened_data)
-        return ReportDataFrame(
-            source=model,
-            type=report_type,
-            count=data_frame.shape[0],
-            unique=data_frame.shape[0],
-            elements=data_frame
-        )
+    @staticmethod
+    def datframe_types(model: str, report_type: ReportType, data: List[dataclass]) -> ReportDataFrame:
+        pass
 
 
 class OcxObserver(IObserver, ABC):
@@ -208,16 +273,6 @@ class OcxObserver(IObserver, ABC):
     def update(self, event: ObservableEvent, payload: Dict):
         self._ocx_objects[payload.get('name')].append(payload.get('object'))
 
-    def element_count(self, model: str) -> ReportElementCount:
-        """
-        Return the 3Docx element count report.
-
-        Returns:
-            The report dataclass
-
-        """
-        return OcxReportFactory.element_count(model=model, objects=self._ocx_objects)
-
     def header(self, model: str) -> OcxHeader:
         """
         Return the 3Docx header data.
@@ -238,14 +293,14 @@ class OcxObserver(IObserver, ABC):
 
         return len(self._ocx_objects)
 
-    def get_root(self) -> Element:
+    def get_elements(self) -> Dict:
         """
-        Returns the root element of the XML document.
+        Return all parsed elements.
 
         Returns:
-            Element: The root element of the XML document.
+            Dict of all OCX objects from the parsed XML document.
         """
-        return self._parser.get_root()
+        return self._ocx_objects
 
 
 def get_guid(element: Element) -> Union[None, str]:
@@ -290,6 +345,7 @@ class OcxReporter:
 
     def __init__(self):
         self._root = None
+        self._model = ''
 
     def parse_model(self, model: str) -> Element:
         """
@@ -305,6 +361,7 @@ class OcxReporter:
             file = Path(SourceValidator.validate(model))
             tree = lxml.etree.parse(file)
             self._root = tree.getroot()
+            self._model = model
             return self._root
         except lxml.etree.XMLSyntaxError as e:
             logger.error(e)
@@ -320,6 +377,10 @@ class OcxReporter:
         """Return the XML model root."""
         return self._root
 
+    def get_model(self) -> str:
+        """Return the path to the parsed model"""
+        return self._model
+
     def get_header(self) -> OcxHeader:
         """
         Returns the header of the OCX report.
@@ -329,31 +390,44 @@ class OcxReporter:
         """
         return OcxReportFactory.create_header(self._root)
 
-    def element_count(self, selection: Union[List, str] = "All") -> List:
+    @staticmethod
+    def element_count_2(model: str) -> ReportElementCount:
         """
         Return the count of a list of OCX elements in a model.
+        This method is slow due to the OcxNotifyParser. Don't use.
 
         Args:
-            selection: Only count elements in the selection list. An empty list will count all elements.
+            model: The 3Docx model source
         """
-        elements = []
-        for element in LxmlElement.iter((self.get_root())):
-            elements.append(element.tag)
+        try:
+            xml_file = SourceValidator.validate(model)
+            parser = OcxNotifyParser()
+            observer = OcxObserver(observable=parser)
+            parser.parse(xml_file)
+            elements = observer.get_elements()
+            grouped_items = [(k, len(g)) for k, g in sorted(elements.items(), key=lambda k: k)]
+            return OcxReportFactory.element_count_2(model=model, objects=grouped_items)
+        except (ParserError, SourceError) as e:
+            logger.error(e)
+            raise ReporterError(e) from e
+
+    def element_count(self, selection: Union[List, str] = "All") -> ReportElementCount:
+
+        elements = [element.tag for element in LxmlElement.iter((self.get_root()))]
         sorted_items = sorted(elements)
-        grouped_items = [(key, len(group)) for key, group in groupby(sorted_items)]
-        return OcxReportFactory.element_count(elements=grouped_items)
+        grouped_items = [(k, len(list(g))) for k, g in groupby(sorted_items)]
+        return OcxReportFactory.element_count(model=self.get_model(), objects=grouped_items)
 
     @staticmethod
-    def dataframe(model: str, ocx_type: ReportType, depth: int = float('inf')) -> Union[None, ReportDataFrame]:
+    def dataframe(model: str, ocx_type: ReportType) -> Union[None, ReportDataFrame]:
         """
 
         Args:
-            depth: Flatten the 3Docx dataclass to the depth level. ``inf`` flattens to the deepest level.
             model: The 3Docx source
             ocx_type: The 3Docx type to parse
 
         Returns:
-            The flattened dataframe of tha parsed 3Docx elements
+            The dataclass ReportDatFrame containing the flattened data frame of the parsed OCX element
         """
         parser = XmlParser(handler=LxmlEventHandler)
         try:
@@ -364,14 +438,15 @@ class OcxReporter:
             declaration = DeclarationOfOcxImport("ocx", version)
             data_class = DynamicLoader.import_class(declaration, ocx_type.value)
             result = []
+            logger.info(f'Parsing object {data_class!r}')
             for e in LxmlElement.find_all_children_with_name(root, ocx_type.value):
                 ocx_element = parser.parse(e, data_class)
                 result.append(ocx_element)
+                logger.info(f'Created report {ocx_type.value!r}')
             if result:
                 return OcxReportFactory.element_to_dataframe(data=result,
                                                              model=model,
-                                                             report_type=ocx_type,
-                                                             depth=depth)
+                                                             report_type=ocx_type)
             else:
                 return None
         except DynamicLoaderError as e:
@@ -382,4 +457,5 @@ class OcxReporter:
             raise ReporterError(e) from e
         except ParserError as e:
             logger.error(e)
+            logger.warning(f'Skipping parsing of {data_class}')
             raise ReporterError(e) from e
