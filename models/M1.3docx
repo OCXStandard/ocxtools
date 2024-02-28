@@ -16,7 +16,7 @@
         <ocx:AP_Pos numericvalue="0" unit="Um" />
       </ocx:PrincipalParticulars>
     </ocx:ClassificationData>
-    <ocx:BuilderInformation yard="OCXV3" designer="LEEVI" owner="Tapio" yearOfBuild="2023-01" />
+    <ocx:BuilderInformation yard="OCXV3" designer="LEEVI" owner="Tapio" />
     <ocx:CoordinateSystem id="nplcid7" ocx:GUIDRef="11fd521c-d2d3-4ebb-a619-da5ff4391f70" isGlobal="true">
       <ocx:LocalCartesian>
         <ocx:Origin coordinates="0 0 0" unit="Um" />

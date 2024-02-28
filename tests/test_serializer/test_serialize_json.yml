@@ -431,7 +431,7 @@ Vessel:
   - designer: LEEVI
     owner: Tapio
     yard: OCXV3
-    yearOfBuild: 2023-01
+    yearOfBuild: null
   ClassificationData:
   - ClassNotation: []
     PrincipalParticulars:

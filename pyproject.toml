@@ -16,7 +16,7 @@ readme = "README.md"
 packages = [{include = "ocxtools"}]
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = "^3.10"
 packaging = "^23.1"
 tbump = '*'
 click ="*"
@@ -29,8 +29,11 @@ loguru = "*"
 httpx = "*"
 arrow = "*"
 pandas = "*"
-ocx = "3.00b5"
-ocx_schema_parser = "*"
+ocx = "3.0.0rc4"
+ocx_schema_parser = "1.7.1"
+pyarrow = "^15.0.0"
+fastparquet = "^2024.2.0"
+openpyxl = "^3.1.2"
 
 
 [tool.poetry.group.development.dependencies]
@@ -50,7 +53,7 @@ sphinx-click = "*"
 sphinx_automodapi = "*"
 
 [tool.poetry.scripts]
-databinding = "ocxtools.cli:main"
+ocxtools = "ocxtools.cli:main"
 
 [tool.tbump]
 # Uncomment this if your project is hosted on GitHub:

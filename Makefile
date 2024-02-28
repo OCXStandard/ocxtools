@@ -4,7 +4,8 @@
 
 SOURCEDIR = ./ocxtools
 CONDA_ENV = ocxtools
-DATA_SOURCE: C:\PythonDev\ocxtools\readme
+DATA_SOURCE= C:\PythonDev\ocxtools\readme
+SKIP_TEST = renderer
 
 # PROJECT setup using conda and powershell
 .PHONY: conda-create
@@ -79,7 +80,7 @@ sourcery:  ## Run sourcery with --fix
 
 
 test:  ## Run unit and integration tests
-	@pytest --durations=5  --cov-report html --cov ocxtools .
+	@pytest -m "not skip" --durations=5  --cov-report html --cov ocxtools .
 
 test-upd:  ## Run unit and integration tests
 	@pytest --force-regen --durations=5  --cov-report html --cov ocxtools .

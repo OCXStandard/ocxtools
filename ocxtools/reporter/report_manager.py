@@ -6,10 +6,9 @@ import os
 
 from typing import Dict, List
 
-
 # Third party
 # project imports
-from ocxtools.dataclass.dataclasses import Report, ReportType
+from ocxtools.dataclass.dataclasses import Report, ReportType, DetailedReport
 
 
 class OcxReportManager:
@@ -26,6 +25,10 @@ class OcxReportManager:
         Args:
             report: The report to add
         """
+        if report.type.value in self._reports:
+            for existing in self.get_report(report.type):
+                if os.path.normpath(existing.source) == os.path.normpath(report.source):
+                    self._reports[report.type.value].remove(existing)
         self._reports[report.type.value].append(report)
 
     def delete_report(self, model: str) -> int:
@@ -41,7 +44,6 @@ class OcxReportManager:
                     self._reports[report_type].remove(report)
                     count += 1
         return count
-
 
     def get_report(self, report_type: ReportType) -> List[Report]:
         """
@@ -63,32 +65,47 @@ class OcxReportManager:
         """
         return self._reports
 
-    def report_detail(self, report_type: ReportType) -> [Report]:
+    def report_detail(self, report_type: ReportType,
+                      level: int = 0,
+                      max_col: int = 8,
+                      guid: str = '',
+                      member: str = 'All') -> List[DetailedReport]:
         """
         Return the detailed reports of ``report_type``
         Args:
+            member: Only include columns matching the OCX member. If member='All', include all columns.
+            level: Create the report with all elements from level zero to ``level``.
+            max_col: Include table columns up to ``max_col``. Default is to 8 columns.
             report_type: The report type
 
         Returns:
             The list of reports of ``report_type``.
         """
         if report_type.value in self._reports.keys():
-            return [report.detail() for report in self._reports[report_type.value] if report.type != ReportType.HEADER.value]
+            return [report.detail(level=level, member=member, max_col=max_col, guid=guid)
+                    for report in self._reports[report_type.value] if report.type != ReportType.HEADER.value]
         else:
             return []
 
-    def report_summary(self):
+    def report_tree(self, report_type: ReportType) -> Dict:
+        if report_type.value in self._reports.keys():
+            return [report.tree()
+                    for report in self._reports[report_type.value]]
+        else:
+            return {}
+
+
+    def report_summary(self) -> List:
         """
         Report summary for all reports.
         """
-        table = []
+        tables = []
         for report_type, reports in self._reports.items():
-            table.extend(
-                report.summary()
+            tables.extend(
+                report.summary().to_dict()
                 for report in reports
-                # if report.type.value != ReportType.HEADER.value
             )
-        return table
+        return tables
 
     def report_headers(self):
         """

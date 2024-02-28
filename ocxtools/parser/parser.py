@@ -7,11 +7,9 @@ import dataclasses
 from abc import ABC
 from dataclasses import dataclass
 from typing import Dict, Iterator
-
+# 3rd party imports
 import lxml.etree
 from lxml.etree import Element
-
-# 3rd party imports
 from loguru import logger
 from xsdata.exceptions import ParserError
 from xsdata.formats.dataclass.context import XmlContext, XmlContextError

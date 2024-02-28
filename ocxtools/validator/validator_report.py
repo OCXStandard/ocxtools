@@ -40,8 +40,10 @@ class ValidatorReportFactory:
             profile_id = LxmlElement.find_child_with_name(root, 'profileID').text
             result = LxmlElement.find_child_with_name(root, 'result').text
             date = LxmlElement.find_child_with_name(root, 'date').text
-            validator_name = LxmlElement.find_child_with_name(root, 'validationServiceName').text
-            validator_version = LxmlElement.find_child_with_name(root, 'validationServiceVersion').text
+            validator_name = LxmlElement.find_child_with_name(root, 'validationServiceName')
+            validator_name = validator_name.text if validator_name is not None else ''
+            validator_version = LxmlElement.find_child_with_name(root, 'validationServiceVersion')
+            validator_version = validator_version.text if validator_version is not None else ''
             LxmlElement.find_all_children_with_name(root, 'errors')
             # Iterate over error elements and create the detailed report
             errors = []

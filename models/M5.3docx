@@ -150,6 +150,7 @@
       </ocx:LimitedBy>
       <ocx:OuterContour>
         <ocx:NURBS3D id="nplcid12" ocx:GUIDRef="9f79a9b6-0c1a-4d33-b49f-14fb21aa25cd">
+          <ocx:Length numericvalue="1.0" unit="Um"/>
           <ocx:NURBSproperties degree="3" numCtrlPts="316" numKnots="320" form="Unknown" isRational="false" />
           <ocx:KnotVector value="0 0 0 0 1 1 1 2 2 2 3 3 3 4 4 4 5 5 5 6 6 6 7 7 7 8 8 8 9 9 9 10 10 10 11 11 11 12 12 12 13 13 13 14 14 14 15 15 15 16 16 16 17 17 17 18 18 18 19 19 19 20 20 20 21 21 21 22 22 22 23 23 23 24 24 24 25 25 25 26 26 26 27 27 27 28 28 28 29 29 29 30 30 30 31 31 31 32 32 32 33 33 33 34 34 34 35 35 35 36 36 36 37 37 37 38 38 38 39 39 39 40 40 40 41 41 41 42 42 42 43 43 43 44 44 44 45 45 45 46 46 46 47 47 47 48 48 48 49 49 49 50 50 50 51 51 51 52 52 52 53 53 53 54 54 54 55 55 55 56 56 56 57 57 57 58 58 58 59 59 59 60 60 60 61 61 61 62 62 62 63 63 63 64 64 64 65 65 65 66 66 66 67 67 67 68 68 68 69 69 69 70 70 70 71 71 71 72 72 72 73 73 73 74 74 74 75 75 75 76 76 76 77 77 77 78 78 78 79 79 79 80 80 80 81 81 81 82 82 82 83 83 83 84 84 84 85 85 85 86 86 86 87 87 87 88 88 88 89 89 89 90 90 90 91 91 91 92 92 92 93 93 93 94 94 94 95 95 95 96 96 96 97 97 97 98 98 98 99 99 99 100 100 100 101 101 101 102 102 102 103 103 103 104 104 104 105 105 105 105" />
           <ocx:ControlPtList>
@@ -1115,6 +1116,7 @@
           </ocx:PlateMaterial>
           <ocx:OuterContour>
             <ocx:NURBS3D id="nplcid13" ocx:GUIDRef="79c77bcb-a773-45a3-a2d6-c410dfa72142">
+              <ocx:Length numericvalue="1.0" unit="Um"/>
               <ocx:NURBSproperties degree="3" numCtrlPts="316" numKnots="320" form="Unknown" isRational="false" />
               <ocx:KnotVector value="0 0 0 0 1 1 1 2 2 2 3 3 3 4 4 4 5 5 5 6 6 6 7 7 7 8 8 8 9 9 9 10 10 10 11 11 11 12 12 12 13 13 13 14 14 14 15 15 15 16 16 16 17 17 17 18 18 18 19 19 19 20 20 20 21 21 21 22 22 22 23 23 23 24 24 24 25 25 25 26 26 26 27 27 27 28 28 28 29 29 29 30 30 30 31 31 31 32 32 32 33 33 33 34 34 34 35 35 35 36 36 36 37 37 37 38 38 38 39 39 39 40 40 40 41 41 41 42 42 42 43 43 43 44 44 44 45 45 45 46 46 46 47 47 47 48 48 48 49 49 49 50 50 50 51 51 51 52 52 52 53 53 53 54 54 54 55 55 55 56 56 56 57 57 57 58 58 58 59 59 59 60 60 60 61 61 61 62 62 62 63 63 63 64 64 64 65 65 65 66 66 66 67 67 67 68 68 68 69 69 69 70 70 70 71 71 71 72 72 72 73 73 73 74 74 74 75 75 75 76 76 76 77 77 77 78 78 78 79 79 79 80 80 80 81 81 81 82 82 82 83 83 83 84 84 84 85 85 85 86 86 86 87 87 87 88 88 88 89 89 89 90 90 90 91 91 91 92 92 92 93 93 93 94 94 94 95 95 95 96 96 96 97 97 97 98 98 98 99 99 99 100 100 100 101 101 101 102 102 102 103 103 103 104 104 104 105 105 105 105" />
               <ocx:ControlPtList>
@@ -2072,6 +2074,7 @@
           <ocx:LimitedBy>
             <ocx:FreeEdgeCurve3D id="nplcid14" name="S:NEQRJ4RRM7/PANEL" ocx:GUIDRef="b3893e5c-bdc2-46a0-b33c-e576db888b8a">
               <ocx:NURBS3D id="nplcid15" ocx:GUIDRef="874434af-fcb6-4d83-bdd3-b99bf27fb35c">
+                <ocx:Length numericvalue="1.0" unit="Um"/>
                 <ocx:NURBSproperties degree="3" numCtrlPts="310" numKnots="314" form="Unknown" isRational="false" />
                 <ocx:KnotVector value="0 0 0 0 1 1 1 2 2 2 3 3 3 4 4 4 5 5 5 6 6 6 7 7 7 8 8 8 9 9 9 10 10 10 11 11 11 12 12 12 13 13 13 14 14 14 15 15 15 16 16 16 17 17 17 18 18 18 19 19 19 20 20 20 21 21 21 22 22 22 23 23 23 24 24 24 25 25 25 26 26 26 27 27 27 28 28 28 29 29 29 30 30 30 31 31 31 32 32 32 33 33 33 34 34 34 35 35 35 36 36 36 37 37 37 38 38 38 39 39 39 40 40 40 41 41 41 42 42 42 43 43 43 44 44 44 45 45 45 46 46 46 47 47 47 48 48 48 49 49 49 50 50 50 51 51 51 52 52 52 53 53 53 54 54 54 55 55 55 56 56 56 57 57 57 58 58 58 59 59 59 60 60 60 61 61 61 62 62 62 63 63 63 64 64 64 65 65 65 66 66 66 67 67 67 68 68 68 69 69 69 70 70 70 71 71 71 72 72 72 73 73 73 74 74 74 75 75 75 76 76 76 77 77 77 78 78 78 79 79 79 80 80 80 81 81 81 82 82 82 83 83 83 84 84 84 85 85 85 86 86 86 87 87 87 88 88 88 89 89 89 90 90 90 91 91 91 92 92 92 93 93 93 94 94 94 95 95 95 96 96 96 97 97 97 98 98 98 99 99 99 100 100 100 101 101 101 102 102 102 103 103 103 103" />
                 <ocx:ControlPtList>
@@ -3029,12 +3032,29 @@
             <ocx:DryWeight numericvalue="70.0743" unit="UKg" />
             <ocx:CenterOfGravity coordinates="1.77506 1.77003 0" unit="Um" />
           </ocx:PhysicalProperties>
-          <ocx:MaterialRef localRef="nplcid4" ocx:GUIDRef="733afbc1-b058-407c-b9d9-f8f6f4cfc85d" ocx:refType="ocx:Material" />
           <ocx:SectionRef localRef="nplcid6" ocx:GUIDRef="91d1cf60-a048-4b78-8abb-c578e36bcdf1" ocx:refType="ocx:BarSection">
             <ocx:OffsetV numericvalue="-0.1" unit="Um" />
+            <ocx:OffsetU numericvalue="0.0" unit="Um" />
           </ocx:SectionRef>
+          <ocx:MaterialRef localRef="nplcid4" ocx:GUIDRef="733afbc1-b058-407c-b9d9-f8f6f4cfc85d" ocx:refType="ocx:Material" />
+          <ocx:Inclination>
+            <ocx:WebDirection x="0" y="0" z="1" />
+            <ocx:FlangeDirection x="-1" y="0" z="0" />
+            <ocx:Position coordinates="2.5 0 0" unit="Um" />
+          </ocx:Inclination>
+          <ocx:Inclination>
+            <ocx:WebDirection x="0" y="0" z="1" />
+            <ocx:FlangeDirection x="-0.7125" y="-0.7017" z="0" />
+            <ocx:Position coordinates="2.13372 2.13367 0" unit="Um" />
+          </ocx:Inclination>
+          <ocx:Inclination>
+            <ocx:WebDirection x="0" y="0" z="1" />
+            <ocx:FlangeDirection x="0" y="-1" z="0" />
+            <ocx:Position coordinates="0 2.5 0" unit="Um" />
+          </ocx:Inclination>
           <ocx:TraceLine>
             <ocx:NURBS3D id="nplcid16" ocx:GUIDRef="4d254ea5-8a64-40d9-affd-e4f3be734d53">
+              <ocx:Length numericvalue="1.0" unit="Um"/>
               <ocx:NURBSproperties degree="3" numCtrlPts="310" numKnots="314" form="Unknown" isRational="false" />
               <ocx:KnotVector value="0 0 0 0 1 1 1 2 2 2 3 3 3 4 4 4 5 5 5 6 6 6 7 7 7 8 8 8 9 9 9 10 10 10 11 11 11 12 12 12 13 13 13 14 14 14 15 15 15 16 16 16 17 17 17 18 18 18 19 19 19 20 20 20 21 21 21 22 22 22 23 23 23 24 24 24 25 25 25 26 26 26 27 27 27 28 28 28 29 29 29 30 30 30 31 31 31 32 32 32 33 33 33 34 34 34 35 35 35 36 36 36 37 37 37 38 38 38 39 39 39 40 40 40 41 41 41 42 42 42 43 43 43 44 44 44 45 45 45 46 46 46 47 47 47 48 48 48 49 49 49 50 50 50 51 51 51 52 52 52 53 53 53 54 54 54 55 55 55 56 56 56 57 57 57 58 58 58 59 59 59 60 60 60 61 61 61 62 62 62 63 63 63 64 64 64 65 65 65 66 66 66 67 67 67 68 68 68 69 69 69 70 70 70 71 71 71 72 72 72 73 73 73 74 74 74 75 75 75 76 76 76 77 77 77 78 78 78 79 79 79 80 80 80 81 81 81 82 82 82 83 83 83 84 84 84 85 85 85 86 86 86 87 87 87 88 88 88 89 89 89 90 90 90 91 91 91 92 92 92 93 93 93 94 94 94 95 95 95 96 96 96 97 97 97 98 98 98 99 99 99 100 100 100 101 101 101 102 102 102 103 103 103 103" />
               <ocx:ControlPtList>
@@ -3971,21 +3991,6 @@
               </ocx:ControlPtList>
             </ocx:NURBS3D>
           </ocx:TraceLine>
-          <ocx:Inclination>
-            <ocx:WebDirection x="0" y="0" z="1" />
-            <ocx:FlangeDirection x="-1" y="0" z="0" />
-            <ocx:Position coordinates="2.5 0 0" unit="Um" />
-          </ocx:Inclination>
-          <ocx:Inclination>
-            <ocx:WebDirection x="0" y="0" z="1" />
-            <ocx:FlangeDirection x="-0.7125" y="-0.7017" z="0" />
-            <ocx:Position coordinates="2.13372 2.13367 0" unit="Um" />
-          </ocx:Inclination>
-          <ocx:Inclination>
-            <ocx:WebDirection x="0" y="0" z="1" />
-            <ocx:FlangeDirection x="0" y="-1" z="0" />
-            <ocx:Position coordinates="0 2.5 0" unit="Um" />
-          </ocx:Inclination>
         </ocx:EdgeReinforcement>
       </ocx:StiffenedBy>
     </ocx:Panel>

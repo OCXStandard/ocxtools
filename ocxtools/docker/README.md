@@ -27,17 +27,19 @@ ocxtools >: docker --help
 
  Usage:  [OPTIONS] COMMAND [ARGS]...
 
-╭─ Options ────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ --install-completion          Install completion for the current shell.                                              │
-│ --show-completion             Show completion for the current shell, to copy it or customize the installation.       │
-│ --help                        Show this message and exit.                                                            │
-╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
-╭─ Commands ───────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ check        Check the status of the docker validator container.                                                     │
-│ run          Start the docker validator container.                                                                   │
-│ start        Start the docker Desktop (Windows only).                                                                │
-│ stop         Stop and remove the validator container.                                                                │
-╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+┌─ Options ───────────────────────────────────────────────────────────────────┐
+│ --install-completion          Install completion for the current shell.     │
+│ --show-completion             Show completion for the current shell, to     │
+│                               copy it or customize the installation.        │
+│ --help                        Show this message and exit.                   │
+└─────────────────────────────────────────────────────────────────────────────┘
+┌─ Commands ──────────────────────────────────────────────────────────────────┐
+│ check    Check the status of the docker running containers.                 │
+│ readme   Show the docker cli html page with usage examples.                 │
+│ run      Pull the container from docker hup and start the container.        │
+│ start    Start the docker Desktop (Windows only).                           │
+│ stop     Stop and remove a container.                                       │
+└─────────────────────────────────────────────────────────────────────────────┘
 
 ocxtools >:
 ```
@@ -64,8 +66,7 @@ ocxtools >: docker start
 ocxtools >:
 ````
 Wait for the desktop to start before running the OCX Validator container.
-
-### run
+ ## run
 The ``run`` command wil start the OCX Validator container:
 ````commandline
 ocxtools >: docker run
@@ -87,6 +88,67 @@ The above result shows us two things happening in the background:
 
 In order to come around this problem, you need to remove the container first.
 
+### run options
+
+The ``run`` command has the following options:
+
+````commandline
+ocxtools >: docker run --help
+
+ Usage: run [OPTIONS]
+
+ Pull the container from docker hup and start the container.
+
+╭─ Options ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ --container                      TEXT     The container name. [default: validator]                                                                                                                   │
+│ --docker-port                    INTEGER  The docker port number. [default: 8080]                                                                                                                    │
+│ --public-port                    INTEGER  The docker public exposed port number. [default: 8080]                                                                                                     │
+│ --image                          TEXT     The docker image name. Pulled from DockerHub if not available in local repo. [default: 3docx/validator]                                                    │
+│ --tag                            TEXT     The docker image tag. [default: latest]                                                                                                                    │
+│ --pull                           TEXT     The docker pull policy. [default: always]                                                                                                                  │
+│ --local-folder                   TEXT     Local folder mount target. [default: models]                                                                                                               │
+│ --docker-volume                  TEXT     The docker mount path [default: /work]                                                                                                                     │
+│ --mount            --no-mount             Mount a local directory. If true, the provided local folder is mounted. [default: no-mount]                                                                │
+│ --help                                    Show this message and exit.                                                                                                                                │
+╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+
+ocxtools >:
+````
+The CLI provides the most common defaults for running the ``validator`` supporting most use scenarios.
+If there is a need for running a specific version of the docker ``validator`` image, one can use the ``--tag`` option:
+
+````commandline
+
+ocxtools >: docker run --tag 3.0.0b4
+ℹ     Unable to find image '3docx/validator:3.0.0b4' locally
+3.0.0b4: Pulling from 3docx/validator
+99de9192b4af: Already exists
+c5980221a1ce: Already exists
+b561fbe0ad19: Already exists
+afff93b71681: Already exists
+203befd68707: Already exists
+25fa5c3015da: Already exists
+449d21fae869: Already exists
+cde84110f69f: Already exists
+e2f0088623c3: Already exists
+Digest: sha256:a7d3df0a98bea8a8dcc3336098031fdf27805954edc7e43e4d1dc4f3be46aca0
+Status: Downloaded newer image for 3docx/validator:3.0.0b4
+
+ℹ     CONTAINER ID   IMAGE                           COMMAND                  CREATED         STATUS                    PORTS                    NAMES
+0a45e6df4d08   3docx/validator:3.0.0b4         "java -XX:+ExitOnOutâ€¦"   3 seconds ago   Up Less than a second     0.0.0.0:8080->8080/tcp   validator
+
+ocxtools >:
+````
+
+The above command will use the image ``3docx/validator`` with tag ``3.0.0b4``. It will pull this image from DockerHub if the image is not found locally as in the case above.
+The ``--pull`` option gives control of using a local or a remote image. Valid values are:
+
+````commandline
+never
+always
+newer
+````
+
 ## stop
 The ``stop`` command will do two things:
 1. stop a running ``validator`` container
@@ -102,6 +164,7 @@ validator
 
 ocxtools >:
 ````
+## run
 
 After running the ``stop`` command, issue the ``run`` command to pull a fresh image (if available) and run the validator:
 

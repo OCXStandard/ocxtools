@@ -36,12 +36,12 @@ class ContextManager:
             header: The header dataclass
 
         """
+
         self._headers[header.source] = header
 
     def get_headers(self) -> Dict:
         """Return 3Docx header information."""
         return self._headers
-
 
     def add_report(self, domain: ValidationDomain, report: ValidationReport):
         """

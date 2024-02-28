@@ -10,12 +10,30 @@ import pandas as pd
 from tabulate import tabulate
 from lxml import etree
 from rich.table import Table
+from rich.tree import Tree
 from loguru import logger
 
 # Project imports
 from ocxtools.utils.utilities import SourceValidator
 from ocxtools.exceptions import SourceError
 from ocxtools.console.console import style_table_header
+
+
+class TreeNode:
+    """
+    Represents a node in a tree structure.
+
+    Args:
+        name: The name of the node.
+
+    Attributes:
+        name: The name of the node.
+        children: A list of child nodes.
+    """
+
+    def __init__(self, name):
+        self.name = name
+        self.children = []
 
 
 class RenderError(ValueError):
@@ -105,6 +123,60 @@ class RichTable:
             rich_table.add_row(*row)
 
         return rich_table
+
+    @classmethod
+    def tree(cls, data: Dict, title: str) -> Tree:
+        """
+        Builds and renders a rich tree structure based on the provided data.
+
+        Args:
+            data: The dictionary representing the tree structure.
+            title: The title of the tree.
+
+        Returns:
+            Tree: The rendered rich tree structure.
+        """
+        tree = Tree(f"[bold]{title}[/bold]")
+        tree = cls.build_rich_tree(data, parent=tree)
+        return tree
+
+    @classmethod
+    def build_rich_tree(cls, tree: Dict, parent: Tree) -> Tree:
+        """
+        Recursively builds a tree structure from a dictionary.
+
+        Args:
+            tree_dict: The dictionary representing the tree structure.
+            parent: The parent node of the current tree level. Defaults to None for the root node.
+
+        Returns:
+            TreeNode: The root node of the built tree.
+        """
+        for child in tree:
+            if len(tree[child]) > 0:
+                cls.build_rich_tree(tree[child], parent)
+            else:
+                parent = parent.add(child)
+        return parent
+
+    @classmethod
+    def render_rich_tree(cls, node, tree=None, depth=0):
+        """
+        Renders a rich tree structure based on the provided node.
+
+        Args:
+            node: The root node of the tree structure.
+            tree: Optional existing Tree object to append the rendered tree. Defaults to None.
+            depth: The current depth of the tree. Defaults to 0.
+
+        Returns:
+            Tree: The rendered rich tree structure.
+        """
+        tree = Tree(f"[bold]{node.name}[/bold]")
+        for child in node.children:
+            sub_tree = cls.render(child)
+            tree.add(sub_tree)
+        return tree
 
 
 class XsltTransformer:

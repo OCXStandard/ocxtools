@@ -18,10 +18,11 @@ import ocxtools.validator.cli
 import ocxtools.docker.cli
 import ocxtools.reporter.cli
 import ocxtools.renderer.cli
-import ocxtools.reporter.cli
+import ocxtools.jupyter.cli
 from ocxtools.console.console import CliConsole
 from ocxtools.context.context_manager import ContextManager
 from ocxtools.config import config
+
 
 LOG_FILE = config.get('FileLogger', 'log_file')
 RETENTION = config.get('FileLogger', 'retention')
@@ -127,7 +128,7 @@ def cli(ctx):
     console.print(f"Version: {__version__}")
     console.print("Copyright (c) 2024. OCX Consortium (https://3docx.org)\n")
     logger.info(f"{__app_name__} session started.")
-    logger.info(f"Logging level is {logger.level}")
+    logger.info(f"Logging level is {SINK_LEVEL}")
     ctx.obj = context_manager
     ctx.call_on_close(exit_cli)
 
@@ -157,7 +158,7 @@ def issues():
     console.html_page(REGISTER_ISSUE)
 
 
-# Arrange all command groups from Typer
+# Install any command group plugins
 if config.getboolean('Plugins', 'serializer'):
     subcommand, typer_click_object = ocxtools.serializer.cli.cli_plugin()
     cli.add_command(typer_click_object, subcommand)
@@ -172,4 +173,7 @@ if config.getboolean('Plugins', 'reporter'):
     cli.add_command(typer_click_object, subcommand)
 if config.getboolean('Plugins', 'renderer'):
     subcommand, typer_click_object = ocxtools.renderer.cli.cli_plugin()
+    cli.add_command(typer_click_object, subcommand)
+if config.getboolean('Plugins', 'jupyter'):
+    subcommand, typer_click_object = ocxtools.jupyter.cli.cli_plugin()
     cli.add_command(typer_click_object, subcommand)

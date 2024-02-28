@@ -7,7 +7,7 @@ import base64
 import json
 from enum import Enum
 from collections import defaultdict
-from typing import List, Tuple
+from typing import List, Tuple, Any
 import itertools
 
 from typing import Dict
@@ -85,7 +85,7 @@ class OcxValidatorClient(CurlRestClient, ABC):
             add_input_to_report: bool = True,
             wrap_report_data_in_cdata: bool = False,
             locale: str = "en",
-    ) -> Tuple[json, OcxHeader]:
+    ) -> Tuple[Any, OcxHeader]:
         """Internal method. Validate a single OCX model.
 
         Args:

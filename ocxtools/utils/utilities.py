@@ -18,6 +18,19 @@ from typing import Generator
 from ocxtools.exceptions import SourceError
 
 
+def is_substring_in_list(substring, string_list):
+    """
+
+    Args:
+        substring: The search string
+        string_list: List of strings
+
+    Returns:
+        True if the substring is found, False otherwise.
+    """
+    return any(substring in string for string in string_list)
+
+
 def all_equal(iterable) -> True:
     """
     Verify that all items in a list are equal
