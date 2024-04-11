@@ -1,6 +1,7 @@
 #  Copyright (c) 2023. OCX Consortium https://3docx.org. See the LICENSE
 """CLI plugin method"""
-from typing import Tuple, Any, List
+from typing import Any, List, Tuple
+
 import typer
 from typer import Typer
 

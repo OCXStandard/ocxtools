@@ -4,20 +4,22 @@
 # System imports
 
 
-from enum import Enum
-from typing import List, Union
 import subprocess
+from enum import Enum
 from pathlib import Path
+from typing import List, Union
+
+from loguru import logger
 # Third party imports
 from rich.console import Console
+from rich.markdown import Markdown
+from rich.style import Style
 from rich.table import Table
 from rich.theme import Theme
-from rich.style import Style
-from rich.markdown import Markdown
-from loguru import logger
+
+from ocxtools import config
 # Project imports
 from ocxtools.utils.utilities import get_file_path
-from ocxtools import config
 
 # # Defaults
 README_FOLDER = config.get("Defaults", "readme_folder")

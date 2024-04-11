@@ -2,26 +2,25 @@
 """This module provides the ocx_attribute_reader app functionality."""
 # System imports
 from pathlib import Path
-from typing import Tuple, Any, List, Annotated, Union
+from typing import Annotated, Any, List, Tuple, Union
 
 # 3rd party imports
 import typer
-# Project imports
-from ocxtools.reporter import __app_name__
+
 from ocxtools import config
 from ocxtools.console.console import CliConsole
-from ocxtools.renderer.renderer import RichTable
-from ocxtools.exceptions import ReporterError
-from ocxtools.reporter.report_manager import OcxReportManager
-from ocxtools.reporter.reporter import OcxReporter
-from ocxtools.dataclass.dataclasses import ReportType, Report, ReportDataFrame
 from ocxtools.context.context_manager import get_context_manager
-
-from ocxtools.utils.utilities import SourceValidator, SourceError
-from ocxtools.serializer.serializer import ReportFormat, Serializer, SerializerError
+from ocxtools.dataclass.dataclasses import Report, ReportDataFrame, ReportType
+from ocxtools.exceptions import ReporterError
+from ocxtools.renderer.renderer import RichTable
+# Project imports
+from ocxtools.reporter import __app_name__
+from ocxtools.reporter.reporter import OcxReporter
+from ocxtools.serializer.serializer import (ReportFormat, Serializer,
+                                            SerializerError)
+from ocxtools.utils.utilities import SourceError, SourceValidator
 
 report = typer.Typer(help="Reporting of 3Docx attributes")
-report_manager = OcxReportManager()  # Singleton
 REPORT_FOLDER = SourceValidator.mkdir(config.get('ValidatorSettings', 'report_folder'))
 
 
@@ -94,6 +93,7 @@ def delete(
     """Delete all reports for a given model."""
     context_manager = get_context_manager()
     console = context_manager.get_console()
+    report_manager = context_manager.get_report_manager()
     count = report_manager.delete_report(model=model)
     console.info(f'Deleted {count} reports for model: {model!r}')
 
@@ -111,6 +111,7 @@ def content(
     """Create the 3Docx content reports."""
     context_manager = get_context_manager()
     console = context_manager.get_console()
+    report_manager = context_manager.get_report_manager()
     try:
         SourceValidator.validate(model)
         match report_type.value:
@@ -168,6 +169,7 @@ def count(
     """
     context_manager = get_context_manager()
     console = context_manager.get_console()
+    report_manager = context_manager.get_report_manager()
     try:
         with console.status("Counting elements in the model..."):
             reporter = OcxReporter()
@@ -188,6 +190,7 @@ def summary():
     """
     context_manager = get_context_manager()
     console = context_manager.get_console()
+    report_manager = context_manager.get_report_manager()
     console.section('Report Summary')
     try:
         summary = report_manager.report_summary()
@@ -217,6 +220,7 @@ def details(
     """
     context_manager = get_context_manager()
     console = context_manager.get_console()
+    report_manager = context_manager.get_report_manager()
     try:
         to_col = int(max_col)
         console.section('Report Details')
@@ -250,6 +254,7 @@ def tree(
     """
     context_manager = get_context_manager()
     console = context_manager.get_console()
+    report_manager = context_manager.get_report_manager()
     try:
         console.section('Table Tree')
         for item in report_manager.report_tree(report_type=report):

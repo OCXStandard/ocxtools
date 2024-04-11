@@ -1,14 +1,17 @@
 #  Copyright (c) 2023. OCX Consortium https://3docx.org. See the LICENSE
 """Provide context information between sub-commands."""
 
+from configparser import ConfigParser
 # System imports
-from typing import Union, Dict
+from typing import Dict, Union
+
 # Third party imports
 import click
-from configparser import ConfigParser
+
 # Project
 from ocxtools.console.console import CliConsole
-from ocxtools.dataclass.dataclasses import ValidationReport, OcxHeader
+from ocxtools.dataclass.dataclasses import OcxHeader, ValidationReport
+from ocxtools.reporter.report_manager import OcxReportManager
 from ocxtools.validator.validator_client import ValidationDomain
 
 
@@ -28,6 +31,7 @@ class ContextManager:
         self._console = console
         self._config = config
         self._headers: Dict = {}
+        self._report_manager = OcxReportManager()
 
     def add_header(self, header: OcxHeader):
         """
@@ -68,6 +72,15 @@ class ContextManager:
             return self._ocx_reports.get(model)
         else:
             return self._schematron_reports.get(model)
+
+    def get_report_manager(self) -> OcxReportManager:
+        """
+        Returns the OcxReportManager instance associated with the context manager.
+
+        Returns:
+            OcxReportManager: The OcxReportManager instance associated with the context manager.
+        """
+        return self._report_manager
 
     def get_ocx_reports(self) -> Dict:
         """

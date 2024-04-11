@@ -1,13 +1,14 @@
 #  Copyright (c) 2023. OCX Consortium https://3docx.org. See the LICENSE
 
+from pathlib import Path
+
 import pytest
 
-from pathlib import Path
-from ocxtools.validator.validator_client import OcxValidatorClient, ValidationDomain
-from ocxtools.renderer.renderer import XsltTransformer
-from ocxtools.validator.validator_report import ValidatorReportFactory
-
 from ocxtools import config
+from ocxtools.renderer.renderer import XsltTransformer
+from ocxtools.validator.validator_client import (OcxValidatorClient,
+                                                 ValidationDomain)
+from ocxtools.validator.validator_report import ValidatorReportFactory
 
 RESOURCES = config.get("RendererSettings", "resource_folder")
 OCX_XSLT = config.get("RendererSettings", "ocx_xslt")
@@ -29,7 +30,7 @@ class TestXsltRenderer:
         assert output_file.exists()
         print(output_file.name)
 
-    @pytest.mark.skipmake
+    @pytest.mark.skip
     def test_schematron_html(self, shared_datadir):
         model = shared_datadir / 'm1.3docx'
         xslt_file = shared_datadir / RESOURCES / SCHEMATRON_XSLT

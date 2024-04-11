@@ -74,10 +74,10 @@ config["StdoutLogger"] = {
 }
 # Plugins to include
 config["Plugins"] = {
-    "serializer": 'no',
+    "serializer": 'yes',
     "validator": 'yes',
-    "reporter": 'yes',
+    "reporter": 'no',
     "docker": 'yes',
     "renderer": 'no',
-    "jupyter": 'no'
+    "jupyter": 'yes'
 }

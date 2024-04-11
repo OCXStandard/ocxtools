@@ -1,19 +1,24 @@
 #  Copyright (c) 2023. OCX Consortium https://3docx.org. See the LICENSE
 """The validator report class."""
 
+import json
 # System imports
 import re
+from typing import List
+
 # Third party imports
 import arrow
 import lxml.etree
 from loguru import logger
-from typing import List
-import json
+from ocx_schema_parser.xelement import LxmlElement
+
+from ocxtools.dataclass.dataclasses import (OcxHeader, ValidationDetails,
+                                            ValidationInformation,
+                                            ValidationReport)
+from ocxtools.exceptions import ReporterError
+
 # Project imports
 
-from ocxtools.dataclass.dataclasses import ValidationReport, ValidationInformation, ValidationDetails, OcxHeader
-from ocx_schema_parser.xelement import LxmlElement
-from ocxtools.exceptions import ReporterError
 
 
 class ValidatorReportFactory:

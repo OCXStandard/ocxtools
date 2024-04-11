@@ -1,12 +1,15 @@
 #  Copyright (c) 2023. OCX Consortium https://3docx.org. See the LICENSE
 
-import time
-import lxml.etree
 import base64
 import json
+import time
+
+import lxml.etree
+from ocx_schema_parser.xelement import LxmlElement
+
 from ocxtools.clients.clients import CurlRestClient, RequestType, RestClient
 from ocxtools.validator.validator_client import EmbeddingMethod
-from ocx_schema_parser.xelement import LxmlElement
+from tests.conftest import SCHEMA_VERSION, TEST_MODEL
 
 VALIDATOR = "http://localhost:8080"
 
@@ -22,14 +25,14 @@ class TestCurlClient:
 
     def test_curl_post_data_string_embedding(self, shared_datadir):
         client = CurlRestClient(VALIDATOR)
-        model = shared_datadir / "m1.3Docx"
+        model = shared_datadir / TEST_MODEL
         tree = lxml.etree.parse(str(model.resolve()))
         byte_string = lxml.etree.tostring(tree)
         content = byte_string.decode("utf-8")
         payload = {
             "contentToValidate": content,
             "embeddingMethod": EmbeddingMethod.STRING.value,
-            "validationType": "ocx.v3.0.0b4",
+            "validationType": f'ocx.v{SCHEMA_VERSION}',
             "locationAsPath": False,
             "addInputToReport": False,
             "wrapReportDataInCDATA": False,
@@ -41,11 +44,11 @@ class TestCurlClient:
         response = client.api(
             RequestType.POST, endpoint="rest/ocx/api/validate", payload=payload
         )
-        assert json.loads(response).get('result') == 'FAILURE'
+        assert json.loads(response).get('result') == 'SUCCESS'
 
     def test_curl_post_data_base64_embedding(self, shared_datadir):
         client = CurlRestClient(VALIDATOR)
-        model = shared_datadir / "m1.3Docx"
+        model = shared_datadir / TEST_MODEL
         tree = lxml.etree.parse(str(model.resolve()))
         byte_string = lxml.etree.tostring(tree)
         base64_bytes = base64.b64encode(byte_string)
@@ -53,7 +56,7 @@ class TestCurlClient:
         payload = {
             "contentToValidate": content,
             "embeddingMethod": EmbeddingMethod.BASE64.value,
-            "validationType": "ocx.v3.0.0b4",
+            "validationType": f'ocx.v{SCHEMA_VERSION}',
             "locationAsPath": False,
             "addInputToReport": False,
             "wrapReportDataInCDATA": False,
@@ -65,19 +68,19 @@ class TestCurlClient:
         response = client.api(
             RequestType.POST, endpoint="rest/ocx/api/validate", payload=payload
         )
-        assert json.loads(response).get('result') == 'FAILURE'
+        assert json.loads(response).get('result') == 'SUCCESS'
 
     def test_curl_post_data_xml_string_embedding(self, shared_datadir):
         tic = time.perf_counter()
         client = CurlRestClient(VALIDATOR)
-        model = shared_datadir / "m1.3docx"
+        model = shared_datadir / TEST_MODEL
         tree = lxml.etree.parse(str(model.resolve()))
         byte_string = lxml.etree.tostring(tree)
         content = byte_string.decode("utf-8")
         payload = {
             "contentToValidate": content,
             "embeddingMethod": EmbeddingMethod.STRING.value,
-            "validationType": "ocx.v3.0.0b4",
+            "validationType": f'ocx.v{SCHEMA_VERSION}',
             "locationAsPath": False,
             "addInputToReport": True,
             "wrapReportDataInCDATA": False,
@@ -92,7 +95,7 @@ class TestCurlClient:
         root = lxml.etree.fromstring(response.encode(encoding='utf-8'))
         result = LxmlElement.find_child_with_name(root, 'result')
         toc = time.perf_counter()
-        assert result.text == 'FAILURE'
+        assert result.text == 'SUCCESS'
         print(f'Elapsed time: {toc - tic:04f} seconds')
 
 
@@ -107,14 +110,14 @@ class TestRestClient:
     def test_rest_post_data_xml_string_embedding(self, shared_datadir):
         tic = time.perf_counter()
         client = RestClient(VALIDATOR)
-        model = shared_datadir / "m1.3docx"
+        model = shared_datadir / TEST_MODEL
         tree = lxml.etree.parse(str(model.resolve()))
         byte_string = lxml.etree.tostring(tree)
         content = byte_string.decode("utf-8")
         payload = {
             "contentToValidate": content,
             "embeddingMethod": EmbeddingMethod.STRING.value,
-            "validationType": "ocx.v3.0.0b4",
+            "validationType": f'ocx.v{SCHEMA_VERSION}',
             "locationAsPath": False,
             "addInputToReport": True,
             "wrapReportDataInCDATA": False,
@@ -129,19 +132,19 @@ class TestRestClient:
         root = lxml.etree.fromstring(response.encode(encoding='utf-8'))
         result = LxmlElement.find_child_with_name(root, 'result')
         toc = time.perf_counter()
-        assert result.text == 'FAILURE'
+        assert result.text == 'SUCCESS'
         print(f'Elapsed time: {toc - tic:04f} seconds')
 
     def test_rest_post_data_json_string_embedding(self, shared_datadir):
         client = RestClient(VALIDATOR)
-        model = shared_datadir / "m1.3docx"
+        model = shared_datadir / TEST_MODEL
         tree = lxml.etree.parse(str(model.resolve()))
         byte_string = lxml.etree.tostring(tree)
         content = byte_string.decode("utf-8")
         payload = {
             "contentToValidate": content,
             "embeddingMethod": EmbeddingMethod.STRING.value,
-            "validationType": "ocx.v3.0.0b4",
+            "validationType": f'ocx.v{SCHEMA_VERSION}',
             "locationAsPath": False,
             "addInputToReport": True,
             "wrapReportDataInCDATA": False,
@@ -153,11 +156,11 @@ class TestRestClient:
         response = client.api(
             RequestType.POST, endpoint="rest/ocx/api/validate", payload=payload
         )
-        assert json.loads(response).get('result') == 'FAILURE'
+        assert json.loads(response).get('result') == 'SUCCESS'
 
     def test_rest_post_data_base64_embedding(self, shared_datadir):
         client = RestClient(VALIDATOR)
-        model = shared_datadir / "m1.3Docx"
+        model = shared_datadir / TEST_MODEL
         tree = lxml.etree.parse(str(model.resolve()))
         byte_string = lxml.etree.tostring(tree)
         base64_bytes = base64.b64encode(byte_string)
@@ -165,7 +168,7 @@ class TestRestClient:
         payload = {
             "contentToValidate": content,
             "embeddingMethod": EmbeddingMethod.BASE64.value,
-            "validationType": "ocx.v2.8.6",
+            "validationType": f'ocx.v{SCHEMA_VERSION}',
             "locationAsPath": False,
             "addInputToReport": True,
             "wrapReportDataInCDATA": False,
@@ -177,4 +180,4 @@ class TestRestClient:
         response = client.api(
             RequestType.POST, endpoint="rest/ocx/api/validate", payload=payload
         )
-        assert json.loads(response).get('result') == 'FAILURE'
+        assert json.loads(response).get('result') == 'SUCCESS'

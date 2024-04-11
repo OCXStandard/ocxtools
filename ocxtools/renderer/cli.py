@@ -3,17 +3,19 @@
 """Renderer CLI commands."""
 
 from pathlib import Path
-from typing import Tuple, Any
+from typing import Any, Tuple
+
 # 3rd party imports
 import typer
 
+from ocxtools import config
+from ocxtools.context.context_manager import get_context_manager
+from ocxtools.parser.parser import OcxParser
 # Project imports
 from ocxtools.renderer import __app_name__
-from ocxtools.parser.parser import OcxParser
 from ocxtools.renderer.renderer import XsltTransformer
-from ocxtools.context.context_manager import get_context_manager
-from ocxtools import config
 from ocxtools.utils.utilities import SourceValidator
+
 # # Renderer
 RESOURCES = config.get("RendererSettings", "resource_folder")
 OCX_XSLT = config.get("RendererSettings", "ocx_xslt")

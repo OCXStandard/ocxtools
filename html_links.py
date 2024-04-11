@@ -2,8 +2,8 @@
 
 # Insert correct href links in ocxtool.html
 
-from pathlib import Path
 import re
+from pathlib import Path
 
 
 # Define a function to be used as a replacement

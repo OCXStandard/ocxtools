@@ -4,9 +4,10 @@
 # System imports
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import Dict, Iterator, List
-import packaging.version
 from enum import Enum
+from typing import Dict, Iterator, List
+
+import packaging.version
 
 # Project imports
 from ocxtools.exceptions import ConverterError

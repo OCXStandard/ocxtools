@@ -1,56 +1,49 @@
 ClassCatalogue:
-- Description: null
-  HoleShapeCatalogue: []
+  CustomProperties: null
+  Description: null
+  HoleShapeCatalogue: null
   MaterialCatalogue:
-  - Description: null
+    CustomProperties: null
+    Description: null
     Material:
-    - Density:
-      - numericvalue: 7850.0
+    - CustomProperties: null
+      Density:
+        numericvalue: 7850.0
         unit: UKgOverm3
       Description: null
-      GUIDRef: 31a65070-c8a2-4127-a871-b11de8975571
+      GUIDRef: b1e760b1-067d-4062-8753-73f0956686df
       PoissonRatio:
-      - numericvalue: 0.3
+        numericvalue: 0.3
         unit: UDimless
-      ThermalExpansionCoefficient: []
+      ThermalExpansionCoefficient: null
       UltimateStress:
-      - numericvalue: 400.0
+        numericvalue: 400.0
         unit: UNOvermm2
       YieldStress:
-      - numericvalue: 235.0
+        numericvalue: 235.0
         unit: UNOvermm2
       YoungsModulus:
-      - numericvalue: 210000.0
+        numericvalue: 210000.0
         unit: UNOvermm2
       grade: A
       id: nplcid4
       name: A
     id: nplcid3
     name: null
-  XSectionCatalogue: []
+  XSectionCatalogue: null
   id: nplcid2
   name: null
-Equipment: []
+Equipments: null
 Header:
-  application_version: XNAPA Release B13 2023.2 feature/NAPA-65283-o x64 X
+  application_version: TNAPA Release B9999 2024.9 sonmy x64 T
   author: MJ
   documentation: OCX Export
-  license: 'Copyright 2023 Open Class 3D Exchange (OCX) Consortium (https://3docx.org)    Licensed
-    under the Apache License, Version 2.0 (the "License");     You may not use this
-    file except in compliance with the License. You may obtain a copy of the License
-    at http://www.apache.org/licenses/LICENSE-2.0    Unless required by applicable
-    law or agreed to in writing, the 3Docx standard and software distributed under
-    the License is distributed on an     "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS
-    OF ANY KIND, either expressed or implied.    The OCX Consortium is not liable
-    to any use whatsoever of the distributed standard or software based on the standard.    See
-    the License for the specific language governing permissions and limitations under
-    the License. '
   name: OCX-MODEL1/A
   organization: NAPA
   originating_system: NAPA Steel
-  time_stamp: '2023-11-30T11:09:46.699922500+02:00'
+  time_stamp: '2024-03-14T11:18:18.481245+02:00'
 UnitsML:
-- DimensionSet:
+  DimensionSet:
     Dimension:
     - AmountOfSubstance: []
       ElectricCurrent: []
@@ -422,59 +415,61 @@ UnitsML:
       dimensionURL: D_NM
       id: UkN-M
 Vessel:
-- AngleTolerance:
+  AngleTolerance:
     numericvalue: 0.05
     unit: URad
-  Arrangement: []
+  Arrangement: null
   Bracket: []
   BuilderInformation:
-  - designer: LEEVI
+    designer: LEEVI
     owner: Tapio
     yard: OCXV3
-    yearOfBuild: null
+    yearOfBuild: '2023-01-01'
   ClassificationData:
-  - ClassNotation: []
+    ClassNotation: null
     PrincipalParticulars:
-    - AP_Pos:
-      - numericvalue: 0.0
+      AP_Pos:
+        numericvalue: 0.0
         unit: Um
       BlockCoefficient:
-      - numericvalue: 0.0
+        numericvalue: 0.0
         unit: UDimless
-      DeepestEquilibriumWL: []
+      DeepestEquilibriumWL: null
       DesignSpeed:
-      - numericvalue: 0.0
+        numericvalue: 0.0
         unit: UKnots
       FP_Pos:
-      - numericvalue: 10.0
+        numericvalue: 10.0
         unit: Um
-      FreeboardDeckHeight: []
-      FreeboardLength: []
-      HeavyBallastDraught: []
-      LengthOfWaterline: []
+      FreeboardDeckHeight: null
+      FreeboardLength:
+        numericvalue: 10.0
+        unit: Um
+      HeavyBallastDraught: null
+      LengthOfWaterline: null
       Lpp:
-      - numericvalue: 10.0
+        numericvalue: 10.0
         unit: Um
       MouldedBreadth:
-      - numericvalue: 10.0
+        numericvalue: 10.0
         unit: Um
       MouldedDepth:
-      - numericvalue: .nan
+        numericvalue: .nan
         unit: Um
-      NormalBallastDraught: []
+      NormalBallastDraught: null
       RuleLength:
-      - numericvalue: 10.0
+        numericvalue: 10.0
         unit: Um
       ScantlingDraught:
-      - numericvalue: 1.0
+        numericvalue: 1.0
         unit: Um
-      SlammingDraughtEmptyFP: []
-      SlammingDraughtFullFP: []
-      SpeedFactor: []
-      UpperDeckArea: []
-      WaterPlaneArea: []
-      ZPosDeckline: []
-      ZPosOfDeck: []
+      SlammingDraughtEmptyFP: null
+      SlammingDraughtFullFP: null
+      SpeedFactor: null
+      UpperDeckArea: null
+      WaterPlaneArea: null
+      ZPosDeckline: null
+      ZPosOfDeck: null
       freeboardType: A
       hasBilgeKeel: null
       hasDeadweightLessThan: null
@@ -485,609 +480,507 @@ Vessel:
     society: null
     societyName: null
   CoordinateSystem:
-  - Description: null
-    GUIDRef: 11fd521c-d2d3-4ebb-a619-da5ff4391f70
+  - CustomProperties: null
+    Description: null
+    GUIDRef: e33db60a-591e-45d7-a674-dce9281da262
     LocalCartesian:
-    - Origin:
+      Origin:
         coordinates:
         - 0.0
         - 0.0
         - 0.0
         unit: Um
       PrimaryAxis:
-        x: 1.0
-        y: 0.0
-        z: 0.0
+        direction:
+        - 1.0
+        - 0.0
+        - 0.0
       SecondaryAxis:
-        x: 0.0
-        y: 1.0
-        z: 0.0
+        direction:
+        - 0.0
+        - 1.0
+        - 0.0
     XRefPlanes:
-    - DistanceToAP: null
+      DistanceToAP: null
       RefPlane:
-      - Description: null
-        GUIDRef: 9b0fc2a3-49bc-436c-a7f2-1a6d0db6a0d7
+      - CustomProperties: null
+        Description: null
+        GUIDRef: 763d8f2c-973b-4990-b577-f28958941cf4
         ReferenceLocation:
           numericvalue: 0.0
           unit: Um
         id: FR0
         name: X0
-      - Description: null
-        GUIDRef: 84a23657-e181-4b1f-8358-6959fc686252
+      - CustomProperties: null
+        Description: null
+        GUIDRef: de473adc-3f43-4d5c-963b-24f9ba579f94
         ReferenceLocation:
           numericvalue: 1.0
           unit: Um
         id: FR1
         name: X1
-      - Description: null
-        GUIDRef: ac790ef3-ddcc-403e-9e1a-826b58a9f26e
+      - CustomProperties: null
+        Description: null
+        GUIDRef: 768ebefb-9df0-4342-8909-8a73a2558a41
         ReferenceLocation:
           numericvalue: 2.0
           unit: Um
         id: FR2
         name: X2
-      - Description: null
-        GUIDRef: 363d404e-39a7-467f-b2c1-a52b4a5de33c
+      - CustomProperties: null
+        Description: null
+        GUIDRef: 3554f57c-9d6f-4bb7-8d47-b56970697425
         ReferenceLocation:
           numericvalue: 3.0
           unit: Um
         id: FR3
         name: X3
-      - Description: null
-        GUIDRef: 27f1015b-c4aa-4253-8fc6-90135ac06dd8
+      - CustomProperties: null
+        Description: null
+        GUIDRef: f08a361b-2928-4da8-bf8b-c4339b97d96e
         ReferenceLocation:
           numericvalue: 4.0
           unit: Um
         id: FR4
         name: X4
-      - Description: null
-        GUIDRef: 924598b5-4be6-4a74-bc65-13614f3f1356
+      - CustomProperties: null
+        Description: null
+        GUIDRef: 6da13a50-6ba4-4ab2-8e3c-888242448f8a
         ReferenceLocation:
           numericvalue: 5.0
           unit: Um
         id: FR5
         name: X5
-      - Description: null
-        GUIDRef: 5961fe55-8b75-41cf-8185-a8615adebc3a
+      - CustomProperties: null
+        Description: null
+        GUIDRef: 544cced5-d31e-4e06-835d-3c5ea2ea064c
         ReferenceLocation:
           numericvalue: 6.0
           unit: Um
         id: FR6
         name: X6
-      - Description: null
-        GUIDRef: 856ce71e-293c-4a34-a385-7427c69895f0
+      - CustomProperties: null
+        Description: null
+        GUIDRef: a0dca66f-a5ca-4eb6-b079-55ef5937a40a
         ReferenceLocation:
           numericvalue: 7.0
           unit: Um
         id: FR7
         name: X7
-      - Description: null
-        GUIDRef: b4cf4256-9519-4c61-86d2-9b2b958e0a72
+      - CustomProperties: null
+        Description: null
+        GUIDRef: 330f53ff-5467-498f-b377-4f594442f140
         ReferenceLocation:
           numericvalue: 8.0
           unit: Um
         id: FR8
         name: X8
-      - Description: null
-        GUIDRef: 68871f14-e374-407e-8494-03416f2afd01
+      - CustomProperties: null
+        Description: null
+        GUIDRef: 04ee0635-e907-4b7c-a7aa-f442e0a6fd1e
         ReferenceLocation:
           numericvalue: 9.0
           unit: Um
         id: FR9
         name: X9
-      - Description: null
-        GUIDRef: fca7eaff-f378-4e53-b344-7e72769e70d2
+      - CustomProperties: null
+        Description: null
+        GUIDRef: b1578f2f-21cd-4474-8948-ec9a95a7f33b
         ReferenceLocation:
           numericvalue: 10.0
           unit: Um
         id: FR10
         name: X10
       isMainSystem: true
-      isReveresed: false
+      isReversed: false
     YRefPlanes:
-    - RefPlane:
-      - Description: null
-        GUIDRef: 9b16afee-1b2a-4c20-863d-c9ee1e61fff3
+      RefPlane:
+      - CustomProperties: null
+        Description: null
+        GUIDRef: 80ad65b2-2071-4a91-850e-817a38f68f95
         ReferenceLocation:
           numericvalue: 0.0
           unit: Um
-        id: nplcid14
+        id: nplcid17
         name: Y0
-      - Description: null
-        GUIDRef: 7176694d-0e2c-4336-99a2-008095c3158c
+      - CustomProperties: null
+        Description: null
+        GUIDRef: 46b23698-55ca-4ad8-8d7e-95b3b886b2c2
         ReferenceLocation:
           numericvalue: 10.0
           unit: Um
-        id: nplcid15
+        id: nplcid18
         name: Y10
       isMainSystem: true
-    ZRefPlanes: []
+    ZRefPlanes: null
     id: nplcid7
     isGlobal: true
     name: null
+  CustomProperties: null
   Description: null
   DesignView: []
   DistanceTolerance:
     numericvalue: 1.0
     unit: Umm
-  GUIDRef: 17728f6e-2faf-432f-8c55-75270fd221f6
+  GUIDRef: 11359e5d-dd1a-4f9f-af12-56b8369e6c28
   Panel:
   - ComposedOf:
-    - Bracket: []
+      Bracket: []
       Pillar: []
       Plate:
-      - CutBy: []
+      - CustomProperties: null
         Description: null
-        ExternalGeometryRef: []
-        GUIDRef: 62e35289-183a-484c-8c0a-1c01260187d1
-        InnerContour: []
+        ExternalGeometryRef: null
+        GUIDRef: e9d8a6fe-1a86-4e8f-9fba-97e0e6a81434
         LimitedBy:
-        - FreeEdgeCurve3D: []
-          GridRef: []
-          OcxItemPtr:
+          EdgeCurveRef: []
+          FreeEdgeCurve3D: []
+          GridRef:
           - ContourBounds:
               ContourEnd:
-              - coordinates:
+                coordinates:
                 - 10.0
                 - 0.0
                 - 0.0
                 unit: Um
               ContourStart:
-              - coordinates:
+                coordinates:
                 - 0.0
                 - 0.0
                 - 0.0
                 unit: Um
-            GUIDRef: 9b16afee-1b2a-4c20-863d-c9ee1e61fff3
-            localRef: nplcid14
-            refType: '{https://3docx.org/fileadmin//ocx_schema//V300b4//OCX_Schema.xsd}GridRef'
+            GUIDRef: 80ad65b2-2071-4a91-850e-817a38f68f95
+            Offset: null
+            localRef: nplcid17
+            name: Y0
+            refType: '{https://3docx.org/fileadmin//ocx_schema//V300rc3//OCX_Schema.xsd}ReferencePlane'
           - ContourBounds:
               ContourEnd:
-              - coordinates:
+                coordinates:
                 - 10.0
                 - 10.0
                 - 0.0
                 unit: Um
               ContourStart:
-              - coordinates:
+                coordinates:
                 - 10.0
                 - 0.0
                 - 0.0
                 unit: Um
-            GUIDRef: fca7eaff-f378-4e53-b344-7e72769e70d2
+            GUIDRef: b1578f2f-21cd-4474-8948-ec9a95a7f33b
+            Offset: null
             localRef: FR10
-            refType: '{https://3docx.org/fileadmin//ocx_schema//V300b4//OCX_Schema.xsd}GridRef'
+            name: X10
+            refType: '{https://3docx.org/fileadmin//ocx_schema//V300rc3//OCX_Schema.xsd}ReferencePlane'
           - ContourBounds:
               ContourEnd:
-              - coordinates:
+                coordinates:
                 - 0.0
                 - 10.0
                 - 0.0
                 unit: Um
               ContourStart:
-              - coordinates:
+                coordinates:
                 - 10.0
                 - 10.0
                 - 0.0
                 unit: Um
-            GUIDRef: 7176694d-0e2c-4336-99a2-008095c3158c
-            localRef: nplcid15
-            refType: '{https://3docx.org/fileadmin//ocx_schema//V300b4//OCX_Schema.xsd}GridRef'
+            GUIDRef: 46b23698-55ca-4ad8-8d7e-95b3b886b2c2
+            Offset: null
+            localRef: nplcid18
+            name: Y10
+            refType: '{https://3docx.org/fileadmin//ocx_schema//V300rc3//OCX_Schema.xsd}ReferencePlane'
           - ContourBounds:
               ContourEnd:
-              - coordinates:
+                coordinates:
                 - 0.0
                 - 0.0
                 - 0.0
                 unit: Um
               ContourStart:
-              - coordinates:
+                coordinates:
                 - 0.0
                 - 10.0
                 - 0.0
                 unit: Um
-            GUIDRef: 9b0fc2a3-49bc-436c-a7f2-1a6d0db6a0d7
+            GUIDRef: 763d8f2c-973b-4990-b577-f28958941cf4
+            Offset: null
             localRef: FR0
-            refType: '{https://3docx.org/fileadmin//ocx_schema//V300b4//OCX_Schema.xsd}GridRef'
+            name: X0
+            refType: '{https://3docx.org/fileadmin//ocx_schema//V300rc3//OCX_Schema.xsd}ReferencePlane'
+          PanelRef: []
+          SeamRef: []
+          StiffenerRef: []
+          SurfaceRef: []
+        NetArea:
+          numericvalue: 100.0
+          unit: Um2
         Offset:
-        - numericvalue: -0.005
+          numericvalue: -0.005
           unit: Um
         OuterContour:
-        - Circle3D: null
-          CircumArc3D: []
+          Circle3D: null
           CircumCircle3D: null
-          CompositeCurve3D: []
-          Ellipse3D: null
-          Line3D: []
-          NURBS3D:
-          - ControlPtList:
-              ControlPoint:
-              - Point3D:
-                  coordinates:
-                  - 0.0
-                  - 0.0
-                  - 0.0
-                  unit: Um
-                weight: 1.0
-              - Point3D:
-                  coordinates:
-                  - 3.33333
-                  - 0.0
-                  - 0.0
-                  unit: Um
-                weight: 1.0
-              - Point3D:
-                  coordinates:
-                  - 6.66667
-                  - 0.0
-                  - 0.0
-                  unit: Um
-                weight: 1.0
-              - Point3D:
-                  coordinates:
-                  - 10.0
-                  - 0.0
-                  - 0.0
-                  unit: Um
-                weight: 1.0
-              - Point3D:
-                  coordinates:
-                  - 10.0
-                  - 3.33333
-                  - 0.0
-                  unit: Um
-                weight: 1.0
-              - Point3D:
-                  coordinates:
-                  - 10.0
-                  - 6.66667
-                  - 0.0
-                  unit: Um
-                weight: 1.0
-              - Point3D:
-                  coordinates:
-                  - 10.0
-                  - 10.0
-                  - 0.0
-                  unit: Um
-                weight: 1.0
-              - Point3D:
-                  coordinates:
-                  - 6.66667
-                  - 10.0
-                  - 0.0
-                  unit: Um
-                weight: 1.0
-              - Point3D:
-                  coordinates:
-                  - 3.33333
-                  - 10.0
-                  - 0.0
-                  unit: Um
-                weight: 1.0
-              - Point3D:
-                  coordinates:
-                  - 0.0
-                  - 10.0
-                  - 0.0
-                  unit: Um
-                weight: 1.0
-              - Point3D:
-                  coordinates:
-                  - 0.0
-                  - 6.66667
-                  - 0.0
-                  unit: Um
-                weight: 1.0
-              - Point3D:
-                  coordinates:
-                  - 0.0
-                  - 3.33333
-                  - 0.0
-                  unit: Um
-                weight: 1.0
-              - Point3D:
-                  coordinates:
-                  - 0.0
-                  - 0.0
-                  - 0.0
-                  unit: Um
-                weight: 1.0
+          CompositeCurve3D:
+            CircumArc3D: []
+            CurveLength:
+              numericvalue: 0.0
+              unit: Um
+            CustomProperties: null
             Description: null
-            GUIDRef: 0714f22b-0b93-47dd-8a64-69dd492b1c6b
-            KnotVector:
-              value:
-              - 0.0
-              - 0.0
-              - 0.0
-              - 0.0
-              - 1.0
-              - 1.0
-              - 1.0
-              - 2.0
-              - 2.0
-              - 2.0
-              - 3.0
-              - 3.0
-              - 3.0
-              - 4.0
-              - 4.0
-              - 4.0
-              - 4.0
-            Length: null
-            NURBSproperties:
-              degree: 3
-              form: Unknown
-              isRational: false
-              numCtrlPts: 13
-              numKnots: 17
-            id: nplcid13
+            GUIDRef: add7c37a-9aae-4671-ad9d-34eb0e2f5896
+            Line3D: []
+            NURBS3D:
+            - ControlPtList:
+                ControlPoint:
+                - Point3D:
+                    coordinates:
+                    - 0.0
+                    - 0.0
+                    - 0.0
+                    unit: Um
+                  weight: 1.0
+                - Point3D:
+                    coordinates:
+                    - 3.33333
+                    - 0.0
+                    - 0.0
+                    unit: Um
+                  weight: 1.0
+                - Point3D:
+                    coordinates:
+                    - 6.66667
+                    - 0.0
+                    - 0.0
+                    unit: Um
+                  weight: 1.0
+                - Point3D:
+                    coordinates:
+                    - 10.0
+                    - 0.0
+                    - 0.0
+                    unit: Um
+                  weight: 1.0
+                - Point3D:
+                    coordinates:
+                    - 10.0
+                    - 3.33333
+                    - 0.0
+                    unit: Um
+                  weight: 1.0
+                - Point3D:
+                    coordinates:
+                    - 10.0
+                    - 6.66667
+                    - 0.0
+                    unit: Um
+                  weight: 1.0
+                - Point3D:
+                    coordinates:
+                    - 10.0
+                    - 10.0
+                    - 0.0
+                    unit: Um
+                  weight: 1.0
+                - Point3D:
+                    coordinates:
+                    - 6.66667
+                    - 10.0
+                    - 0.0
+                    unit: Um
+                  weight: 1.0
+                - Point3D:
+                    coordinates:
+                    - 3.33333
+                    - 10.0
+                    - 0.0
+                    unit: Um
+                  weight: 1.0
+                - Point3D:
+                    coordinates:
+                    - 0.0
+                    - 10.0
+                    - 0.0
+                    unit: Um
+                  weight: 1.0
+                - Point3D:
+                    coordinates:
+                    - 0.0
+                    - 6.66667
+                    - 0.0
+                    unit: Um
+                  weight: 1.0
+                - Point3D:
+                    coordinates:
+                    - 0.0
+                    - 3.33333
+                    - 0.0
+                    unit: Um
+                  weight: 1.0
+                - Point3D:
+                    coordinates:
+                    - 0.0
+                    - 0.0
+                    - 0.0
+                    unit: Um
+                  weight: 1.0
+              CurveLength:
+                numericvalue: 0.0
+                unit: Um
+              CustomProperties: null
+              Description: null
+              GUIDRef: 7bfaa7e5-7032-4f12-b54f-064c2002b5e7
+              KnotVector:
+                value:
+                - 0.0
+                - 0.0
+                - 0.0
+                - 0.0
+                - 1.0
+                - 1.0
+                - 1.0
+                - 2.0
+                - 2.0
+                - 2.0
+                - 3.0
+                - 3.0
+                - 3.0
+                - 4.0
+                - 4.0
+                - 4.0
+                - 4.0
+              NURBSproperties:
+                degree: 3
+                form: Unknown
+                isRational: false
+                numCtrlPts: 13
+                numKnots: 17
+              id: nplcid16
+              is2D: false
+              name: null
+            PolyLine3D: []
+            id: nplcid15
             is2D: false
             name: null
-          PolyLine3D: []
+          Ellipse3D: null
         PhysicalProperties:
-        - CenterOfGravity:
+          CenterOfGravity:
             coordinates:
             - 5.0
             - 5.0
             - 0.0
             unit: Um
           DryWeight:
-            numericvalue: 7849.9999
+            numericvalue: 7850.0
             unit: UKg
+        PlateCutBy: null
         PlateMaterial:
-        - GUIDRef: 31a65070-c8a2-4127-a871-b11de8975571
+          GUIDRef: b1e760b1-067d-4062-8753-73f0956686df
           Thickness:
             numericvalue: 0.01
             unit: Um
           localRef: nplcid4
-          refType: '{https://3docx.org/fileadmin//ocx_schema//V300b4//OCX_Schema.xsd}Material'
-        UnboundedGeometry: []
+          name: A
+          refType: '{https://3docx.org/fileadmin//ocx_schema//V300rc3//OCX_Schema.xsd}Material'
+        UnboundedGeometry: null
         functionType: null
-        id: nplcid11
-        name: P:P1/PANEL
-    CutBy: []
-    Description: Hull Trans. Bulkhead, watertight
-    GUIDRef: 41a6da00-ce09-4ae2-841f-91564d5f5b65
-    LimitedBy:
-    - FreeEdgeCurve3D: []
-      GridRef: []
-      OcxItemPtr:
-      - ContourBounds:
-          ContourEnd:
-          - coordinates:
-            - 10.0
-            - 0.0
-            - 0.0
-            unit: Um
-          ContourStart:
-          - coordinates:
-            - 0.0
-            - 0.0
-            - 0.0
-            unit: Um
-        GUIDRef: 9b16afee-1b2a-4c20-863d-c9ee1e61fff3
-        localRef: nplcid14
-        refType: '{https://3docx.org/fileadmin//ocx_schema//V300b4//OCX_Schema.xsd}GridRef'
-      - ContourBounds:
-          ContourEnd:
-          - coordinates:
-            - 10.0
-            - 10.0
-            - 0.0
-            unit: Um
-          ContourStart:
-          - coordinates:
-            - 10.0
-            - 0.0
-            - 0.0
-            unit: Um
-        GUIDRef: fca7eaff-f378-4e53-b344-7e72769e70d2
-        localRef: FR10
-        refType: '{https://3docx.org/fileadmin//ocx_schema//V300b4//OCX_Schema.xsd}GridRef'
-      - ContourBounds:
-          ContourEnd:
-          - coordinates:
-            - 0.0
-            - 10.0
-            - 0.0
-            unit: Um
-          ContourStart:
-          - coordinates:
-            - 10.0
-            - 10.0
-            - 0.0
-            unit: Um
-        GUIDRef: 7176694d-0e2c-4336-99a2-008095c3158c
-        localRef: nplcid15
-        refType: '{https://3docx.org/fileadmin//ocx_schema//V300b4//OCX_Schema.xsd}GridRef'
-      - ContourBounds:
-          ContourEnd:
-          - coordinates:
-            - 0.0
-            - 0.0
-            - 0.0
-            unit: Um
-          ContourStart:
-          - coordinates:
-            - 0.0
-            - 10.0
-            - 0.0
-            unit: Um
-        GUIDRef: 9b0fc2a3-49bc-436c-a7f2-1a6d0db6a0d7
-        localRef: FR0
-        refType: '{https://3docx.org/fileadmin//ocx_schema//V300b4//OCX_Schema.xsd}GridRef'
-    OuterContour:
-    - Circle3D: null
-      CircumArc3D: []
-      CircumCircle3D: null
-      CompositeCurve3D: []
-      Ellipse3D: null
-      Line3D: []
-      NURBS3D:
-      - ControlPtList:
-          ControlPoint:
-          - Point3D:
-              coordinates:
-              - 0.0
-              - 0.0
-              - 0.0
-              unit: Um
-            weight: 1.0
-          - Point3D:
-              coordinates:
-              - 3.33333
-              - 0.0
-              - 0.0
-              unit: Um
-            weight: 1.0
-          - Point3D:
-              coordinates:
-              - 6.66667
-              - 0.0
-              - 0.0
-              unit: Um
-            weight: 1.0
-          - Point3D:
-              coordinates:
-              - 10.0
-              - 0.0
-              - 0.0
-              unit: Um
-            weight: 1.0
-          - Point3D:
-              coordinates:
-              - 10.0
-              - 3.33333
-              - 0.0
-              unit: Um
-            weight: 1.0
-          - Point3D:
-              coordinates:
-              - 10.0
-              - 6.66667
-              - 0.0
-              unit: Um
-            weight: 1.0
-          - Point3D:
-              coordinates:
-              - 10.0
-              - 10.0
-              - 0.0
-              unit: Um
-            weight: 1.0
-          - Point3D:
-              coordinates:
-              - 6.66667
-              - 10.0
-              - 0.0
-              unit: Um
-            weight: 1.0
-          - Point3D:
-              coordinates:
-              - 3.33333
-              - 10.0
-              - 0.0
-              unit: Um
-            weight: 1.0
-          - Point3D:
-              coordinates:
-              - 0.0
-              - 10.0
-              - 0.0
-              unit: Um
-            weight: 1.0
-          - Point3D:
-              coordinates:
-              - 0.0
-              - 6.66667
-              - 0.0
-              unit: Um
-            weight: 1.0
-          - Point3D:
-              coordinates:
-              - 0.0
-              - 3.33333
-              - 0.0
-              unit: Um
-            weight: 1.0
-          - Point3D:
-              coordinates:
-              - 0.0
-              - 0.0
-              - 0.0
-              unit: Um
-            weight: 1.0
-        Description: null
-        GUIDRef: e91c27c9-24bf-480e-b56e-b59833e95bc2
-        KnotVector:
-          value:
-          - 0.0
-          - 0.0
-          - 0.0
-          - 0.0
-          - 1.0
-          - 1.0
-          - 1.0
-          - 2.0
-          - 2.0
-          - 2.0
-          - 3.0
-          - 3.0
-          - 3.0
-          - 4.0
-          - 4.0
-          - 4.0
-          - 4.0
-        Length: null
-        NURBSproperties:
-          degree: 3
-          form: Unknown
-          isRational: false
-          numCtrlPts: 13
-          numKnots: 17
         id: nplcid12
-        is2D: false
-        name: null
-      PolyLine3D: []
-    PhysicalProperties: []
-    SplitBy: []
-    StiffenedBy: []
-    UnboundedGeometry:
-    - Cone3D: []
-      Cylinder3D: []
-      ExtrudedSurface: []
-      GridRef: []
-      NURBSSurface: []
-      Plane3D: []
-      Sphere3D: []
-      SurfaceRef:
-        ContourBounds: null
-        GUIDRef: 3f600fca-92cf-4b85-9c6f-ff95aeb72acf
-        localRef: nplcid9
-        refType: '{https://3docx.org/fileadmin//ocx_schema//V300b4//OCX_Schema.xsd}Surface'
-    functionType: TRANSVERSAL_BULKHEAD
-    id: nplcid8
-    name: PANEL
-    tightness: WaterTight
-  Pillar: []
-  Plate: []
-  ReferenceSurfaces:
-  - Cone3D: []
-    Cylinder3D: []
-    ExtrudedSurface: []
-    NURBSSurface: []
-    Plane3D:
-    - Area:
-        numericvalue: 100.0
-        unit: Um2
-      Description: null
-      FaceBoundaryCurve:
-        Circle3D: null
+        name: P:P1/PANEL
+    CustomProperties: null
+    CutBy: null
+    Description: Hull Trans. Bulkhead, watertight
+    GUIDRef: b49a8de7-10fd-4655-a2f2-984b8baab268
+    LimitedBy:
+      EdgeCurveRef: []
+      FreeEdgeCurve3D: []
+      GridRef:
+      - ContourBounds:
+          ContourEnd:
+            coordinates:
+            - 10.0
+            - 0.0
+            - 0.0
+            unit: Um
+          ContourStart:
+            coordinates:
+            - 0.0
+            - 0.0
+            - 0.0
+            unit: Um
+        GUIDRef: 80ad65b2-2071-4a91-850e-817a38f68f95
+        Offset: null
+        localRef: nplcid17
+        name: Y0
+        refType: '{https://3docx.org/fileadmin//ocx_schema//V300rc3//OCX_Schema.xsd}ReferencePlane'
+      - ContourBounds:
+          ContourEnd:
+            coordinates:
+            - 10.0
+            - 10.0
+            - 0.0
+            unit: Um
+          ContourStart:
+            coordinates:
+            - 10.0
+            - 0.0
+            - 0.0
+            unit: Um
+        GUIDRef: b1578f2f-21cd-4474-8948-ec9a95a7f33b
+        Offset: null
+        localRef: FR10
+        name: X10
+        refType: '{https://3docx.org/fileadmin//ocx_schema//V300rc3//OCX_Schema.xsd}ReferencePlane'
+      - ContourBounds:
+          ContourEnd:
+            coordinates:
+            - 0.0
+            - 10.0
+            - 0.0
+            unit: Um
+          ContourStart:
+            coordinates:
+            - 10.0
+            - 10.0
+            - 0.0
+            unit: Um
+        GUIDRef: 46b23698-55ca-4ad8-8d7e-95b3b886b2c2
+        Offset: null
+        localRef: nplcid18
+        name: Y10
+        refType: '{https://3docx.org/fileadmin//ocx_schema//V300rc3//OCX_Schema.xsd}ReferencePlane'
+      - ContourBounds:
+          ContourEnd:
+            coordinates:
+            - 0.0
+            - 0.0
+            - 0.0
+            unit: Um
+          ContourStart:
+            coordinates:
+            - 0.0
+            - 10.0
+            - 0.0
+            unit: Um
+        GUIDRef: 763d8f2c-973b-4990-b577-f28958941cf4
+        Offset: null
+        localRef: FR0
+        name: X0
+        refType: '{https://3docx.org/fileadmin//ocx_schema//V300rc3//OCX_Schema.xsd}ReferencePlane'
+      PanelRef: []
+      SeamRef: []
+      StiffenerRef: []
+      SurfaceRef: []
+    OuterContour:
+      Circle3D: null
+      CircumCircle3D: null
+      CompositeCurve3D:
         CircumArc3D: []
-        CircumCircle3D: null
-        CompositeCurve3D: []
-        Ellipse3D: null
+        CurveLength:
+          numericvalue: 0.0
+          unit: Um
+        CustomProperties: null
+        Description: null
+        GUIDRef: 4feb784f-5cff-406b-b91c-da288319d971
         Line3D: []
         NURBS3D:
         - ControlPtList:
@@ -1183,8 +1076,12 @@ Vessel:
                 - 0.0
                 unit: Um
               weight: 1.0
+          CurveLength:
+            numericvalue: 0.0
+            unit: Um
+          CustomProperties: null
           Description: null
-          GUIDRef: 81a5ef18-2168-4680-b255-12c10607484b
+          GUIDRef: 6eaa927f-7770-4977-b9b1-d72243f24e86
           KnotVector:
             value:
             - 0.0
@@ -1204,24 +1101,204 @@ Vessel:
             - 4.0
             - 4.0
             - 4.0
-          Length: null
           NURBSproperties:
             degree: 3
             form: Unknown
             isRational: false
             numCtrlPts: 13
             numKnots: 17
-          id: nplcid10
+          id: nplcid14
           is2D: false
           name: null
         PolyLine3D: []
+        id: nplcid13
+        is2D: false
+        name: null
+      Ellipse3D: null
+    PhysicalProperties: null
+    SplitBy: null
+    StiffenedBy: null
+    UnboundedGeometry:
+      Cone3D: []
+      Cylinder3D: []
+      ExtrudedSurface: []
+      GridRef: []
+      NURBSSurface: []
+      Plane3D: []
+      Sphere3D: []
+      SurfaceRef:
+      - ContourBounds: null
+        GUIDRef: 32cf9c69-8ba8-4935-bbea-0f9fa5755353
+        localRef: nplcid9
+        name: PANEL
+        refType: '{https://3docx.org/fileadmin//ocx_schema//V300rc3//OCX_Schema.xsd}Surface'
+    functionType: TRANSVERSAL_BULKHEAD
+    id: nplcid8
+    name: PANEL
+    tightness: WaterTight
+  Pillar: []
+  Plate: []
+  ReferenceSurfaces:
+    Cone3D: []
+    Cylinder3D: []
+    ExtrudedSurface: []
+    NURBSSurface: []
+    Plane3D:
+    - CustomProperties: null
+      Description: null
+      FaceBoundaryCurve:
+        Circle3D: null
+        CircumCircle3D: null
+        CompositeCurve3D:
+          CircumArc3D: []
+          CurveLength:
+            numericvalue: 0.0
+            unit: Um
+          CustomProperties: null
+          Description: null
+          GUIDRef: ffa1b2e4-d40a-4ca2-aa1c-3cc2425f9b58
+          Line3D: []
+          NURBS3D:
+          - ControlPtList:
+              ControlPoint:
+              - Point3D:
+                  coordinates:
+                  - 0.0
+                  - 0.0
+                  - 0.0
+                  unit: Um
+                weight: 1.0
+              - Point3D:
+                  coordinates:
+                  - 3.33333
+                  - 0.0
+                  - 0.0
+                  unit: Um
+                weight: 1.0
+              - Point3D:
+                  coordinates:
+                  - 6.66667
+                  - 0.0
+                  - 0.0
+                  unit: Um
+                weight: 1.0
+              - Point3D:
+                  coordinates:
+                  - 10.0
+                  - 0.0
+                  - 0.0
+                  unit: Um
+                weight: 1.0
+              - Point3D:
+                  coordinates:
+                  - 10.0
+                  - 3.33333
+                  - 0.0
+                  unit: Um
+                weight: 1.0
+              - Point3D:
+                  coordinates:
+                  - 10.0
+                  - 6.66667
+                  - 0.0
+                  unit: Um
+                weight: 1.0
+              - Point3D:
+                  coordinates:
+                  - 10.0
+                  - 10.0
+                  - 0.0
+                  unit: Um
+                weight: 1.0
+              - Point3D:
+                  coordinates:
+                  - 6.66667
+                  - 10.0
+                  - 0.0
+                  unit: Um
+                weight: 1.0
+              - Point3D:
+                  coordinates:
+                  - 3.33333
+                  - 10.0
+                  - 0.0
+                  unit: Um
+                weight: 1.0
+              - Point3D:
+                  coordinates:
+                  - 0.0
+                  - 10.0
+                  - 0.0
+                  unit: Um
+                weight: 1.0
+              - Point3D:
+                  coordinates:
+                  - 0.0
+                  - 6.66667
+                  - 0.0
+                  unit: Um
+                weight: 1.0
+              - Point3D:
+                  coordinates:
+                  - 0.0
+                  - 3.33333
+                  - 0.0
+                  unit: Um
+                weight: 1.0
+              - Point3D:
+                  coordinates:
+                  - 0.0
+                  - 0.0
+                  - 0.0
+                  unit: Um
+                weight: 1.0
+            CurveLength:
+              numericvalue: 0.0
+              unit: Um
+            CustomProperties: null
+            Description: null
+            GUIDRef: b3c0d9e8-24b4-4641-b03c-cbe0e95ef8e9
+            KnotVector:
+              value:
+              - 0.0
+              - 0.0
+              - 0.0
+              - 0.0
+              - 1.0
+              - 1.0
+              - 1.0
+              - 2.0
+              - 2.0
+              - 2.0
+              - 3.0
+              - 3.0
+              - 3.0
+              - 4.0
+              - 4.0
+              - 4.0
+              - 4.0
+            NURBSproperties:
+              degree: 3
+              form: Unknown
+              isRational: false
+              numCtrlPts: 13
+              numKnots: 17
+            id: nplcid11
+            is2D: false
+            name: null
+          PolyLine3D: []
+          id: nplcid10
+          is2D: false
+          name: null
+        Ellipse3D: null
         isUVspace: false
-      GUIDRef: 3f600fca-92cf-4b85-9c6f-ff95aeb72acf
+      GUIDRef: 32cf9c69-8ba8-4935-bbea-0f9fa5755353
       LimitedBy: null
       Normal:
-        x: 0.0
-        y: 0.0
-        z: 1.0
+        direction:
+        - 0.0
+        - 0.0
+        - 1.0
       Origin:
         coordinates:
         - 0.0
@@ -1233,11 +1310,11 @@ Vessel:
       name: REF_PANEL
     Sphere3D: []
     SurfaceCollection: []
-  ShipDesignation: []
-  StatutoryData: []
+  ShipDesignation: null
+  StatutoryData: null
   Stiffener: []
-  TonnageData: []
+  TonnageData: null
   id: nplcid1
   name: OCX-MODEL1/A
 language: en
-schemaVersion: 3.0.0b4
+schemaVersion: 3.0.0rc3

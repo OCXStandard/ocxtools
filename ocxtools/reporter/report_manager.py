@@ -1,14 +1,13 @@
 #  Copyright (c) 2024. OCX Consortium https://3docx.org. See the LICENSE
 """The report manager implementation."""
 # System imports
-from collections import defaultdict
 import os
-
+from collections import defaultdict
 from typing import Dict, List
 
 # Third party
 # project imports
-from ocxtools.dataclass.dataclasses import Report, ReportType, DetailedReport
+from ocxtools.dataclass.dataclasses import DetailedReport, Report, ReportType
 
 
 class OcxReportManager:

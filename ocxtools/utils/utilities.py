@@ -1,18 +1,18 @@
 #  Copyright (c) 2023. OCX Consortium https://3docx.org. See the LICENSE
 """Shared utility classes and functions"""
 # System imports
-import sys
 import errno
 import logging
 import os
 import re
+import sys
 from collections import defaultdict
-from typing import Dict, List
-import yaml
 from itertools import groupby
 from pathlib import Path
+from typing import Dict, Generator, List
 from urllib.parse import urlparse
-from typing import Generator
+
+import yaml
 
 # Project imports
 from ocxtools.exceptions import SourceError

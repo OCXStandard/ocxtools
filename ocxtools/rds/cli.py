@@ -1,22 +1,23 @@
 #  Copyright (c) 2023. OCX Consortium https://3docx.org. See the LICENSE
 """This module provides the ocx_attribute_reader app functionality."""
 # System imports
-from typing import Tuple, Any, Annotated
+from typing import Annotated, Any, Tuple
 
 # 3rd party imports
 import typer
 
 # Project imports
 from ocxtools import config
-from ocxtools.renderer.renderer import RichTable
+from ocxtools.context.context_manager import get_context_manager
+from ocxtools.dataclass.dataclasses import ReportType
 from ocxtools.exceptions import ReporterError
+from ocxtools.rds import __app_name__
+from ocxtools.renderer.renderer import RichTable
 from ocxtools.reporter.report_manager import OcxReportManager
 from ocxtools.reporter.reporter import OcxReporter
-from ocxtools.dataclass.dataclasses import ReportType
-from ocxtools.context.context_manager import get_context_manager
-from ocxtools.rds import __app_name__
-from ocxtools.utils.utilities import SourceValidator, SourceError
-from ocxtools.serializer.serializer import ReportFormat, Serializer, SerializerError
+from ocxtools.serializer.serializer import (ReportFormat, Serializer,
+                                            SerializerError)
+from ocxtools.utils.utilities import SourceError, SourceValidator
 
 rds = typer.Typer(help="Reference Designation System output.")
 report_manager = OcxReportManager()  # Singleton

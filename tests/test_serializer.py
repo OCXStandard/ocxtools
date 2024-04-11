@@ -1,13 +1,15 @@
 #  Copyright (c) 2023. OCX Consortium https://3docx.org. See the LICENSE
 import json
+
 # Project imports
 from ocxtools.parser.parser import OcxParser
 from ocxtools.serializer.serializer import OcxSerializer
+from tests.conftest import TEST_MODEL
 
 
 def test_serialize_json(shared_datadir, data_regression):
     parser = OcxParser()
-    model = shared_datadir / "m1.3Docx"
+    model = shared_datadir / TEST_MODEL
     ocxxml = parser.parse(str(model.resolve()))
     serializer = OcxSerializer(ocxxml)
     result = serializer.serialize_json()
@@ -16,7 +18,7 @@ def test_serialize_json(shared_datadir, data_regression):
 
 def test_serialize_xml(shared_datadir):
     parser = OcxParser()
-    model = shared_datadir / "m1.3Docx"
+    model = shared_datadir / TEST_MODEL
     ocxxml = parser.parse(str(model.resolve()))
     serializer = OcxSerializer(ocxxml)
     result = serializer.serialize_xml()

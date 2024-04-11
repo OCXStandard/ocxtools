@@ -7,15 +7,14 @@ from enum import Enum
 from typing import Dict, List
 
 import packaging.version
-
 # Third party imports
 from loguru import logger
 
 from ocxtools.exceptions import ConverterError, ConverterWarning
 from ocxtools.interfaces.interfaces import IObservable, IObserver, IRule
-
 # Project imports
-from ocxtools.loader.loader import DeclarationOfOcxImport, DynamicLoader, DynamicLoaderError
+from ocxtools.loader.loader import (DeclarationOfOcxImport, DynamicLoader,
+                                    DynamicLoaderError)
 from ocxtools.utils.utilities import all_equal
 
 

@@ -1,19 +1,20 @@
 #  Copyright (c) 2023. OCX Consortium https://3docx.org. See the LICENSE
 """Docker CLI."""
 # System imports
-from typing import Any, Tuple
-from typing_extensions import Annotated
-from ocxtools.renderer.renderer import RichTable
 import re
+from typing import Any, Tuple
+
 # 3rd party imports
 import typer
+from typing_extensions import Annotated
 
 # Project imports
 from ocxtools import config
 from ocxtools.context.context_manager import get_context_manager
-from ocxtools.jupyter import __app_name__
-from ocxtools.utils.utilities import SourceValidator
 from ocxtools.docker.cli import run
+from ocxtools.jupyter import __app_name__
+from ocxtools.renderer.renderer import RichTable
+from ocxtools.utils.utilities import SourceValidator
 
 # Docker
 DOCKER_DESKTOP = config.get("DockerSettings", "docker_desktop")
@@ -84,7 +85,7 @@ def settings():
     context_manager = get_context_manager()
     console = context_manager.get_console()
     console.section('Jupyter lab settings')
-    data = {key:value for key, value in config.items('JupyterSettings')}
+    data = dict(config.items('JupyterSettings'))
     table = RichTable.render(data=[data], title='Settings')
     console.print_table(table)
 

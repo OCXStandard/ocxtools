@@ -2,10 +2,11 @@
 # You can set these variables from the command line, and also
 # from the environment for the first two.
 
-SOURCEDIR = ./ocxtools
+PACKAGE = ocxtools
+SOURCEDIR = ./$(PACKAGE)
 CONDA_ENV = ocxtools
-DATA_SOURCE= C:\PythonDev\ocxtools\readme
-SKIP_TEST = renderer
+COVDIR = htmlcov
+
 
 # PROJECT setup using conda and powershell
 .PHONY: conda-create
@@ -33,7 +34,7 @@ check:
 
 # DOCUMENTATION ##############################################################
 SPHINXBUILD = sphinx-build -E -b html docs dist/docs
-COVDIR = "htmlcov"
+
 
 doc-serve: ## Open the the html docs built by Sphinx
 	@cmd /c start "_build/index.html"
@@ -76,14 +77,14 @@ pre-commit:	## Run any pre-commit hooks
 
 sourcery:  ## Run sourcery with --fix
 # TESTS #######################################################################
-	@sourcery review --fix --no-summary ./ocxtools
+	@sourcery review --fix --no-summary $(SOURCEDIR)
 
 
 test:  ## Run unit and integration tests
-	@pytest -m "not skip" --durations=5  --cov-report html --cov ocxtools .
+	@pytest -m "not skip" --durations=5  --cov-report html --cov $(PACKAGE) .
 
 test-upd:  ## Run unit and integration tests
-	@pytest --force-regen --durations=5  --cov-report html --cov ocxtools .
+	@pytest --force-regen --durations=5  --cov-report html --cov $(PACKAGE) .
 
 
 test-cov:  ## View the test coverage report

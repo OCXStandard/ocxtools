@@ -1,22 +1,23 @@
 #  Copyright (c) 2023. OCX Consortium https://3docx.org. See the LICENSE
 """ Render classes"""
 
+from enum import Enum
+from pathlib import Path
 # System imports
 from typing import Dict, List, Optional
-from pathlib import Path
-from enum import Enum
+
 import pandas as pd
-# Third party imports
-from tabulate import tabulate
+from loguru import logger
 from lxml import etree
 from rich.table import Table
 from rich.tree import Tree
-from loguru import logger
+# Third party imports
+from tabulate import tabulate
 
+from ocxtools.console.console import style_table_header
+from ocxtools.exceptions import SourceError
 # Project imports
 from ocxtools.utils.utilities import SourceValidator
-from ocxtools.exceptions import SourceError
-from ocxtools.console.console import style_table_header
 
 
 class TreeNode:

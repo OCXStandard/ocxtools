@@ -15,6 +15,14 @@ and this project adheres to the Python [PEP 440 versioning recommendations](http
 
 
 
+## [1.4.0] - 2024.04.11
+
+Bump to version [1.5.0]((https://github.com/OCXStandard/ocxtools/tree/v1.5.0))
+
+### Changed
+ - Updated tests to support schema release 3.0.0rc3
+ - Update GitHub workflows to latest action versions
+
 
 ## [1.4.0] - 2024.03.11
 

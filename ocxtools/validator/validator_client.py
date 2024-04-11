@@ -1,26 +1,28 @@
 #  Copyright (c) 2023. OCX Consortium https://3docx.org. See the LICENSE
 """OCX validator client module."""
 # System imports
-from abc import ABC
-from pathlib import Path
 import base64
-import json
-from enum import Enum
-from collections import defaultdict
-from typing import List, Tuple, Any
 import itertools
+import json
+from abc import ABC
+from collections import defaultdict
+from enum import Enum
+from pathlib import Path
+from typing import Any, Dict, List, Tuple
 
-from typing import Dict
 # 3rd party imports
 import lxml.etree
 from loguru import logger
+
 # Project
-from ocxtools.clients.clients import CurlClientError, CurlRestClient, AsyncRestClient, RequestClientError, RequestType
+from ocxtools.clients.clients import (AsyncRestClient, CurlClientError,
+                                      CurlRestClient, RequestClientError,
+                                      RequestType)
+from ocxtools.dataclass.dataclasses import OcxHeader
 from ocxtools.exceptions import SourceError
+from ocxtools.reporter.reporter import OcxReportFactory
 from ocxtools.utils.utilities import OcxVersion, SourceValidator
 from ocxtools.validator.validator_report import ValidatorReportFactory
-from ocxtools.dataclass.dataclasses import OcxHeader
-from ocxtools.reporter.reporter import OcxReportFactory
 
 
 class ValidatorError(ValueError):

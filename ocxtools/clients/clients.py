@@ -1,21 +1,19 @@
 #  Copyright (c) 2023. OCX Consortium https://3docx.org. See the LICENSE
 """Module for server clients."""
 
-# System reports
-import httpx
 import json
 from abc import ABC, abstractmethod
 from enum import Enum
 from io import BytesIO
 from typing import Any, Coroutine, Dict, List, Tuple, Union
 
+# System reports
+import httpx
 import pycurl
 import requests
-
 # Third party
 from loguru import logger
 from pycurl import error as pycurl_error
-
 
 # Project imports
 

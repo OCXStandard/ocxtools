@@ -2,8 +2,8 @@
 """Dynamically load a python module."""
 # system imports
 import importlib
-from abc import ABC
 import sys
+from abc import ABC
 from types import ModuleType
 from typing import Any, List
 

@@ -10,18 +10,14 @@ repos:
 #    hooks:
 #      - id: black
 #        language_version: python3.11
-#  - repo: https://github.com/pycqa/flake8
-#    rev: 6.1.0
+-   repo: https://github.com/pycqa/isort
+    rev: 5.12.0
+    hooks:
+    -   id: isort
+#-   repo: https://github.com/pre-commit/mirrors-mypy
+#    rev: v1.7.0
 #    hooks:
-#      - id: flake8
-#  -   repo: https://github.com/pycqa/isort
-#      rev: 5.12.0
-#      hooks:
-#      -   id: isort
-#  -   repo: https://github.com/pre-commit/mirrors-mypy
-#      rev: v1.7.0
-#      hooks:
-#      -   id: mypy
+#    -   id: mypy
 #  -   repo: https://github.com/hadialqattan/pycln
 #      rev: 'v2.3.0'
 #      hooks:
@@ -32,13 +28,13 @@ repos:
 #    hooks:
 #      - id: pydocstyle
 #        args: [ '.' ]
-#  - repo: local
-#    hooks:
-#      - id: unittest
-#        name: run unit tests
-#        language: system
-#        pass_filenames: false
-#        entry: poetry run coverage run -m pytest
+- repo: local
+  hooks:
+    - id: unittest
+      name: run unit tests
+      language: system
+      pass_filenames: false
+      entry: poetry run coverage run -m pytest
 - repo: https://github.com/pycqa/flake8
   rev: 6.1.0
   hooks:

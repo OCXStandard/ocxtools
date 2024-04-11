@@ -3,26 +3,27 @@
 
 # System imports
 from __future__ import annotations
+
 import logging
 import warnings
+
+import typer
 # Third party
 from click import pass_context
 from click_shell import shell
-import typer
 from loguru import logger
 
-# Project imports
-from ocxtools import __app_name__, __version__
+import ocxtools.docker.cli
+import ocxtools.jupyter.cli
+import ocxtools.renderer.cli
+import ocxtools.reporter.cli
 import ocxtools.serializer.cli
 import ocxtools.validator.cli
-import ocxtools.docker.cli
-import ocxtools.reporter.cli
-import ocxtools.renderer.cli
-import ocxtools.jupyter.cli
+# Project imports
+from ocxtools import __app_name__, __version__
+from ocxtools.config import config
 from ocxtools.console.console import CliConsole
 from ocxtools.context.context_manager import ContextManager
-from ocxtools.config import config
-
 
 LOG_FILE = config.get('FileLogger', 'log_file')
 RETENTION = config.get('FileLogger', 'retention')

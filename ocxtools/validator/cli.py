@@ -1,29 +1,29 @@
 #  Copyright (c) 2023. OCX Consortium https://3docx.org. See the LICENSE
 """Validator CLI."""
 # System imports
-import json
 import base64
-from typing import Any, Tuple, List
+import json
 from pathlib import Path
+from typing import Any, List, Tuple
 
+import click
+import typer
 # 3rd party imports
 from loguru import logger
-import typer
 from typing_extensions import Annotated
-import click
 
 # Project imports
 from ocxtools import config
-from ocxtools.validator import __app_name__
-from ocxtools.validator.validator_report import ValidatorReportFactory
-from ocxtools.validator.validator_client import (
-    EmbeddingMethod,
-    ValidationDomain, OcxValidatorClient,
-    ValidatorError)
-from ocxtools.renderer.renderer import RichTable
-from ocxtools.utils.utilities import SourceValidator
 from ocxtools.context.context_manager import get_context_manager
+from ocxtools.renderer.renderer import RichTable
 from ocxtools.serializer.serializer import ReportFormat, Serializer
+from ocxtools.utils.utilities import SourceValidator
+from ocxtools.validator import __app_name__
+from ocxtools.validator.validator_client import (EmbeddingMethod,
+                                                 OcxValidatorClient,
+                                                 ValidationDomain,
+                                                 ValidatorError)
+from ocxtools.validator.validator_report import ValidatorReportFactory
 
 REPORT_FOLDER = SourceValidator.mkdir(config.get('ValidatorSettings', 'report_folder'))
 SUFFIX = config.get('ValidatorSettings', 'report_suffix')

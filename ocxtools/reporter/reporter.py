@@ -3,32 +3,34 @@
 
 # System imports
 from collections import defaultdict
-from typing import Any, Dict, List, Union
-from pathlib import Path
-from itertools import groupby
 from dataclasses import dataclass, is_dataclass
-import pandas as pd
 from enum import Enum
+from itertools import groupby
+from pathlib import Path
+from typing import Any, Dict, List, Union
 
+import arrow
 # Third party
 import lxml
-from lxml.etree import Element, QName
+import pandas as pd
 from loguru import logger
-import arrow
+from lxml.etree import Element, QName
+from ocx_schema_parser.xelement import LxmlElement
+from xsdata.exceptions import ParserError
 from xsdata.formats.dataclass.parsers import XmlParser
 from xsdata.formats.dataclass.parsers.handlers import LxmlEventHandler
-from xsdata.exceptions import ParserError
 
-
+from ocxtools.dataclass.dataclasses import (ElementCount, OcxHeader,
+                                            ReportDataFrame,
+                                            ReportElementCount, ReportType)
+from ocxtools.exceptions import ReporterError, SourceError
+from ocxtools.interfaces.interfaces import ABC, IObserver, ObservableEvent
+from ocxtools.loader.loader import (DeclarationOfOcxImport, DynamicLoader,
+                                    DynamicLoaderError)
 # project imports
 from ocxtools.parser.parser import OcxNotifyParser
-from ocxtools.dataclass.dataclasses import (OcxHeader, ReportDataFrame, ReportElementCount, ElementCount,
-                                            ReportType)
-from ocxtools.interfaces.interfaces import ABC, IObserver, ObservableEvent
-from ocxtools.utils.utilities import SourceValidator, OcxVersion, is_substring_in_list
-from ocxtools.exceptions import ReporterError, SourceError
-from ocx_schema_parser.xelement import LxmlElement
-from ocxtools.loader.loader import DeclarationOfOcxImport, DynamicLoader, DynamicLoaderError
+from ocxtools.utils.utilities import (OcxVersion, SourceValidator,
+                                      is_substring_in_list)
 
 
 def all_empty_array(column: pd.Series) -> bool:
@@ -42,11 +44,10 @@ def all_empty_array(column: pd.Series) -> bool:
         bool: True if all elements in the column are empty arrays, False otherwise.
 
     """
-    if column.dtype == object:
-        if not column.isna().any():
-            lengths = column.apply(len)
-            if lengths.max() == 0:
-                return True
+    if column.dtype == object and not column.isna().any():
+        lengths = column.apply(len)
+        if lengths.max() == 0:
+            return True
     return False
 
 
@@ -249,8 +250,8 @@ class OcxReportFactory:
                 count=data_frame.shape[0],
                 unique=data_frame.shape[0] - duplicates,
                 columns=data_frame.shape[1],
-                levels=max([col.count('.') for col in data_frame.columns]),
-                elements=data_frame
+                levels=max(col.count('.') for col in data_frame.columns),
+                elements=data_frame,
             )
         except (IndexError, ValueError) as e:
             logger.error(e)
@@ -319,13 +320,15 @@ def get_guid(element: Element) -> Union[None, str]:
     Returns:
         The GUIDRef value if present, else None
     """
-    guid = None
     attributes = element.attrib
     prefix = element.prefix
     ns = LxmlElement.namespaces_decorate(element.nsmap.get(prefix))
-    if is_substring_in_list('GUIDRef', attributes.keys()) and not is_substring_in_list('refType', attributes.keys()):
-        guid = attributes.get(f'{ns}GUIDRef')
-    return guid
+    return (
+        attributes.get(f'{ns}GUIDRef')
+        if is_substring_in_list('GUIDRef', attributes.keys())
+        and not is_substring_in_list('refType', attributes.keys())
+        else None
+    )
 
 
 def get_guid_ref(element: Element) -> Union[None, str]:
@@ -337,14 +340,15 @@ def get_guid_ref(element: Element) -> Union[None, str]:
     Returns:
         The GUIDRef value if present, else None
     """
-    guid_ref = None
     attributes = element.attrib
     prefix = element.prefix
     ns = element.nsmap[prefix]
     ns = LxmlElement.namespaces_decorate(ns)
-    if is_substring_in_list('refType', attributes.keys()):
-        guid_ref = attributes.get(f'{ns}GUIDRef')
-    return guid_ref
+    return (
+        attributes.get(f'{ns}GUIDRef')
+        if is_substring_in_list('refType', attributes.keys())
+        else None
+    )
 
 
 class OcxReporter:

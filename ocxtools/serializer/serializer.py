@@ -1,21 +1,23 @@
 #  Copyright (c) 2023. OCX Consortium https://3docx.org. See the LICENSE
 """OcxSerializer module."""
 
+import csv
 # system imports
 from dataclasses import dataclass
-import pyarrow
-import csv
-from typing import List
 from enum import Enum
 from pathlib import Path
+from typing import List
+
+import pyarrow
+from loguru import logger
 # 3rd party imports
 from xsdata.formats.dataclass.context import XmlContext
 from xsdata.formats.dataclass.serializers import JsonSerializer, XmlSerializer
 from xsdata.formats.dataclass.serializers.config import SerializerConfig
-from loguru import logger
+
+from ocxtools.dataclass.dataclasses import ReportDataFrame
 # Project imports
 from ocxtools.parser.parser import MetaData
-from ocxtools.dataclass.dataclasses import ReportDataFrame
 
 
 class ReportFormat(Enum):

@@ -8,14 +8,13 @@ from typing import Any, Tuple
 import typer
 from typing_extensions import Annotated
 
-from ocxtools.exceptions import XmlParserError
-from ocxtools.parser.parser import OcxParser
-
-# Project imports
-from ocxtools.serializer.serializer import OcxSerializer
-from ocxtools.serializer import __app_name__
 from ocxtools import config
 from ocxtools.context.context_manager import get_context_manager
+from ocxtools.exceptions import XmlParserError
+from ocxtools.parser.parser import OcxParser
+from ocxtools.serializer import __app_name__
+# Project imports
+from ocxtools.serializer.serializer import OcxSerializer
 
 JSON_INDENT = int(config.get("SerializerSettings", "json_indent"))
 SERIALIZER_SUFFIX = config.get("SerializerSettings", "suffix")

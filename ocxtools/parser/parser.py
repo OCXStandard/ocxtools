@@ -2,25 +2,25 @@
 """Module for parsing a 3Docx model."""
 
 import dataclasses
-
 # system imports
 from abc import ABC
 from dataclasses import dataclass
 from typing import Dict, Iterator
+
 # 3rd party imports
 import lxml.etree
-from lxml.etree import Element
 from loguru import logger
+from lxml.etree import Element
 from xsdata.exceptions import ParserError
 from xsdata.formats.dataclass.context import XmlContext, XmlContextError
+from xsdata.formats.dataclass.parsers import XmlParser
 from xsdata.formats.dataclass.parsers.config import ParserConfig
 from xsdata.formats.dataclass.parsers.handlers import LxmlEventHandler
-from xsdata.formats.dataclass.parsers import XmlParser
 
 from ocxtools.exceptions import XmlParserError
-
 # Project imports
-from ocxtools.interfaces.interfaces import IObservable, IParser, ObservableEvent
+from ocxtools.interfaces.interfaces import (IObservable, IParser,
+                                            ObservableEvent)
 from ocxtools.loader.loader import DeclarationOfOcxImport, DynamicLoader
 from ocxtools.utils.utilities import OcxVersion, SourceValidator
 

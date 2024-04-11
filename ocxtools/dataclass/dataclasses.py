@@ -1,14 +1,14 @@
 #  Copyright (c) 2023-2024. OCX Consortium https://3docx.org. See the LICENSE
 """The validation data dataclasses."""
 
+from abc import ABC
+from collections import defaultdict
 # System imports
 from dataclasses import dataclass, field, fields
 from enum import Enum
 from typing import Dict, List, Union
-from abc import ABC
-import pandas as pd
-from collections import defaultdict
 
+import pandas as pd
 # Third party imports
 from xsdata.utils.text import snake_case
 

@@ -1,11 +1,18 @@
 #  Copyright (c) 2023. OCX Consortium https://3docx.org. See the LICENSE
 # System imports
 import json
+
 import lxml.etree
-# Project imports
-from ocxtools.validator.validator_client import EmbeddingMethod, OcxValidatorClient, ValidatorError, ValidationDomain
 from ocx_schema_parser.xelement import LxmlElement
+
 from ocxtools import config
+# Project imports
+from ocxtools.validator.validator_client import (EmbeddingMethod,
+                                                 OcxValidatorClient,
+                                                 ValidationDomain,
+                                                 ValidatorError)
+from tests.conftest import SCHEMA_VERSION, TEST_MODEL
+
 VALIDATOR = config.get('ValidatorSettings', 'validator_url')
 
 
@@ -23,34 +30,34 @@ def test_get_validator_validation_types():
 
 def test_validate_one_model_status(shared_datadir):
     client = OcxValidatorClient(VALIDATOR)
-    model = str(shared_datadir / 'm1.3docx')
+    model = str(shared_datadir / TEST_MODEL)
     response, header = client.validate_one(
         ocx_model=model, domain=ValidationDomain.OCX, embedding_method=EmbeddingMethod.STRING
     )
     root = lxml.etree.fromstring(response.encode(encoding='utf-8'))
     result = LxmlElement.find_child_with_name(root, 'result')
-    assert result.text == 'FAILURE'
+    assert result.text == 'SUCCESS'
 
 
 def test_validate_one_model_status_force_version_succeed(shared_datadir):
     client = OcxValidatorClient(VALIDATOR)
-    model = str(shared_datadir / 'm1.3docx')
+    model = str(shared_datadir / TEST_MODEL)
     response, header = client.validate_one(
-        ocx_model=model, domain=ValidationDomain.OCX, schema_version='3.0.0b4',
+        ocx_model=model, domain=ValidationDomain.OCX, schema_version=SCHEMA_VERSION,
         embedding_method=EmbeddingMethod.STRING,
         force_version=True
     )
     root = lxml.etree.fromstring(response.encode(encoding='utf-8'))
     result = LxmlElement.find_child_with_name(root, 'result')
-    assert result.text == 'FAILURE'
+    assert result.text == 'SUCCESS'
 
 
 def test_validate_one_model_status_force_version_fail(shared_datadir):
     client = OcxValidatorClient(VALIDATOR)
-    model = str(shared_datadir / 'm1.3docx')
+    model = str(shared_datadir / TEST_MODEL)
     try:
         client.validate_one(
-            ocx_model=model, domain=ValidationDomain.OCX, schema_version='0.0.0',
+            ocx_model=model, domain=ValidationDomain.OCX, schema_version=SCHEMA_VERSION,
             embedding_method=EmbeddingMethod.STRING,
             force_version=True
         )
@@ -60,18 +67,18 @@ def test_validate_one_model_status_force_version_fail(shared_datadir):
 
 def test_validate_one_model_status_code_500(shared_datadir):
     client = OcxValidatorClient(VALIDATOR)
-    model = str(shared_datadir / 'm1.3docx')
+    model = str(shared_datadir / TEST_MODEL)
     response, header = client.validate_one(
         ocx_model=model, domain=ValidationDomain.OCX, embedding_method=EmbeddingMethod.BASE64
     )
     root = lxml.etree.fromstring(response.encode(encoding='utf-8'))
     result = LxmlElement.find_child_with_name(root, 'result')
-    assert result.text == 'FAILURE'
+    assert result.text == 'SUCCESS'
 
 
 def test_validate_one_embedding_url(shared_datadir):
     client = OcxValidatorClient(VALIDATOR)
-    model = str(shared_datadir / 'm1.3docx')
+    model = str(shared_datadir / TEST_MODEL)
     try:
         client.validate_one(model, ValidationDomain.OCX, embedding_method=EmbeddingMethod.URL)
     except ValidatorError as e:
@@ -80,7 +87,7 @@ def test_validate_one_embedding_url(shared_datadir):
 
 def test_validate_many(shared_datadir):
     client = OcxValidatorClient(VALIDATOR)
-    models = [str(shared_datadir / 'm1.3docx'), str(shared_datadir / 'm2.3docx'), str(shared_datadir / 'm3.3docx')]
+    models = [str(shared_datadir / TEST_MODEL), str(shared_datadir / TEST_MODEL), str(shared_datadir / TEST_MODEL)]
     response, headers = client.validate_many(
         ocx_models=models, domain=ValidationDomain.OCX, embedding_method=EmbeddingMethod.STRING
     )
