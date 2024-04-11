@@ -9,7 +9,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "ocxtools"
-version = "1.4.0"
+version = "1.5.0"
 description = "Python utility CLI for working with 3Docx models."
 authors = ["ocastrup <ole.christian.astrup@dnv.com>"]
 readme = "README.md"
@@ -60,7 +60,7 @@ ocxtools = "ocxtools.cli:main"
 github_url = "https://github.com/OCXStandard/ocxtools"
 
 [tool.tbump.version]
-current = "1.4.0"
+current = "1.5.0"
 
 # Example of a semver regexp.
 # Make sure this matches current_version before
