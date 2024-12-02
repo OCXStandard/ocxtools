@@ -1,0 +1,248 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ocxtools.interfaces.interfaces &mdash; ocxtools 1.5.3 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css" />
+
+  
+      <script src="../../../_static/jquery.js"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+      <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+      <script src="../../../_static/doctools.js"></script>
+      <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            ocxtools
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">ocxtools</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">ocxtools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ocxtools.interfaces.interfaces</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ocxtools.interfaces.interfaces</h1><div class="highlight"><pre>
+<span></span><span class="c1">#  Copyright (c) 2023. OCX Consortium https://3docx.org. See the LICENSE</span>
+<span class="sd">&quot;&quot;&quot;Interfaces module.&quot;&quot;&quot;</span>
+
+<span class="c1"># System imports</span>
+<span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Iterator</span><span class="p">,</span> <span class="n">List</span>
+
+<span class="kn">import</span> <span class="nn">packaging.version</span>
+
+<span class="c1"># Project imports</span>
+<span class="kn">from</span> <span class="nn">ocxtools.exceptions</span> <span class="kn">import</span> <span class="n">ConverterError</span>
+
+
+<div class="viewcode-block" id="ObservableEvent"><a class="viewcode-back" href="../../../modules.html#ocxtools.interfaces.interfaces.ObservableEvent">[docs]</a><span class="k">class</span> <span class="nc">ObservableEvent</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Events that can be listened to and broadcast.&quot;&quot;&quot;</span>
+    <span class="n">DATACLASS</span> <span class="o">=</span> <span class="s1">&#39;dataclass&#39;</span>
+    <span class="n">REPORT</span> <span class="o">=</span> <span class="s1">&#39;report&#39;</span>
+    <span class="n">SERIALIZE</span> <span class="o">=</span> <span class="s1">&#39;serialize&#39;</span></div>
+
+
+<div class="viewcode-block" id="IModuleDeclaration"><a class="viewcode-back" href="../../../modules.html#ocxtools.interfaces.interfaces.IModuleDeclaration">[docs]</a><span class="k">class</span> <span class="nc">IModuleDeclaration</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Abstract module import declaration Interface&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="IModuleDeclaration.get_declaration"><a class="viewcode-back" href="../../../modules.html#ocxtools.interfaces.interfaces.IModuleDeclaration.get_declaration">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">get_declaration</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Abstract Method: Return the module declaration string.&quot;&quot;&quot;</span>
+        <span class="k">pass</span></div></div>
+
+
+<div class="viewcode-block" id="IObserver"><a class="viewcode-back" href="../../../modules.html#ocxtools.interfaces.interfaces.IObserver">[docs]</a><span class="k">class</span> <span class="nc">IObserver</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The observer interface&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="IObserver.update"><a class="viewcode-back" href="../../../modules.html#ocxtools.interfaces.interfaces.IObserver.update">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">ObservableEvent</span><span class="p">,</span> <span class="n">payload</span><span class="p">:</span> <span class="n">Dict</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Interface update method&quot;&quot;&quot;</span></div></div>
+
+
+<div class="viewcode-block" id="IObservable"><a class="viewcode-back" href="../../../modules.html#ocxtools.interfaces.interfaces.IObservable">[docs]</a><span class="k">class</span> <span class="nc">IObservable</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Interface. The observable object.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="IObservable.subscribe"><a class="viewcode-back" href="../../../modules.html#ocxtools.interfaces.interfaces.IObservable.subscribe">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">subscribe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">observer</span><span class="p">:</span> <span class="n">IObserver</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;subscription&quot;&quot;&quot;</span></div>
+
+<div class="viewcode-block" id="IObservable.unsubscribe"><a class="viewcode-back" href="../../../modules.html#ocxtools.interfaces.interfaces.IObservable.unsubscribe">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">unsubscribe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">observer</span><span class="p">:</span> <span class="n">IObserver</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;unsubscribe&quot;&quot;&quot;</span></div>
+
+<div class="viewcode-block" id="IObservable.update"><a class="viewcode-back" href="../../../modules.html#ocxtools.interfaces.interfaces.IObservable.update">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">ObservableEvent</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="n">Dict</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        update method.</span>
+<span class="sd">        Args:</span>
+<span class="sd">            event: The event type</span>
+<span class="sd">            message: The event message</span>
+<span class="sd">        &quot;&quot;&quot;</span></div></div>
+
+
+<div class="viewcode-block" id="IRule"><a class="viewcode-back" href="../../../modules.html#ocxtools.interfaces.interfaces.IRule">[docs]</a><span class="k">class</span> <span class="nc">IRule</span><span class="p">(</span><span class="n">IObserver</span><span class="p">,</span> <span class="n">ABC</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Abstract rule interface&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">latest</span><span class="p">:</span> <span class="n">IModuleDeclaration</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_latest_version</span> <span class="o">=</span> <span class="n">latest</span>
+
+<div class="viewcode-block" id="IRule.convert"><a class="viewcode-back" href="../../../modules.html#ocxtools.interfaces.interfaces.IRule.convert">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">convert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source_params</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="n">IModuleDeclaration</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Abstract Method: Return the mapped parameters.&quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="IRule.get_latest_version"><a class="viewcode-back" href="../../../modules.html#ocxtools.interfaces.interfaces.IRule.get_latest_version">[docs]</a>    <span class="k">def</span> <span class="nf">get_latest_version</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the latest supported version.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_latest_version</span><span class="o">.</span><span class="n">get_version</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="IRule.validate_version"><a class="viewcode-back" href="../../../modules.html#ocxtools.interfaces.interfaces.IRule.validate_version">[docs]</a>    <span class="k">def</span> <span class="nf">validate_version</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="n">IModuleDeclaration</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            target:</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            True if the conversion is implemented for the target version.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">target_version</span> <span class="o">=</span> <span class="n">packaging</span><span class="o">.</span><span class="n">version</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">target</span><span class="o">.</span><span class="n">get_version</span><span class="p">())</span>
+        <span class="k">if</span> <span class="n">target_version</span><span class="o">.</span><span class="fm">__gt__</span><span class="p">(</span><span class="n">packaging</span><span class="o">.</span><span class="n">version</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_latest_version</span><span class="p">())):</span>
+            <span class="k">raise</span> <span class="n">ConverterError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Conversion to </span><span class="si">{</span><span class="n">target</span><span class="o">.</span><span class="n">get_version</span><span class="p">()</span><span class="si">!r}</span><span class="s2"> is not supported. &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;Supported versions &lt;= </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">get_latest_version</span><span class="p">()</span><span class="si">!r}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="IRule.update"><a class="viewcode-back" href="../../../modules.html#ocxtools.interfaces.interfaces.IRule.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="n">Dict</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Default update is to do nothing&quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="IRule.listen_to_events"><a class="viewcode-back" href="../../../modules.html#ocxtools.interfaces.interfaces.IRule.listen_to_events">[docs]</a>    <span class="k">def</span> <span class="nf">listen_to_events</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Default is to subscribe to no events&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[]</span></div></div>
+
+
+<div class="viewcode-block" id="IParser"><a class="viewcode-back" href="../../../modules.html#ocxtools.interfaces.interfaces.IParser">[docs]</a><span class="k">class</span> <span class="nc">IParser</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Abstract IParser interface.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="IParser.parse"><a class="viewcode-back" href="../../../modules.html#ocxtools.interfaces.interfaces.IParser.parse">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">dataclass</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Abstract method for parsing a data model,</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            model: the data model source</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            the root dataclass of the parsed data model.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="IParser.iterator"><a class="viewcode-back" href="../../../modules.html#ocxtools.interfaces.interfaces.IParser.iterator">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">iterator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Abstract method for iterating a data model.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            model: the data model to iterate on.</span>
+<span class="sd">        Returns:</span>
+<span class="sd">             An iterator</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div></div>
+
+
+<div class="viewcode-block" id="ISerializer"><a class="viewcode-back" href="../../../modules.html#ocxtools.interfaces.interfaces.ISerializer">[docs]</a><span class="k">class</span> <span class="nc">ISerializer</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;OcxSerializer interface&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="n">dataclass</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">model</span>
+
+<div class="viewcode-block" id="ISerializer.serialize_to_file"><a class="viewcode-back" href="../../../modules.html#ocxtools.interfaces.interfaces.ISerializer.serialize_to_file">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">serialize_to_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">to_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Abstract XML serialize to file method&quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="ISerializer.serialize_to_string"><a class="viewcode-back" href="../../../modules.html#ocxtools.interfaces.interfaces.ISerializer.serialize_to_string">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">serialize_to_string</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Abstract XML serialize to string method&quot;&quot;&quot;</span>
+        <span class="k">pass</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, 3Docx.org.
+      <span class="lastupdated">Last updated on Dec 02, 2024.
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

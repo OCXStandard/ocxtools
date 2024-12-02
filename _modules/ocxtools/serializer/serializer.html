@@ -1,0 +1,230 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ocxtools.serializer.serializer &mdash; ocxtools 1.5.3 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css" />
+
+  
+      <script src="../../../_static/jquery.js"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+      <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+      <script src="../../../_static/doctools.js"></script>
+      <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            ocxtools
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">ocxtools</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">ocxtools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ocxtools.serializer.serializer</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ocxtools.serializer.serializer</h1><div class="highlight"><pre>
+<span></span><span class="c1">#  Copyright (c) 2023. OCX Consortium https://3docx.org. See the LICENSE</span>
+<span class="sd">&quot;&quot;&quot;OcxSerializer module.&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">csv</span>
+<span class="c1"># system imports</span>
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+
+<span class="kn">import</span> <span class="nn">pyarrow</span>
+<span class="kn">from</span> <span class="nn">loguru</span> <span class="kn">import</span> <span class="n">logger</span>
+<span class="c1"># 3rd party imports</span>
+<span class="kn">from</span> <span class="nn">xsdata.formats.dataclass.context</span> <span class="kn">import</span> <span class="n">XmlContext</span>
+<span class="kn">from</span> <span class="nn">xsdata.formats.dataclass.serializers</span> <span class="kn">import</span> <span class="n">JsonSerializer</span><span class="p">,</span> <span class="n">XmlSerializer</span>
+<span class="kn">from</span> <span class="nn">xsdata.formats.dataclass.serializers.config</span> <span class="kn">import</span> <span class="n">SerializerConfig</span>
+
+<span class="kn">from</span> <span class="nn">ocxtools.dataclass.dataclasses</span> <span class="kn">import</span> <span class="n">ReportDataFrame</span>
+<span class="c1"># Project imports</span>
+<span class="kn">from</span> <span class="nn">ocxtools.parser.parser</span> <span class="kn">import</span> <span class="n">MetaData</span>
+
+
+<div class="viewcode-block" id="ReportFormat"><a class="viewcode-back" href="../../../modules.html#ocxtools.serializer.serializer.ReportFormat">[docs]</a><span class="k">class</span> <span class="nc">ReportFormat</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Serialisation formats&quot;&quot;&quot;</span>
+    <span class="n">CSV</span> <span class="o">=</span> <span class="s1">&#39;csv&#39;</span>
+    <span class="n">PARQUET</span> <span class="o">=</span> <span class="s1">&#39;parquet&#39;</span></div>
+
+
+<div class="viewcode-block" id="OcxSerializer"><a class="viewcode-back" href="../../../modules.html#ocxtools.serializer.serializer.OcxSerializer">[docs]</a><span class="k">class</span> <span class="nc">OcxSerializer</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;OcxSerializer class for 3Docx XML models.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">ocx_model</span><span class="p">:</span> <span class="n">dataclass</span><span class="p">,</span>
+            <span class="n">pretty_print</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="n">pretty_print_indent</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;  &quot;</span><span class="p">,</span>
+            <span class="n">encoding</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;utf-8&quot;</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Args:</span>
+<span class="sd">            ocx_model: The dataclass to serialize.</span>
+<span class="sd">            pretty_print: True to pretty print, False otherwise.</span>
+<span class="sd">            pretty_print_indent: Pretty print indentation.</span>
+<span class="sd">            encoding: The encoding code.</span>
+<span class="sd">        Params:</span>
+<span class="sd">            _model: The dataclass to serialize.</span>
+<span class="sd">            _config: The serializer configuration.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="p">:</span> <span class="n">dataclass</span> <span class="o">=</span> <span class="n">ocx_model</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_config</span> <span class="o">=</span> <span class="n">SerializerConfig</span><span class="p">(</span>
+            <span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span><span class="p">,</span>
+            <span class="n">xml_version</span><span class="o">=</span><span class="s2">&quot;1.0&quot;</span><span class="p">,</span>
+            <span class="n">xml_declaration</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">pretty_print</span><span class="o">=</span><span class="n">pretty_print</span><span class="p">,</span>
+            <span class="n">pretty_print_indent</span><span class="o">=</span><span class="n">pretty_print_indent</span><span class="p">,</span>
+            <span class="n">ignore_default_attributes</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">schema_location</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">no_namespace_schema_location</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">globalns</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="p">)</span>
+
+<div class="viewcode-block" id="OcxSerializer.serialize_xml"><a class="viewcode-back" href="../../../modules.html#ocxtools.serializer.serializer.OcxSerializer.serialize_xml">[docs]</a>    <span class="k">def</span> <span class="nf">serialize_xml</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">global_ns</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;ocx&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Serialize a 3Docx XML file with proper indentations.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">              The dataclass xml serialisation.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            SerializeError if failing</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">target_ns</span> <span class="o">=</span> <span class="n">MetaData</span><span class="o">.</span><span class="n">namespace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="p">)</span>
+        <span class="n">ns_map</span> <span class="o">=</span> <span class="p">{</span><span class="n">global_ns</span><span class="p">:</span> <span class="n">target_ns</span><span class="p">}</span>
+        <span class="n">serializer</span> <span class="o">=</span> <span class="n">XmlSerializer</span><span class="p">(</span><span class="n">context</span><span class="o">=</span><span class="n">XmlContext</span><span class="p">(),</span> <span class="n">config</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_config</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">serializer</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="p">,</span> <span class="n">ns_map</span><span class="o">=</span><span class="n">ns_map</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="OcxSerializer.serialize_json"><a class="viewcode-back" href="../../../modules.html#ocxtools.serializer.serializer.OcxSerializer.serialize_json">[docs]</a>    <span class="k">def</span> <span class="nf">serialize_json</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Serialize a 3Docx XML model to json with proper indentations.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">              The dataclass xml serialisation.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            SerializeError if failing</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">serializer</span> <span class="o">=</span> <span class="n">JsonSerializer</span><span class="p">(</span><span class="n">context</span><span class="o">=</span><span class="n">XmlContext</span><span class="p">(),</span> <span class="n">config</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_config</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">serializer</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="Serializer"><a class="viewcode-back" href="../../../modules.html#ocxtools.serializer.serializer.Serializer">[docs]</a><span class="k">class</span> <span class="nc">Serializer</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A general serializer for dict type data structures&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Serializer.serialize_to_csv"><a class="viewcode-back" href="../../../modules.html#ocxtools.serializer.serializer.Serializer.serialize_to_csv">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">serialize_to_csv</span><span class="p">(</span><span class="n">table</span><span class="p">:</span> <span class="n">List</span><span class="p">,</span> <span class="n">file_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Serialize a list of dictionaries to a csv file. Each dictionary is a row with ``key:value`` pairs</span>
+<span class="sd">        where the key is the column header and the value is the data value.</span>
+<span class="sd">        Args:</span>
+<span class="sd">            table: The table to serialize</span>
+<span class="sd">            file_name: the output file name</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_name</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">csvfile</span><span class="p">:</span>
+            <span class="n">fieldnames</span> <span class="o">=</span> <span class="n">table</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+            <span class="n">writer</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">DictWriter</span><span class="p">(</span><span class="n">csvfile</span><span class="p">,</span> <span class="n">fieldnames</span><span class="o">=</span><span class="n">fieldnames</span><span class="p">)</span>
+            <span class="n">writer</span><span class="o">.</span><span class="n">writeheader</span><span class="p">()</span>
+            <span class="n">writer</span><span class="o">.</span><span class="n">writerows</span><span class="p">(</span><span class="n">table</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Serializer.serialize_to_parquet"><a class="viewcode-back" href="../../../modules.html#ocxtools.serializer.serializer.Serializer.serialize_to_parquet">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">serialize_to_parquet</span><span class="p">(</span><span class="n">report</span><span class="p">:</span> <span class="n">ReportDataFrame</span><span class="p">,</span> <span class="n">report_folder</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Serialize a dataframe report to a parquet file</span>
+<span class="sd">        Args:</span>
+<span class="sd">            report: Dataclass containing the dataframe to serialize</span>
+<span class="sd">            report_folder: the output directory</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">stem</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">report</span><span class="o">.</span><span class="n">source</span><span class="p">)</span><span class="o">.</span><span class="n">stem</span>
+            <span class="n">ocx_type</span> <span class="o">=</span> <span class="n">report</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+            <span class="n">file_name</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">report_folder</span><span class="p">)</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">stem</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">ocx_type</span><span class="si">}</span><span class="s1">.parquet&#39;</span><span class="p">)</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">report</span><span class="o">.</span><span class="n">elements</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">to_parquet</span><span class="p">(</span><span class="n">file_name</span><span class="p">)</span>
+        <span class="k">except</span> <span class="p">(</span><span class="n">pyarrow</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">ArrowException</span><span class="p">,</span> <span class="n">pyarrow</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">ArrowInvalid</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Error serializing to parquet: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">SerializerError</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span></div></div>
+
+
+<div class="viewcode-block" id="SerializerError"><a class="viewcode-back" href="../../../modules.html#ocxtools.serializer.serializer.SerializerError">[docs]</a><span class="k">class</span> <span class="nc">SerializerError</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;OCX Serializing errors.&quot;&quot;&quot;</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, 3Docx.org.
+      <span class="lastupdated">Last updated on Dec 02, 2024.
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

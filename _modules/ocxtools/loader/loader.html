@@ -1,0 +1,245 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ocxtools.loader.loader &mdash; ocxtools 1.5.3 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css" />
+
+  
+      <script src="../../../_static/jquery.js"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+      <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+      <script src="../../../_static/doctools.js"></script>
+      <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            ocxtools
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">ocxtools</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">ocxtools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ocxtools.loader.loader</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ocxtools.loader.loader</h1><div class="highlight"><pre>
+<span></span><span class="c1">#  Copyright (c) 2023. OCX Consortium https://3docx.org. See the LICENSE</span>
+<span class="sd">&quot;&quot;&quot;Dynamically load a python module.&quot;&quot;&quot;</span>
+<span class="c1"># system imports</span>
+<span class="kn">import</span> <span class="nn">importlib</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABC</span>
+<span class="kn">from</span> <span class="nn">types</span> <span class="kn">import</span> <span class="n">ModuleType</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span>
+
+<span class="c1"># 3rd party imports</span>
+<span class="kn">from</span> <span class="nn">loguru</span> <span class="kn">import</span> <span class="n">logger</span>
+
+<span class="c1"># Project imports</span>
+<span class="kn">from</span> <span class="nn">ocxtools.interfaces.interfaces</span> <span class="kn">import</span> <span class="n">IModuleDeclaration</span>
+
+
+<div class="viewcode-block" id="ModuleDeclaration"><a class="viewcode-back" href="../../../modules.html#ocxtools.loader.loader.ModuleDeclaration">[docs]</a><span class="k">class</span> <span class="nc">ModuleDeclaration</span><span class="p">(</span><span class="n">IModuleDeclaration</span><span class="p">,</span> <span class="n">ABC</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;General module declaration</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        package:the package name</span>
+<span class="sd">        sub_module: The submodule name</span>
+<span class="sd">        name: The method name</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">package</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">sub_module</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_module</span> <span class="o">=</span> <span class="n">sub_module</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_package</span> <span class="o">=</span> <span class="n">package</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_method</span> <span class="o">=</span> <span class="n">name</span>
+
+<div class="viewcode-block" id="ModuleDeclaration.get_declaration"><a class="viewcode-back" href="../../../modules.html#ocxtools.loader.loader.ModuleDeclaration.get_declaration">[docs]</a>    <span class="k">def</span> <span class="nf">get_declaration</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the module import declaration.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_package</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_module</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_method</span><span class="si">}</span><span class="s2">&quot;</span></div></div>
+
+
+<div class="viewcode-block" id="DeclarationOfOcxImport"><a class="viewcode-back" href="../../../modules.html#ocxtools.loader.loader.DeclarationOfOcxImport">[docs]</a><span class="k">class</span> <span class="nc">DeclarationOfOcxImport</span><span class="p">(</span><span class="n">IModuleDeclaration</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Declaration of the ocx module.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">version</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_version</span> <span class="o">=</span> <span class="n">version</span>
+
+<div class="viewcode-block" id="DeclarationOfOcxImport.get_declaration"><a class="viewcode-back" href="../../../modules.html#ocxtools.loader.loader.DeclarationOfOcxImport.get_declaration">[docs]</a>    <span class="k">def</span> <span class="nf">get_declaration</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the module import declaration.&quot;&quot;&quot;</span>
+        <span class="n">ocx_pkg</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_version</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">ocx_pkg</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">ocx_pkg</span><span class="si">}</span><span class="s2">&quot;</span></div>
+
+<div class="viewcode-block" id="DeclarationOfOcxImport.get_version"><a class="viewcode-back" href="../../../modules.html#ocxtools.loader.loader.DeclarationOfOcxImport.get_version">[docs]</a>    <span class="k">def</span> <span class="nf">get_version</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the OCX module version.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_version</span></div>
+
+<div class="viewcode-block" id="DeclarationOfOcxImport.get_name"><a class="viewcode-back" href="../../../modules.html#ocxtools.loader.loader.DeclarationOfOcxImport.get_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the declared module name.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name</span></div></div>
+
+
+<div class="viewcode-block" id="DynamicLoader"><a class="viewcode-back" href="../../../modules.html#ocxtools.loader.loader.DynamicLoader">[docs]</a><span class="k">class</span> <span class="nc">DynamicLoader</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Dynamically loads modules, classes of functions from a module declaration.&quot;&quot;&quot;</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_load</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">declaration</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Internal Method: Import the object from the declaration.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            declaration: The module declaration string.</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            Return the loaded object, None if failed.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">obj_type</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">spec</span> <span class="o">:=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">find_spec</span><span class="p">(</span><span class="n">declaration</span><span class="p">))</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">obj_type</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">module_from_spec</span><span class="p">(</span><span class="n">spec</span><span class="p">)</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="n">declaration</span><span class="p">]</span> <span class="o">=</span> <span class="n">obj_type</span>
+            <span class="n">spec</span><span class="o">.</span><span class="n">loader</span><span class="o">.</span><span class="n">exec_module</span><span class="p">(</span><span class="n">obj_type</span><span class="p">)</span>
+            <span class="c1"># logger.debug(f&quot;Loaded object {declaration!r} from location {spec.origin!r}&quot;)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No object </span><span class="si">{</span><span class="n">declaration</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">obj_type</span>
+
+<div class="viewcode-block" id="DynamicLoader.import_module"><a class="viewcode-back" href="../../../modules.html#ocxtools.loader.loader.DynamicLoader.import_module">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">import_module</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">module_declaration</span><span class="p">:</span> <span class="n">IModuleDeclaration</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ModuleType</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            module_declaration: The declaration of the pyton module to load</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Return the loaded module, None if failed.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">module_to_load</span> <span class="o">=</span> <span class="n">module_declaration</span><span class="o">.</span><span class="n">get_declaration</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_load</span><span class="p">(</span><span class="n">module_to_load</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DynamicLoader.import_class"><a class="viewcode-back" href="../../../modules.html#ocxtools.loader.loader.DynamicLoader.import_class">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">import_class</span><span class="p">(</span>
+            <span class="bp">cls</span><span class="p">,</span> <span class="n">module_declaration</span><span class="p">:</span> <span class="n">IModuleDeclaration</span><span class="p">,</span> <span class="n">class_name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The module import declaration.</span>
+<span class="sd">        Args:</span>
+<span class="sd">            class_name: The class name to load form the declared module</span>
+<span class="sd">            module_declaration: The declaration of the python module to be loaded</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Return the loaded class, None if failed.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">obj</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">module_to_load</span> <span class="o">=</span> <span class="n">module_declaration</span><span class="o">.</span><span class="n">get_declaration</span><span class="p">()</span>
+        <span class="n">module</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_load</span><span class="p">(</span><span class="n">module_to_load</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">obj</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">class_name</span><span class="p">)</span>
+            <span class="c1"># logger.debug(f&quot;Loaded class {class_name!r}&quot;)</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">DynamicLoaderError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;No class with name </span><span class="si">{</span><span class="n">class_name</span><span class="si">!r}</span><span class="s2"> in module </span><span class="si">{</span><span class="n">module_to_load</span><span class="si">!r}</span><span class="s2">&quot;</span>
+            <span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span>
+        <span class="k">return</span> <span class="n">obj</span></div>
+
+<div class="viewcode-block" id="DynamicLoader.get_all_class_names"><a class="viewcode-back" href="../../../modules.html#ocxtools.loader.loader.DynamicLoader.get_all_class_names">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">get_all_class_names</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">module_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">version</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return all class names in the module by the ``__all__`` variable.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            module_name: The module name</span>
+<span class="sd">            version: The module version</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            The list of available module class names.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">all_names</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">ocx_pkg</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">module_name</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">version</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span>
+        <span class="n">ocx_module</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">module_name</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">ocx_pkg</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">spec</span> <span class="o">:=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">find_spec</span><span class="p">(</span><span class="n">ocx_module</span><span class="p">))</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">module</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">module_from_spec</span><span class="p">(</span><span class="n">spec</span><span class="p">)</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="n">ocx_module</span><span class="p">]</span> <span class="o">=</span> <span class="n">module</span>
+            <span class="n">spec</span><span class="o">.</span><span class="n">loader</span><span class="o">.</span><span class="n">exec_module</span><span class="p">(</span><span class="n">module</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Found module </span><span class="si">{</span><span class="n">ocx_module</span><span class="si">!r}</span><span class="s2"> in location </span><span class="si">{</span><span class="n">spec</span><span class="o">.</span><span class="n">origin</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">all_names</span> <span class="o">=</span> <span class="n">module</span><span class="o">.</span><span class="n">__all__</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No module with name </span><span class="si">{</span><span class="n">module_name</span><span class="si">!r}</span><span class="s2"> and version </span><span class="si">{</span><span class="n">version</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">all_names</span></div></div>
+
+
+<div class="viewcode-block" id="DynamicLoaderError"><a class="viewcode-back" href="../../../modules.html#ocxtools.loader.loader.DynamicLoaderError">[docs]</a><span class="k">class</span> <span class="nc">DynamicLoaderError</span><span class="p">(</span><span class="ne">AttributeError</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Dynamic import errors.&quot;&quot;&quot;</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, 3Docx.org.
+      <span class="lastupdated">Last updated on Dec 02, 2024.
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

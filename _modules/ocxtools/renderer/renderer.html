@@ -1,0 +1,328 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ocxtools.renderer.renderer &mdash; ocxtools 1.5.3 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css" />
+
+  
+      <script src="../../../_static/jquery.js"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+      <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+      <script src="../../../_static/doctools.js"></script>
+      <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            ocxtools
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">ocxtools</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">ocxtools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ocxtools.renderer.renderer</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ocxtools.renderer.renderer</h1><div class="highlight"><pre>
+<span></span><span class="c1">#  Copyright (c) 2023. OCX Consortium https://3docx.org. See the LICENSE</span>
+<span class="sd">&quot;&quot;&quot; Render classes&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="c1"># System imports</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">loguru</span> <span class="kn">import</span> <span class="n">logger</span>
+<span class="kn">from</span> <span class="nn">lxml</span> <span class="kn">import</span> <span class="n">etree</span>
+<span class="kn">from</span> <span class="nn">rich.table</span> <span class="kn">import</span> <span class="n">Table</span>
+<span class="kn">from</span> <span class="nn">rich.tree</span> <span class="kn">import</span> <span class="n">Tree</span>
+<span class="c1"># Third party imports</span>
+<span class="kn">from</span> <span class="nn">tabulate</span> <span class="kn">import</span> <span class="n">tabulate</span>
+
+<span class="kn">from</span> <span class="nn">ocxtools.console.console</span> <span class="kn">import</span> <span class="n">style_table_header</span>
+<span class="kn">from</span> <span class="nn">ocxtools.exceptions</span> <span class="kn">import</span> <span class="n">SourceError</span>
+<span class="c1"># Project imports</span>
+<span class="kn">from</span> <span class="nn">ocxtools.utils.utilities</span> <span class="kn">import</span> <span class="n">SourceValidator</span>
+
+
+<div class="viewcode-block" id="TreeNode"><a class="viewcode-back" href="../../../modules.html#ocxtools.renderer.renderer.TreeNode">[docs]</a><span class="k">class</span> <span class="nc">TreeNode</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Represents a node in a tree structure.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        name: The name of the node.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        name: The name of the node.</span>
+<span class="sd">        children: A list of child nodes.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">children</span> <span class="o">=</span> <span class="p">[]</span></div>
+
+
+<div class="viewcode-block" id="RenderError"><a class="viewcode-back" href="../../../modules.html#ocxtools.renderer.renderer.RenderError">[docs]</a><span class="k">class</span> <span class="nc">RenderError</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Render errors.&quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="ReportType"><a class="viewcode-back" href="../../../modules.html#ocxtools.renderer.renderer.ReportType">[docs]</a><span class="k">class</span> <span class="nc">ReportType</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Validator report types&quot;&quot;&quot;</span>
+    <span class="n">OCX</span> <span class="o">=</span> <span class="s1">&#39;ocx&#39;</span>
+    <span class="n">SCHEMATRON</span> <span class="o">=</span> <span class="s1">&#39;schematron&#39;</span></div>
+
+
+<div class="viewcode-block" id="TableRender"><a class="viewcode-back" href="../../../modules.html#ocxtools.renderer.renderer.TableRender">[docs]</a><span class="k">class</span> <span class="nc">TableRender</span><span class="p">:</span>
+<div class="viewcode-block" id="TableRender.render"><a class="viewcode-back" href="../../../modules.html#ocxtools.renderer.renderer.TableRender.render">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            data:</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">headers</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">headers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+            <span class="n">values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">tabulate</span><span class="p">([</span><span class="n">headers</span><span class="p">,</span> <span class="n">values</span><span class="p">],</span> <span class="n">headers</span><span class="o">=</span><span class="s2">&quot;firstrow&quot;</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="RichTable"><a class="viewcode-back" href="../../../modules.html#ocxtools.renderer.renderer.RichTable">[docs]</a><span class="k">class</span> <span class="nc">RichTable</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Build a Rich table.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="RichTable.render"><a class="viewcode-back" href="../../../modules.html#ocxtools.renderer.renderer.RichTable.render">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">title</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">List</span><span class="p">,</span> <span class="n">show_header</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">caption</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Render a rich table</span>
+<span class="sd">        Args:</span>
+<span class="sd">            show_header: If True render the table header.</span>
+<span class="sd">            title: The table title rendered above.</span>
+<span class="sd">            data: The table content. List of dictionaries where each dictionary</span>
+<span class="sd">            represents a row in the table, and the keys represent column headers.</span>
+<span class="sd">            caption: The table caption rendered below.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            The table</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">table</span> <span class="o">=</span> <span class="n">Table</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span> <span class="n">header_style</span><span class="o">=</span><span class="n">style_table_header</span><span class="p">,</span> <span class="n">caption</span><span class="o">=</span><span class="n">caption</span><span class="p">,</span> <span class="n">show_header</span><span class="o">=</span><span class="n">show_header</span><span class="p">)</span>
+            <span class="n">headers</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+            <span class="k">for</span> <span class="n">header</span> <span class="ow">in</span> <span class="n">headers</span><span class="p">:</span>
+                <span class="n">table</span><span class="o">.</span><span class="n">add_column</span><span class="p">(</span><span class="n">header</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+                <span class="n">table</span><span class="o">.</span><span class="n">add_row</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="n">header</span><span class="p">])</span> <span class="k">for</span> <span class="n">header</span> <span class="ow">in</span> <span class="n">headers</span><span class="p">])</span>
+            <span class="k">return</span> <span class="n">table</span>
+        <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">RenderError</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span></div>
+
+<div class="viewcode-block" id="RichTable.df_to_table"><a class="viewcode-back" href="../../../modules.html#ocxtools.renderer.renderer.RichTable.df_to_table">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">df_to_table</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span>
+                    <span class="n">pandas_dataframe</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
+                    <span class="n">rich_table</span><span class="p">:</span> <span class="n">Table</span><span class="p">,</span>
+                    <span class="n">show_index</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+                    <span class="n">index_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Table</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert a pandas.DataFrame obj into a rich.Table obj.</span>
+<span class="sd">        Args:</span>
+<span class="sd">            pandas_dataframe (DataFrame): A Pandas DataFrame to be converted to a rich Table.</span>
+<span class="sd">            rich_table (Table): A rich Table that should be populated by the DataFrame values.</span>
+<span class="sd">            show_index (bool): Add a column with a row count to the table. Defaults to True.</span>
+<span class="sd">            index_name (str, optional): The column name to give to the index column. Defaults to None, showing no value.</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            Table: The rich Table instance passed, populated with the DataFrame values.&quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">show_index</span><span class="p">:</span>
+            <span class="n">index_name</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">index_name</span><span class="p">)</span> <span class="k">if</span> <span class="n">index_name</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+            <span class="n">rich_table</span><span class="o">.</span><span class="n">add_column</span><span class="p">(</span><span class="n">index_name</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">column</span> <span class="ow">in</span> <span class="n">pandas_dataframe</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="n">rich_table</span><span class="o">.</span><span class="n">add_column</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">column</span><span class="p">))</span>
+
+        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">value_list</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">pandas_dataframe</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">()):</span>
+            <span class="n">row</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">index</span><span class="p">)]</span> <span class="k">if</span> <span class="n">show_index</span> <span class="k">else</span> <span class="p">[]</span>
+            <span class="n">row</span> <span class="o">+=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">value_list</span><span class="p">]</span>
+            <span class="n">rich_table</span><span class="o">.</span><span class="n">add_row</span><span class="p">(</span><span class="o">*</span><span class="n">row</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">rich_table</span></div>
+
+<div class="viewcode-block" id="RichTable.tree"><a class="viewcode-back" href="../../../modules.html#ocxtools.renderer.renderer.RichTable.tree">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">tree</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">title</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tree</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Builds and renders a rich tree structure based on the provided data.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            data: The dictionary representing the tree structure.</span>
+<span class="sd">            title: The title of the tree.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Tree: The rendered rich tree structure.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">tree</span> <span class="o">=</span> <span class="n">Tree</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[bold]</span><span class="si">{</span><span class="n">title</span><span class="si">}</span><span class="s2">[/bold]&quot;</span><span class="p">)</span>
+        <span class="n">tree</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">build_rich_tree</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">tree</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">tree</span></div>
+
+<div class="viewcode-block" id="RichTable.build_rich_tree"><a class="viewcode-back" href="../../../modules.html#ocxtools.renderer.renderer.RichTable.build_rich_tree">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">build_rich_tree</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">tree</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">parent</span><span class="p">:</span> <span class="n">Tree</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tree</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Recursively builds a tree structure from a dictionary.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            tree_dict: The dictionary representing the tree structure.</span>
+<span class="sd">            parent: The parent node of the current tree level. Defaults to None for the root node.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            TreeNode: The root node of the built tree.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">tree</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tree</span><span class="p">[</span><span class="n">child</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="bp">cls</span><span class="o">.</span><span class="n">build_rich_tree</span><span class="p">(</span><span class="n">tree</span><span class="p">[</span><span class="n">child</span><span class="p">],</span> <span class="n">parent</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">parent</span> <span class="o">=</span> <span class="n">parent</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">child</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">parent</span></div>
+
+<div class="viewcode-block" id="RichTable.render_rich_tree"><a class="viewcode-back" href="../../../modules.html#ocxtools.renderer.renderer.RichTable.render_rich_tree">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">render_rich_tree</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">tree</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Renders a rich tree structure based on the provided node.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            node: The root node of the tree structure.</span>
+<span class="sd">            tree: Optional existing Tree object to append the rendered tree. Defaults to None.</span>
+<span class="sd">            depth: The current depth of the tree. Defaults to 0.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Tree: The rendered rich tree structure.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">tree</span> <span class="o">=</span> <span class="n">Tree</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[bold]</span><span class="si">{</span><span class="n">node</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">[/bold]&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">children</span><span class="p">:</span>
+            <span class="n">sub_tree</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">child</span><span class="p">)</span>
+            <span class="n">tree</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">sub_tree</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">tree</span></div></div>
+
+
+<div class="viewcode-block" id="XsltTransformer"><a class="viewcode-back" href="../../../modules.html#ocxtools.renderer.renderer.XsltTransformer">[docs]</a><span class="k">class</span> <span class="nc">XsltTransformer</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Transform an XML file using an xslt stylesheet.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xslt_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_xslt_file</span> <span class="o">=</span> <span class="n">SourceValidator</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="n">xslt_file</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">SourceError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">RenderError</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span>
+
+<div class="viewcode-block" id="XsltTransformer.render"><a class="viewcode-back" href="../../../modules.html#ocxtools.renderer.renderer.XsltTransformer.render">[docs]</a>    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">source_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">output_folder</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+               <span class="n">report_type</span><span class="p">:</span> <span class="n">ReportType</span> <span class="o">=</span> <span class="n">ReportType</span><span class="o">.</span><span class="n">SCHEMATRON</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            report_type: The report type. ``OCX`` or ``SCHEMATRON``.</span>
+<span class="sd">            output_folder: The report folder.</span>
+<span class="sd">            data: the xml data as a string</span>
+<span class="sd">            source_file: The source file</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            The path to the output file name</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Parse XML and XSLT files</span>
+        <span class="n">file_name</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">source_file</span><span class="p">)</span><span class="o">.</span><span class="n">stem</span>
+        <span class="n">output_file</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">output_folder</span><span class="p">)</span> <span class="o">/</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">report_type</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s1">_report.html&#39;</span>
+        <span class="n">xml_file</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">output_folder</span><span class="p">)</span> <span class="o">/</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s1">.xml&#39;</span>
+        <span class="k">with</span> <span class="n">xml_file</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+        <span class="n">xml_tree</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">xml_file</span><span class="p">)</span>
+        <span class="n">xslt_tree</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_xslt_file</span><span class="p">)</span>
+
+        <span class="c1"># Create an XSLT processor</span>
+        <span class="n">transform</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">XSLT</span><span class="p">(</span><span class="n">xslt_tree</span><span class="p">)</span>
+
+        <span class="c1"># Apply the transformation</span>
+        <span class="n">result_tree</span> <span class="o">=</span> <span class="n">transform</span><span class="p">(</span><span class="n">xml_tree</span><span class="p">)</span>
+
+        <span class="c1"># Save the result to a new file</span>
+        <span class="n">result_tree</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">output_file</span><span class="p">,</span> <span class="n">pretty_print</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">output_file</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, 3Docx.org.
+      <span class="lastupdated">Last updated on Dec 02, 2024.
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

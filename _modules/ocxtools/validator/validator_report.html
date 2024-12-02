@@ -1,0 +1,225 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ocxtools.validator.validator_report &mdash; ocxtools 1.5.3 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css" />
+
+  
+      <script src="../../../_static/jquery.js"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+      <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+      <script src="../../../_static/doctools.js"></script>
+      <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            ocxtools
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">ocxtools</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">ocxtools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ocxtools.validator.validator_report</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ocxtools.validator.validator_report</h1><div class="highlight"><pre>
+<span></span><span class="c1">#  Copyright (c) 2023. OCX Consortium https://3docx.org. See the LICENSE</span>
+<span class="sd">&quot;&quot;&quot;The validator report class.&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="c1"># System imports</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+
+<span class="c1"># Third party imports</span>
+<span class="kn">import</span> <span class="nn">arrow</span>
+<span class="kn">import</span> <span class="nn">lxml.etree</span>
+<span class="kn">from</span> <span class="nn">loguru</span> <span class="kn">import</span> <span class="n">logger</span>
+<span class="kn">from</span> <span class="nn">ocx_schema_parser.xelement</span> <span class="kn">import</span> <span class="n">LxmlElement</span>
+
+<span class="kn">from</span> <span class="nn">ocxtools.dataclass.dataclasses</span> <span class="kn">import</span> <span class="p">(</span><span class="n">OcxHeader</span><span class="p">,</span> <span class="n">ValidationDetails</span><span class="p">,</span>
+                                            <span class="n">ValidationInformation</span><span class="p">,</span>
+                                            <span class="n">ValidationReport</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">ocxtools.exceptions</span> <span class="kn">import</span> <span class="n">ReporterError</span>
+
+<span class="c1"># Project imports</span>
+
+
+
+<div class="viewcode-block" id="ValidatorReportFactory"><a class="viewcode-back" href="../../../modules.html#ocxtools.validator.validator_report.ValidatorReportFactory">[docs]</a><span class="k">class</span> <span class="nc">ValidatorReportFactory</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Validator report.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ValidatorReportFactory.create_report"><a class="viewcode-back" href="../../../modules.html#ocxtools.validator.validator_report.ValidatorReportFactory.create_report">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">create_report</span><span class="p">(</span><span class="n">source</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">report_data</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">header</span><span class="p">:</span> <span class="n">OcxHeader</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ValidationReport</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create the validation report.</span>
+<span class="sd">        Args:</span>
+<span class="sd">            source: The source 3Docx model source file name.</span>
+<span class="sd">            report_data: The validation result.</span>
+<span class="sd">            header: The 3Docx Header information</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            The report dataclass</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">report_bytes</span> <span class="o">=</span> <span class="n">report_data</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+            <span class="n">root</span> <span class="o">=</span> <span class="n">lxml</span><span class="o">.</span><span class="n">etree</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span><span class="n">report_bytes</span><span class="p">)</span>
+            <span class="n">n_assert</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">LxmlElement</span><span class="o">.</span><span class="n">find_child_with_name</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="s1">&#39;nrOfAssertions&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+            <span class="n">n_err</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">LxmlElement</span><span class="o">.</span><span class="n">find_child_with_name</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="s1">&#39;nrOfErrors&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+            <span class="n">n_warn</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">LxmlElement</span><span class="o">.</span><span class="n">find_child_with_name</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="s1">&#39;nrOfWarnings&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+            <span class="n">profile_id</span> <span class="o">=</span> <span class="n">LxmlElement</span><span class="o">.</span><span class="n">find_child_with_name</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="s1">&#39;profileID&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">LxmlElement</span><span class="o">.</span><span class="n">find_child_with_name</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="s1">&#39;result&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span>
+            <span class="n">date</span> <span class="o">=</span> <span class="n">LxmlElement</span><span class="o">.</span><span class="n">find_child_with_name</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="s1">&#39;date&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span>
+            <span class="n">validator_name</span> <span class="o">=</span> <span class="n">LxmlElement</span><span class="o">.</span><span class="n">find_child_with_name</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="s1">&#39;validationServiceName&#39;</span><span class="p">)</span>
+            <span class="n">validator_name</span> <span class="o">=</span> <span class="n">validator_name</span><span class="o">.</span><span class="n">text</span> <span class="k">if</span> <span class="n">validator_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
+            <span class="n">validator_version</span> <span class="o">=</span> <span class="n">LxmlElement</span><span class="o">.</span><span class="n">find_child_with_name</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="s1">&#39;validationServiceVersion&#39;</span><span class="p">)</span>
+            <span class="n">validator_version</span> <span class="o">=</span> <span class="n">validator_version</span><span class="o">.</span><span class="n">text</span> <span class="k">if</span> <span class="n">validator_version</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
+            <span class="n">LxmlElement</span><span class="o">.</span><span class="n">find_all_children_with_name</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="s1">&#39;errors&#39;</span><span class="p">)</span>
+            <span class="c1"># Iterate over error elements and create the detailed report</span>
+            <span class="n">errors</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">error</span> <span class="ow">in</span> <span class="n">LxmlElement</span><span class="o">.</span><span class="n">iter</span><span class="p">(</span><span class="n">root</span><span class="p">,</span><span class="s1">&#39;{*}error&#39;</span><span class="p">):</span>
+                <span class="n">description</span> <span class="o">=</span> <span class="n">LxmlElement</span><span class="o">.</span><span class="n">find_child_with_name</span><span class="p">(</span><span class="n">error</span><span class="p">,</span> <span class="s1">&#39;description&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span>
+                <span class="n">text</span> <span class="o">=</span> <span class="n">description</span>
+                <span class="k">if</span> <span class="s1">&#39;{&#39;</span> <span class="ow">in</span> <span class="n">description</span><span class="p">:</span>
+                    <span class="n">text</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+                    <span class="n">sub_str</span> <span class="o">=</span> <span class="s1">&#39;&quot;http&#39;</span>
+                    <span class="n">start_indices</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">start</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">re</span><span class="o">.</span><span class="n">finditer</span><span class="p">(</span><span class="n">sub_str</span><span class="p">,</span> <span class="n">description</span><span class="p">)]</span>
+                    <span class="n">sub_str</span> <span class="o">=</span> <span class="s1">&#39;&quot;:&#39;</span>
+                    <span class="n">end_indices</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">start</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">re</span><span class="o">.</span><span class="n">finditer</span><span class="p">(</span><span class="n">sub_str</span><span class="p">,</span> <span class="n">description</span><span class="p">)]</span>
+                    <span class="n">end_indices</span> <span class="o">=</span> <span class="p">[</span><span class="n">index</span> <span class="o">+</span> <span class="mi">2</span> <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">end_indices</span><span class="p">]</span>
+                    <span class="n">slices</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="nb">slice</span><span class="p">,</span><span class="n">start_indices</span><span class="p">,</span><span class="n">end_indices</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">slices</span><span class="p">:</span>
+                        <span class="n">text</span> <span class="o">=</span> <span class="n">description</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">description</span><span class="p">[</span><span class="n">s</span><span class="p">],</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+                    <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;{&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+                    <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;}&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+                <span class="n">location</span> <span class="o">=</span> <span class="n">LxmlElement</span><span class="o">.</span><span class="n">find_child_with_name</span><span class="p">(</span><span class="n">error</span><span class="p">,</span><span class="s1">&#39;location&#39;</span><span class="p">)</span>
+                <span class="c1"># Define the regex pattern to extract numbers between colons</span>
+                <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;(?&lt;=:)\d+(?=:|$)&#39;</span><span class="p">)</span>
+                <span class="c1"># Find all matches in the input string</span>
+                <span class="n">matches</span> <span class="o">=</span> <span class="n">pattern</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">location</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+                <span class="n">detailed_report</span> <span class="o">=</span> <span class="n">ValidationDetails</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="n">text</span><span class="p">,</span> <span class="n">line</span><span class="o">=</span><span class="n">matches</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">column</span><span class="o">=</span><span class="n">matches</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">detailed_report</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">ValidationReport</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="n">source</span><span class="p">,</span>
+                                    <span class="n">date</span><span class="o">=</span><span class="n">arrow</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">date</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(),</span>
+                                    <span class="n">result</span><span class="o">=</span><span class="n">result</span><span class="p">,</span>
+                                    <span class="n">validation_type</span><span class="o">=</span><span class="n">profile_id</span><span class="p">,</span>
+                                    <span class="n">validator_version</span><span class="o">=</span><span class="n">validator_version</span><span class="p">,</span>
+                                    <span class="n">validator_name</span><span class="o">=</span><span class="n">validator_name</span><span class="p">,</span>
+                                    <span class="n">errors</span><span class="o">=</span><span class="n">n_err</span><span class="p">,</span>
+                                    <span class="n">warnings</span><span class="o">=</span><span class="n">n_warn</span><span class="p">,</span>
+                                    <span class="n">assertions</span><span class="o">=</span><span class="n">n_assert</span><span class="p">,</span>
+                                    <span class="n">report</span><span class="o">=</span><span class="n">report_data</span><span class="p">,</span>
+                                    <span class="n">error_details</span><span class="o">=</span><span class="n">errors</span><span class="p">,</span>
+                                    <span class="n">warning_details</span><span class="o">=</span><span class="p">[],</span>
+                                    <span class="n">assertion_details</span><span class="o">=</span><span class="p">[],</span>
+                                    <span class="n">ocx_header</span><span class="o">=</span><span class="n">header</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">ReporterError</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span></div>
+
+<div class="viewcode-block" id="ValidatorReportFactory.create_info_report"><a class="viewcode-back" href="../../../modules.html#ocxtools.validator.validator_report.ValidatorReportFactory.create_info_report">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">create_info_report</span><span class="p">(</span><span class="n">response</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">ValidationInformation</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The validator information about supported domains and validation types.</span>
+<span class="sd">        Args:</span>
+<span class="sd">            response: The input data</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            A list of the ValidationInformation objects</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">information</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+                <span class="n">domain</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;domain&quot;</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">validations</span> <span class="ow">in</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;validationTypes&quot;</span><span class="p">):</span>
+                    <span class="n">description</span> <span class="o">=</span> <span class="n">validations</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;description&quot;</span><span class="p">)</span>
+                    <span class="n">validation_type</span> <span class="o">=</span> <span class="n">validations</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">)</span>
+                    <span class="n">information</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                        <span class="n">ValidationInformation</span><span class="p">(</span>
+                            <span class="n">domain</span><span class="o">=</span><span class="n">domain</span><span class="p">,</span>
+                            <span class="n">validation_type</span><span class="o">=</span><span class="n">validation_type</span><span class="p">,</span>
+                            <span class="n">description</span><span class="o">=</span><span class="n">description</span><span class="p">,</span>
+                        <span class="p">)</span>
+                    <span class="p">)</span>
+            <span class="k">return</span> <span class="n">information</span>
+        <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">ReporterError</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, 3Docx.org.
+      <span class="lastupdated">Last updated on Dec 02, 2024.
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
