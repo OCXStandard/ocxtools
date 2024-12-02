@@ -4,12 +4,12 @@ import json
 # Project imports
 from ocxtools.parser.parser import OcxParser
 from ocxtools.serializer.serializer import OcxSerializer
-from tests.conftest import TEST_MODEL
+from tests.conftest import AVEVA
 
 
 def test_serialize_json(shared_datadir, data_regression):
     parser = OcxParser()
-    model = shared_datadir / TEST_MODEL
+    model = shared_datadir / AVEVA
     ocxxml = parser.parse(str(model.resolve()))
     serializer = OcxSerializer(ocxxml)
     result = serializer.serialize_json()
@@ -18,7 +18,7 @@ def test_serialize_json(shared_datadir, data_regression):
 
 def test_serialize_xml(shared_datadir):
     parser = OcxParser()
-    model = shared_datadir / TEST_MODEL
+    model = shared_datadir / AVEVA
     ocxxml = parser.parse(str(model.resolve()))
     serializer = OcxSerializer(ocxxml)
     result = serializer.serialize_xml()

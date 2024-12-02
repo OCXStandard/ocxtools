@@ -10,7 +10,7 @@ def test_report_count_elements(shared_datadir):
     reporter = OcxReporter()
     reporter.parse_model(str(model.resolve()))
     result = reporter.element_count(str(model))
-    assert result.count == 326
+    assert result.count == 289
 
 
 def test_report_count_filtered_elements(shared_datadir):
@@ -18,7 +18,7 @@ def test_report_count_filtered_elements(shared_datadir):
     reporter = OcxReporter()
     reporter.parse_model(str(model.resolve()))
     result = reporter.element_count(selection=['Panel', 'Plate', 'Stiffener'])
-    assert result.count == 326
+    assert result.count == 289
 
 
 @pytest.mark.skip

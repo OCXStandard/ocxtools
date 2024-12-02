@@ -9,7 +9,7 @@ from ocx_schema_parser.xelement import LxmlElement
 
 from ocxtools.clients.clients import CurlRestClient, RequestType, RestClient
 from ocxtools.validator.validator_client import EmbeddingMethod
-from tests.conftest import SCHEMA_VERSION, TEST_MODEL
+from tests.conftest import AVEVA, SCHEMA_VERSION
 
 VALIDATOR = "http://localhost:8080"
 
@@ -25,7 +25,7 @@ class TestCurlClient:
 
     def test_curl_post_data_string_embedding(self, shared_datadir):
         client = CurlRestClient(VALIDATOR)
-        model = shared_datadir / TEST_MODEL
+        model = shared_datadir / AVEVA
         tree = lxml.etree.parse(str(model.resolve()))
         byte_string = lxml.etree.tostring(tree)
         content = byte_string.decode("utf-8")
@@ -48,7 +48,7 @@ class TestCurlClient:
 
     def test_curl_post_data_base64_embedding(self, shared_datadir):
         client = CurlRestClient(VALIDATOR)
-        model = shared_datadir / TEST_MODEL
+        model = shared_datadir / AVEVA
         tree = lxml.etree.parse(str(model.resolve()))
         byte_string = lxml.etree.tostring(tree)
         base64_bytes = base64.b64encode(byte_string)
@@ -73,7 +73,7 @@ class TestCurlClient:
     def test_curl_post_data_xml_string_embedding(self, shared_datadir):
         tic = time.perf_counter()
         client = CurlRestClient(VALIDATOR)
-        model = shared_datadir / TEST_MODEL
+        model = shared_datadir / AVEVA
         tree = lxml.etree.parse(str(model.resolve()))
         byte_string = lxml.etree.tostring(tree)
         content = byte_string.decode("utf-8")
@@ -110,7 +110,7 @@ class TestRestClient:
     def test_rest_post_data_xml_string_embedding(self, shared_datadir):
         tic = time.perf_counter()
         client = RestClient(VALIDATOR)
-        model = shared_datadir / TEST_MODEL
+        model = shared_datadir / AVEVA
         tree = lxml.etree.parse(str(model.resolve()))
         byte_string = lxml.etree.tostring(tree)
         content = byte_string.decode("utf-8")
@@ -137,7 +137,7 @@ class TestRestClient:
 
     def test_rest_post_data_json_string_embedding(self, shared_datadir):
         client = RestClient(VALIDATOR)
-        model = shared_datadir / TEST_MODEL
+        model = shared_datadir / AVEVA
         tree = lxml.etree.parse(str(model.resolve()))
         byte_string = lxml.etree.tostring(tree)
         content = byte_string.decode("utf-8")
@@ -160,7 +160,7 @@ class TestRestClient:
 
     def test_rest_post_data_base64_embedding(self, shared_datadir):
         client = RestClient(VALIDATOR)
-        model = shared_datadir / TEST_MODEL
+        model = shared_datadir / AVEVA
         tree = lxml.etree.parse(str(model.resolve()))
         byte_string = lxml.etree.tostring(tree)
         base64_bytes = base64.b64encode(byte_string)

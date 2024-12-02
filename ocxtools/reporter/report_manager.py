@@ -1,9 +1,11 @@
 #  Copyright (c) 2024. OCX Consortium https://3docx.org. See the LICENSE
 """The report manager implementation."""
+from __future__ import annotations
+
 # System imports
 import os
 from collections import defaultdict
-from typing import Dict, List
+from typing import Any, Dict, List
 
 # Third party
 # project imports
@@ -64,6 +66,18 @@ class OcxReportManager:
         """
         return self._reports
 
+    def has_report(self, report_type: ReportType.value) -> bool:
+        """
+        Check if a report of a specific type is available.
+
+        Args:
+            report_type: The type of report to check for.
+
+        Returns:
+            bool: True if a report of the specified type is available, False otherwise.
+        """
+        return report_type in self._reports.keys() or (report_type == ReportType.ALL.value and len(self._reports) > 0)
+
     def report_detail(self, report_type: ReportType,
                       level: int = 0,
                       max_col: int = 8,
@@ -86,13 +100,12 @@ class OcxReportManager:
         else:
             return []
 
-    def report_tree(self, report_type: ReportType) -> Dict:
+    def report_tree(self, report_type: ReportType) -> list[Any] | dict[Any, Any]:
         if report_type.value in self._reports.keys():
             return [report.tree()
                     for report in self._reports[report_type.value]]
         else:
             return {}
-
 
     def report_summary(self) -> List:
         """

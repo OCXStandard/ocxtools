@@ -76,7 +76,7 @@ config["StdoutLogger"] = {
 config["Plugins"] = {
     "serializer": 'yes',
     "validator": 'yes',
-    "reporter": 'no',
+    "reporter": 'yes',
     "docker": 'yes',
     "renderer": 'no',
     "jupyter": 'yes'

@@ -4,156 +4,68 @@ ClassCatalogue:
   HoleShapeCatalogue: null
   MaterialCatalogue:
     CustomProperties: null
-    Description: null
+    Description: ''
     Material:
     - CustomProperties: null
       Density:
         numericvalue: 7850.0
-        unit: UKgOverm3
+        unit: u7
       Description: null
-      GUIDRef: b1e760b1-067d-4062-8753-73f0956686df
+      GUIDRef: '{0BEF184A-6827-4A99-B527-31DC92D484BE}'
       PoissonRatio:
         numericvalue: 0.3
-        unit: UDimless
+        unit: u6
       ThermalExpansionCoefficient: null
       UltimateStress:
-        numericvalue: 400.0
-        unit: UNOvermm2
+        numericvalue: 331.0
+        unit: u4
       YieldStress:
-        numericvalue: 235.0
-        unit: UNOvermm2
+        numericvalue: 207.0
+        unit: u4
       YoungsModulus:
         numericvalue: 210000.0
-        unit: UNOvermm2
+        unit: u4
       grade: A
-      id: nplcid4
-      name: A
-    id: nplcid3
+      id: ID72
+      name: GradeA
+    id: ID71
     name: null
   XSectionCatalogue: null
-  id: nplcid2
+  id: ID70
   name: null
 Equipments: null
 Header:
-  application_version: TNAPA Release B9999 2024.9 sonmy x64 T
-  author: MJ
-  documentation: OCX Export
-  name: OCX-MODEL1/A
-  organization: NAPA
-  originating_system: NAPA Steel
-  time_stamp: '2024-03-14T11:18:18.481245+02:00'
+  application_version: '4.2'
+  author: AVEVA E3D Design User
+  documentation: null
+  name: OCX Export
+  organization: AVEVA E3D Design User
+  originating_system: AVEVA E3D Design
+  time_stamp: '2024-10-16T10:56:03.400'
 UnitsML:
   DimensionSet:
     Dimension:
-    - AmountOfSubstance: []
-      ElectricCurrent: []
+    - AmountOfSubstance:
+      - powerNumerator: 1
+        symbol: N
+      ElectricCurrent:
+      - powerNumerator: 1
+        symbol: I
       Length:
       - powerNumerator: 1
         symbol: L
-      LuminousIntensity: []
-      Mass: []
-      ThermodynamicTemperature: []
-      Time: []
-      dimensionless: false
-      id: D_L
-    - AmountOfSubstance: []
-      ElectricCurrent: []
-      Length:
-      - powerNumerator: 2
-        symbol: L
-      LuminousIntensity: []
-      Mass: []
-      ThermodynamicTemperature: []
-      Time: []
-      dimensionless: false
-      id: D_L2
-    - AmountOfSubstance: []
-      ElectricCurrent: []
-      Length:
-      - powerNumerator: 3
-        symbol: L
-      LuminousIntensity: []
-      Mass: []
-      ThermodynamicTemperature: []
-      Time: []
-      dimensionless: false
-      id: D_L3
-    - AmountOfSubstance: []
-      ElectricCurrent: []
-      Length:
-      - powerNumerator: 4
-        symbol: L
-      LuminousIntensity: []
-      Mass: []
-      ThermodynamicTemperature: []
-      Time: []
-      dimensionless: false
-      id: D_L4
-    - AmountOfSubstance: []
-      ElectricCurrent: []
-      Length:
+      LuminousIntensity:
       - powerNumerator: 1
-        symbol: L
-      LuminousIntensity: []
-      Mass: []
-      ThermodynamicTemperature: []
-      Time:
-      - powerNumerator: -1
-        symbol: T
-      dimensionless: false
-      id: D_L.T-1
-    - AmountOfSubstance: []
-      ElectricCurrent: []
-      Length: []
-      LuminousIntensity: []
-      Mass:
-      - powerNumerator: 1
-        symbol: M
-      ThermodynamicTemperature: []
-      Time: []
-      dimensionless: false
-      id: D_Kg
-    - AmountOfSubstance: []
-      ElectricCurrent: []
-      Length:
-      - powerNumerator: -3
-        symbol: L
-      LuminousIntensity: []
-      Mass:
-      - powerNumerator: 1
-        symbol: M
-      ThermodynamicTemperature: []
-      Time: []
-      dimensionless: false
-      id: D_Kg.M-3
-    - AmountOfSubstance: []
-      ElectricCurrent: []
-      Length:
-      - powerNumerator: -1
-        symbol: L
-      LuminousIntensity: []
+        symbol: J
       Mass:
       - powerNumerator: 1
         symbol: M
       ThermodynamicTemperature: []
       Time:
-      - powerNumerator: -2
+      - powerNumerator: 1
         symbol: T
       dimensionless: false
-      id: D_N.MM-2
-    - AmountOfSubstance: []
-      ElectricCurrent: []
-      Length:
-      - powerNumerator: 1
-        symbol: L
-      LuminousIntensity: []
-      Mass:
-      - powerNumerator: 1
-        symbol: M
-      ThermodynamicTemperature: []
-      Time: []
-      dimensionless: false
-      id: D_NM
+      id: ID_F
     - AmountOfSubstance: []
       ElectricCurrent: []
       Length: []
@@ -162,93 +74,18 @@ UnitsML:
       ThermodynamicTemperature: []
       Time: []
       dimensionless: true
-      id: D_None
+      id: ID_T
   UnitSet:
     Unit:
-    - RootUnits:
-        EnumeratedRootUnit:
-        - powerNumerator: 1
-          prefix: null
-          sourceURL: null
-          unit: meter
+    - RootUnits: null
       UnitName:
       - lang: en-us
         value: meter
       UnitSymbol:
       - content: []
         type: m
-      dimensionURL: D_L
-      id: Um
-    - RootUnits:
-        EnumeratedRootUnit:
-        - powerNumerator: 2
-          prefix: null
-          sourceURL: null
-          unit: meter
-      UnitName:
-      - lang: en-us
-        value: square meter
-      UnitSymbol:
-      - content: []
-        type: m2
-      dimensionURL: D_L2
-      id: Um2
-    - RootUnits:
-        EnumeratedRootUnit:
-        - powerNumerator: 3
-          prefix: null
-          sourceURL: null
-          unit: meter
-      UnitName:
-      - lang: en-us
-        value: cubic meter
-      UnitSymbol:
-      - content: []
-        type: m3
-      dimensionURL: D_L3
-      id: Um3
-    - RootUnits:
-        EnumeratedRootUnit:
-        - powerNumerator: 1
-          prefix: c
-          sourceURL: null
-          unit: meter
-      UnitName:
-      - lang: en-us
-        value: centimeter
-      UnitSymbol:
-      - content: []
-        type: cm
-      dimensionURL: D_L
-      id: Ucm
-    - RootUnits:
-        EnumeratedRootUnit:
-        - powerNumerator: 2
-          prefix: c
-          sourceURL: null
-          unit: meter
-      UnitName:
-      - lang: en-us
-        value: square centimeter
-      UnitSymbol:
-      - content: []
-        type: cm2
-      dimensionURL: D_L2
-      id: Ucm2
-    - RootUnits:
-        EnumeratedRootUnit:
-        - powerNumerator: 4
-          prefix: c
-          sourceURL: null
-          unit: meter
-      UnitName:
-      - lang: en-us
-        value: double square centimeter
-      UnitSymbol:
-      - content: []
-        type: cm4
-      dimensionURL: D_L4
-      id: Ucm4
+      dimensionURL: ID1
+      id: u1
     - RootUnits:
         EnumeratedRootUnit:
         - powerNumerator: 1
@@ -261,8 +98,8 @@ UnitsML:
       UnitSymbol:
       - content: []
         type: mm
-      dimensionURL: D_L
-      id: Umm
+      dimensionURL: ID2
+      id: u2
     - RootUnits:
         EnumeratedRootUnit:
         - powerNumerator: 1
@@ -275,36 +112,43 @@ UnitsML:
       UnitSymbol:
       - content: []
         type: kn
-      dimensionURL: D_L.T-1
-      id: UKnots
+      dimensionURL: ID3
+      id: u3
     - RootUnits:
         EnumeratedRootUnit:
         - powerNumerator: 1
+          prefix: M
+          sourceURL: null
+          unit: pascal
+      UnitName:
+      - lang: en-us
+        value: megapascal
+      UnitSymbol:
+      - content: []
+        type: MPa
+      dimensionURL: ID4
+      id: u4
+    - RootUnits:
+        EnumeratedRootUnit:
+        - powerNumerator: 2
           prefix: null
           sourceURL: null
-          unit: radian
+          unit: meter
       UnitName:
       - lang: en-us
-        value: radian
+        value: area
       UnitSymbol:
       - content: []
-        type: rad
-      dimensionURL: D_L
-      id: URad
-    - RootUnits:
-        EnumeratedRootUnit:
-        - powerNumerator: 1
-          prefix: k
-          sourceURL: null
-          unit: gram
+        type: A
+      dimensionURL: ID5
+      id: u5
+    - RootUnits: null
       UnitName:
       - lang: en-us
-        value: kilogram
-      UnitSymbol:
-      - content: []
-        type: kg
-      dimensionURL: D_Kg
-      id: UKg
+        value: nondimensional
+      UnitSymbol: []
+      dimensionURL: ID6
+      id: u6
     - RootUnits:
         EnumeratedRootUnit:
         - powerNumerator: 1
@@ -317,154 +161,108 @@ UnitsML:
           unit: meter
       UnitName:
       - lang: en-us
-        value: kilogram per cubic meter
+        value: kilo gram per cubic meter
       UnitSymbol:
       - content: []
         type: kg/m3
-      dimensionURL: D_Kg.M-3
-      id: UKgOverm3
-    - RootUnits:
-        EnumeratedRootUnit:
-        - powerNumerator: 1
-          prefix: null
-          sourceURL: null
-          unit: newton
-        - powerNumerator: -2
-          prefix: m
-          sourceURL: null
-          unit: meter
-      UnitName:
-      - lang: en-us
-        value: newton per square millimeter
-      UnitSymbol:
-      - content: []
-        type: N/mm2
-      dimensionURL: D_N.MM-2
-      id: UNOvermm2
-    - RootUnits:
-        EnumeratedRootUnit:
-        - powerNumerator: 1
-          prefix: null
-          sourceURL: null
-          unit: newton
-        - powerNumerator: -2
-          prefix: null
-          sourceURL: null
-          unit: meter
-      UnitName:
-      - lang: en-us
-        value: newton per square meter
-      UnitSymbol:
-      - content: []
-        type: N/m2
-      dimensionURL: D_N.MM-2
-      id: UNOverm2
+      dimensionURL: ID7
+      id: u7
     - RootUnits: null
       UnitName:
       - lang: en-us
-        value: dimensionless
+        value: kg
       UnitSymbol:
       - content: []
-        type: ''
-      dimensionURL: D_None
-      id: UDimless
+        type: kg
+      dimensionURL: ID8
+      id: u8
     - RootUnits:
         EnumeratedRootUnit:
         - powerNumerator: 1
           prefix: null
           sourceURL: null
-          unit: metric_ton
+          unit: radian
       UnitName:
       - lang: en-us
-        value: ton
+        value: angle
       UnitSymbol:
       - content: []
-        type: t
-      dimensionURL: D_Kg
-      id: Ut
+        type: rad
+      dimensionURL: ID9
+      id: u9
     - RootUnits:
         EnumeratedRootUnit:
-        - powerNumerator: 1
-          prefix: k
-          sourceURL: null
-          unit: newton
-      UnitName:
-      - lang: en-us
-        value: kilo newton
-      UnitSymbol:
-      - content: []
-        type: kN
-      dimensionURL: D_Kg
-      id: UkN
-    - RootUnits:
-        EnumeratedRootUnit:
-        - powerNumerator: 1
-          prefix: k
-          sourceURL: null
-          unit: newton
-        - powerNumerator: 1
+        - powerNumerator: 3
           prefix: null
           sourceURL: null
           unit: meter
       UnitName:
       - lang: en-us
-        value: kilonewton meter
+        value: volume
       UnitSymbol:
       - content: []
-        type: kNm
-      dimensionURL: D_NM
-      id: UkN-M
+        type: m3
+      dimensionURL: ID10
+      id: u10
 Vessel:
   AngleTolerance:
-    numericvalue: 0.05
-    unit: URad
+    numericvalue: 0.5
+    unit: u9
   Arrangement: null
   Bracket: []
-  BuilderInformation:
-    designer: LEEVI
-    owner: Tapio
-    yard: OCXV3
-    yearOfBuild: '2023-01-01'
+  BuilderInformation: null
   ClassificationData:
-    ClassNotation: null
+    ClassNotation:
+      additionalNotations: ''
+      hull: ''
+      iceClass: null
+      machinery: ''
+      serviceArea: ''
+      serviceFactor: null
     PrincipalParticulars:
-      AP_Pos:
-        numericvalue: 0.0
-        unit: Um
+      AP_Pos: null
       BlockCoefficient:
         numericvalue: 0.0
-        unit: UDimless
+        unit: u6
       DeepestEquilibriumWL: null
       DesignSpeed:
         numericvalue: 0.0
-        unit: UKnots
+        unit: u2
       FP_Pos:
-        numericvalue: 10.0
-        unit: Um
+        numericvalue: 0.0
+        unit: u2
       FreeboardDeckHeight: null
       FreeboardLength:
-        numericvalue: 10.0
-        unit: Um
-      HeavyBallastDraught: null
+        numericvalue: 0.0
+        unit: u2
+      HeavyBallastDraught:
+        numericvalue: 0.0
+        unit: u2
       LengthOfWaterline: null
       Lpp:
-        numericvalue: 10.0
-        unit: Um
+        numericvalue: 70000.0
+        unit: u2
       MouldedBreadth:
-        numericvalue: 10.0
-        unit: Um
+        numericvalue: 20000.0
+        unit: u2
       MouldedDepth:
-        numericvalue: .nan
-        unit: Um
-      NormalBallastDraught: null
+        numericvalue: 12000.0
+        unit: u2
+      NormalBallastDraught:
+        numericvalue: 0.0
+        unit: u2
       RuleLength:
-        numericvalue: 10.0
-        unit: Um
+        numericvalue: 0.0
+        unit: u2
       ScantlingDraught:
-        numericvalue: 1.0
-        unit: Um
-      SlammingDraughtEmptyFP: null
-      SlammingDraughtFullFP: null
+        numericvalue: 8000.0
+        unit: u2
+      SlammingDraughtEmptyFP:
+        numericvalue: 0.0
+        unit: u2
+      SlammingDraughtFullFP:
+        numericvalue: 0.0
+        unit: u2
       SpeedFactor: null
       UpperDeckArea: null
       WaterPlaneArea: null
@@ -474,7 +272,7 @@ Vessel:
       hasBilgeKeel: null
       hasDeadweightLessThan: null
       numberOfDecksAbove: null
-    identification: S01
+    identification: ''
     newbuildingSociety: DNV
     newbuildingSocietyName: null
     society: null
@@ -482,147 +280,373 @@ Vessel:
   CoordinateSystem:
   - CustomProperties: null
     Description: null
-    GUIDRef: e33db60a-591e-45d7-a674-dce9281da262
-    LocalCartesian:
-      Origin:
-        coordinates:
-        - 0.0
-        - 0.0
-        - 0.0
-        unit: Um
-      PrimaryAxis:
-        direction:
-        - 1.0
-        - 0.0
-        - 0.0
-      SecondaryAxis:
-        direction:
-        - 0.0
-        - 1.0
-        - 0.0
+    GUIDRef: '{E6A0C746-7549-404F-8D74-2F688A0E5834}'
+    LocalCartesian: null
     XRefPlanes:
       DistanceToAP: null
       RefPlane:
       - CustomProperties: null
         Description: null
-        GUIDRef: 763d8f2c-973b-4990-b577-f28958941cf4
+        GUIDRef: '{496CBB24-D8BF-4722-94E2-875182F8BE70}'
         ReferenceLocation:
           numericvalue: 0.0
-          unit: Um
-        id: FR0
-        name: X0
+          unit: u2
+        id: ID3
+        name: F0
       - CustomProperties: null
         Description: null
-        GUIDRef: de473adc-3f43-4d5c-963b-24f9ba579f94
+        GUIDRef: '{D1F94F9F-954A-4499-8EDC-262FAECC4733}'
         ReferenceLocation:
-          numericvalue: 1.0
-          unit: Um
-        id: FR1
-        name: X1
+          numericvalue: 750.0
+          unit: u2
+        id: ID4
+        name: F1
       - CustomProperties: null
         Description: null
-        GUIDRef: 768ebefb-9df0-4342-8909-8a73a2558a41
+        GUIDRef: '{B36AF500-6072-460B-A0CA-B04CA7DFF1B0}'
         ReferenceLocation:
-          numericvalue: 2.0
-          unit: Um
-        id: FR2
-        name: X2
+          numericvalue: 1500.0
+          unit: u2
+        id: ID5
+        name: F2
       - CustomProperties: null
         Description: null
-        GUIDRef: 3554f57c-9d6f-4bb7-8d47-b56970697425
+        GUIDRef: '{2EB5805B-A1B9-46DE-91B8-8DBEB5150096}'
         ReferenceLocation:
-          numericvalue: 3.0
-          unit: Um
-        id: FR3
-        name: X3
+          numericvalue: 2250.0
+          unit: u2
+        id: ID6
+        name: F3
       - CustomProperties: null
         Description: null
-        GUIDRef: f08a361b-2928-4da8-bf8b-c4339b97d96e
+        GUIDRef: '{B57B3320-1456-4F8E-B5FD-F02B4ED73074}'
         ReferenceLocation:
-          numericvalue: 4.0
-          unit: Um
-        id: FR4
-        name: X4
+          numericvalue: 3000.0
+          unit: u2
+        id: ID7
+        name: F4
       - CustomProperties: null
         Description: null
-        GUIDRef: 6da13a50-6ba4-4ab2-8e3c-888242448f8a
+        GUIDRef: '{0CB24302-10ED-4948-9BD6-774C5B65B2C5}'
         ReferenceLocation:
-          numericvalue: 5.0
-          unit: Um
-        id: FR5
-        name: X5
+          numericvalue: 3750.0
+          unit: u2
+        id: ID8
+        name: F5
       - CustomProperties: null
         Description: null
-        GUIDRef: 544cced5-d31e-4e06-835d-3c5ea2ea064c
+        GUIDRef: '{111ECC3E-4362-4BB4-85E8-F60B9A7C6A22}'
         ReferenceLocation:
-          numericvalue: 6.0
-          unit: Um
-        id: FR6
-        name: X6
+          numericvalue: 4500.0
+          unit: u2
+        id: ID9
+        name: F6
       - CustomProperties: null
         Description: null
-        GUIDRef: a0dca66f-a5ca-4eb6-b079-55ef5937a40a
+        GUIDRef: '{0AB1D26B-0E2F-4784-81CE-082DB7B10738}'
         ReferenceLocation:
-          numericvalue: 7.0
-          unit: Um
-        id: FR7
-        name: X7
+          numericvalue: 5250.0
+          unit: u2
+        id: ID10
+        name: F7
       - CustomProperties: null
         Description: null
-        GUIDRef: 330f53ff-5467-498f-b377-4f594442f140
+        GUIDRef: '{0E714082-FD60-4A07-8FD3-5296EF71947A}'
         ReferenceLocation:
-          numericvalue: 8.0
-          unit: Um
-        id: FR8
-        name: X8
+          numericvalue: 6000.0
+          unit: u2
+        id: ID11
+        name: F8
       - CustomProperties: null
         Description: null
-        GUIDRef: 04ee0635-e907-4b7c-a7aa-f442e0a6fd1e
+        GUIDRef: '{F6B78D29-9CFC-4D8E-80AB-E1F25863D244}'
         ReferenceLocation:
-          numericvalue: 9.0
-          unit: Um
-        id: FR9
-        name: X9
+          numericvalue: 6750.0
+          unit: u2
+        id: ID12
+        name: F9
       - CustomProperties: null
         Description: null
-        GUIDRef: b1578f2f-21cd-4474-8948-ec9a95a7f33b
+        GUIDRef: '{FA141558-C08D-4DA2-B530-12670564F370}'
         ReferenceLocation:
-          numericvalue: 10.0
-          unit: Um
-        id: FR10
-        name: X10
+          numericvalue: 7500.0
+          unit: u2
+        id: ID13
+        name: F10
+      - CustomProperties: null
+        Description: null
+        GUIDRef: '{A35A83C8-40D6-49CD-B15A-FE1154CD0371}'
+        ReferenceLocation:
+          numericvalue: 8250.0
+          unit: u2
+        id: ID14
+        name: F11
+      - CustomProperties: null
+        Description: null
+        GUIDRef: '{F5DF15F9-B3A2-438D-9BE4-FA40A456F05F}'
+        ReferenceLocation:
+          numericvalue: 9000.0
+          unit: u2
+        id: ID15
+        name: F12
+      - CustomProperties: null
+        Description: null
+        GUIDRef: '{A6E9B4CD-B212-4011-8BB8-98D58BAC3390}'
+        ReferenceLocation:
+          numericvalue: 9750.0
+          unit: u2
+        id: ID16
+        name: F13
       isMainSystem: true
       isReversed: false
     YRefPlanes:
       RefPlane:
       - CustomProperties: null
         Description: null
-        GUIDRef: 80ad65b2-2071-4a91-850e-817a38f68f95
+        GUIDRef: '{3379CDEE-23D2-4AB0-A913-9578B12B4AAD}'
         ReferenceLocation:
-          numericvalue: 0.0
-          unit: Um
-        id: nplcid17
-        name: Y0
+          numericvalue: -10320.0
+          unit: u2
+        id: ID17
+        name: L-12
       - CustomProperties: null
         Description: null
-        GUIDRef: 46b23698-55ca-4ad8-8d7e-95b3b886b2c2
+        GUIDRef: '{9B6B2919-78FD-41A2-B77B-B328CDD354B8}'
         ReferenceLocation:
-          numericvalue: 10.0
-          unit: Um
-        id: nplcid18
-        name: Y10
+          numericvalue: -9460.0
+          unit: u2
+        id: ID18
+        name: L-11
+      - CustomProperties: null
+        Description: null
+        GUIDRef: '{075125A5-E280-4626-8E91-E70AA4841E85}'
+        ReferenceLocation:
+          numericvalue: -8600.0
+          unit: u2
+        id: ID19
+        name: L-10
+      - CustomProperties: null
+        Description: null
+        GUIDRef: '{5B3BFF64-A233-48FE-BF35-9F22F8AE974C}'
+        ReferenceLocation:
+          numericvalue: -7740.0
+          unit: u2
+        id: ID20
+        name: L-9
+      - CustomProperties: null
+        Description: null
+        GUIDRef: '{1DB50810-D838-402B-A08B-7BF9FE7A27EA}'
+        ReferenceLocation:
+          numericvalue: -6880.0
+          unit: u2
+        id: ID21
+        name: L-8
+      - CustomProperties: null
+        Description: null
+        GUIDRef: '{78749A73-D9BB-466B-B9CA-4B030D5A4916}'
+        ReferenceLocation:
+          numericvalue: -6020.0
+          unit: u2
+        id: ID22
+        name: L-7
+      - CustomProperties: null
+        Description: null
+        GUIDRef: '{0F41F7FD-CDFF-42AA-80B6-07A2D9C11943}'
+        ReferenceLocation:
+          numericvalue: -5160.0
+          unit: u2
+        id: ID23
+        name: L-6
+      - CustomProperties: null
+        Description: null
+        GUIDRef: '{700659E2-C0BB-41E2-AA57-FBAB6EAF3002}'
+        ReferenceLocation:
+          numericvalue: -4300.0
+          unit: u2
+        id: ID24
+        name: L-5
+      - CustomProperties: null
+        Description: null
+        GUIDRef: '{770B1FD4-75E6-4543-845E-1A7532C65674}'
+        ReferenceLocation:
+          numericvalue: -3440.0
+          unit: u2
+        id: ID25
+        name: L-4
+      - CustomProperties: null
+        Description: null
+        GUIDRef: '{94DA01AD-EB5B-42D4-B672-FC072C04FD2C}'
+        ReferenceLocation:
+          numericvalue: -2580.0
+          unit: u2
+        id: ID26
+        name: L-3
+      - CustomProperties: null
+        Description: null
+        GUIDRef: '{810EEC08-E5D0-4374-89A0-304B29111766}'
+        ReferenceLocation:
+          numericvalue: -1720.0
+          unit: u2
+        id: ID27
+        name: L-2
+      - CustomProperties: null
+        Description: null
+        GUIDRef: '{9CEDE442-0B67-4D02-94EE-60D7E5FCCCA6}'
+        ReferenceLocation:
+          numericvalue: -860.0
+          unit: u2
+        id: ID28
+        name: L-1
+      - CustomProperties: null
+        Description: null
+        GUIDRef: '{39AB563D-A086-49E7-818C-D1CDEBD6B678}'
+        ReferenceLocation:
+          numericvalue: 0.0
+          unit: u2
+        id: ID29
+        name: L0
+      - CustomProperties: null
+        Description: null
+        GUIDRef: '{860A9478-3D90-4019-95FD-A85AC83D9BA5}'
+        ReferenceLocation:
+          numericvalue: 860.0
+          unit: u2
+        id: ID30
+        name: L1
+      - CustomProperties: null
+        Description: null
+        GUIDRef: '{A68D9C8F-9352-4062-9647-168F9EF361F3}'
+        ReferenceLocation:
+          numericvalue: 1720.0
+          unit: u2
+        id: ID31
+        name: L2
+      - CustomProperties: null
+        Description: null
+        GUIDRef: '{AF4021E8-8A7A-45F2-9A2D-016552526C30}'
+        ReferenceLocation:
+          numericvalue: 2580.0
+          unit: u2
+        id: ID32
+        name: L3
+      - CustomProperties: null
+        Description: null
+        GUIDRef: '{35BC5D97-8D63-476A-926F-05EF3BAB5F4C}'
+        ReferenceLocation:
+          numericvalue: 3440.0
+          unit: u2
+        id: ID33
+        name: L4
+      - CustomProperties: null
+        Description: null
+        GUIDRef: '{B7F30310-BFCB-4EF8-8496-684AD75A9329}'
+        ReferenceLocation:
+          numericvalue: 4300.0
+          unit: u2
+        id: ID34
+        name: L5
+      - CustomProperties: null
+        Description: null
+        GUIDRef: '{2E0D2518-664D-4E4D-AE6B-0208F488FE6E}'
+        ReferenceLocation:
+          numericvalue: 5160.0
+          unit: u2
+        id: ID35
+        name: L6
+      - CustomProperties: null
+        Description: null
+        GUIDRef: '{3B885C63-8B68-4FAF-999A-8E888FBD34E5}'
+        ReferenceLocation:
+          numericvalue: 6020.0
+          unit: u2
+        id: ID36
+        name: L7
+      - CustomProperties: null
+        Description: null
+        GUIDRef: '{6FA377BD-D522-4E9E-ADAF-5753F0701461}'
+        ReferenceLocation:
+          numericvalue: 6880.0
+          unit: u2
+        id: ID37
+        name: L8
+      - CustomProperties: null
+        Description: null
+        GUIDRef: '{E93EBC39-88AA-4ACF-9037-CF2DC8947282}'
+        ReferenceLocation:
+          numericvalue: 7740.0
+          unit: u2
+        id: ID38
+        name: L9
+      - CustomProperties: null
+        Description: null
+        GUIDRef: '{F0FBB3B0-05FE-4177-A123-D51CF5E4FDF7}'
+        ReferenceLocation:
+          numericvalue: 8600.0
+          unit: u2
+        id: ID39
+        name: L10
+      - CustomProperties: null
+        Description: null
+        GUIDRef: '{4A31F904-0DCC-4B88-86D6-BBDF882DC52F}'
+        ReferenceLocation:
+          numericvalue: 9460.0
+          unit: u2
+        id: ID40
+        name: L11
+      - CustomProperties: null
+        Description: null
+        GUIDRef: '{90E5FB8F-CD8B-463A-9D60-8A0D54D660BC}'
+        ReferenceLocation:
+          numericvalue: 10320.0
+          unit: u2
+        id: ID41
+        name: L12
       isMainSystem: true
-    ZRefPlanes: null
-    id: nplcid7
+    ZRefPlanes:
+      RefPlane:
+      - CustomProperties: null
+        Description: null
+        GUIDRef: '{2DACAF39-2D48-46B6-A041-F90577BE237D}'
+        ReferenceLocation:
+          numericvalue: 0.0
+          unit: u2
+        id: ID42
+        name: D0
+      - CustomProperties: null
+        Description: null
+        GUIDRef: '{B8883994-40D1-40E8-8A2D-86D684D8C030}'
+        ReferenceLocation:
+          numericvalue: 1500.0
+          unit: u2
+        id: ID43
+        name: D1
+      - CustomProperties: null
+        Description: null
+        GUIDRef: '{8A3F2FE7-222B-443B-BD08-50BE103B445F}'
+        ReferenceLocation:
+          numericvalue: 6000.0
+          unit: u2
+        id: ID44
+        name: D2
+      - CustomProperties: null
+        Description: null
+        GUIDRef: '{A5694853-A845-4ABE-8271-13425FB5A218}'
+        ReferenceLocation:
+          numericvalue: 9900.0
+          unit: u2
+        id: ID45
+        name: D3
+      isMainSystem: true
+    id: ID2
     isGlobal: true
     name: null
   CustomProperties: null
   Description: null
   DesignView: []
   DistanceTolerance:
-    numericvalue: 1.0
-    unit: Umm
-  GUIDRef: 11359e5d-dd1a-4f9f-af12-56b8369e6c28
+    numericvalue: 0.1
+    unit: u2
+  GUIDRef: '{BA3A77C2-BAE6-4317-BE03-15BCEDE2745F}'
   Panel:
   - ComposedOf:
       Bracket: []
@@ -631,490 +655,528 @@ Vessel:
       - CustomProperties: null
         Description: null
         ExternalGeometryRef: null
-        GUIDRef: e9d8a6fe-1a86-4e8f-9fba-97e0e6a81434
+        GUIDRef: '{C07B7006-B9D8-4E19-A263-A5BEC2194A24}'
         LimitedBy:
           EdgeCurveRef: []
-          FreeEdgeCurve3D: []
-          GridRef:
-          - ContourBounds:
-              ContourEnd:
+          EdgeReinforcementRef: []
+          FreeEdgeCurve3D:
+          - Circle3D: []
+            CircumArc3D: []
+            CircumCircle3D: []
+            CompositeCurve3D: []
+            CurveLength:
+              numericvalue: 10000.0
+              unit: u2
+            CustomProperties: null
+            Description: null
+            Ellipse3D: []
+            GUIDRef: '{2621C560-D8B1-4A58-BEB3-DD88EFE42229}'
+            Line3D:
+            - CurveLength:
+                numericvalue: 10000.0
+                unit: u2
+              CustomProperties: null
+              Description: null
+              EndPoint:
                 coordinates:
-                - 10.0
+                - 9999.99999999997
                 - 0.0
                 - 0.0
-                unit: Um
-              ContourStart:
+                unit: u2
+              GUIDRef: null
+              StartPoint:
                 coordinates:
+                - -2.9103830456733704e-11
                 - 0.0
                 - 0.0
-                - 0.0
-                unit: Um
-            GUIDRef: 80ad65b2-2071-4a91-850e-817a38f68f95
-            Offset: null
-            localRef: nplcid17
-            name: Y0
-            refType: '{https://3docx.org/fileadmin//ocx_schema//V300rc3//OCX_Schema.xsd}ReferencePlane'
-          - ContourBounds:
-              ContourEnd:
-                coordinates:
-                - 10.0
-                - 10.0
-                - 0.0
-                unit: Um
-              ContourStart:
-                coordinates:
-                - 10.0
-                - 0.0
-                - 0.0
-                unit: Um
-            GUIDRef: b1578f2f-21cd-4474-8948-ec9a95a7f33b
-            Offset: null
-            localRef: FR10
-            name: X10
-            refType: '{https://3docx.org/fileadmin//ocx_schema//V300rc3//OCX_Schema.xsd}ReferencePlane'
-          - ContourBounds:
-              ContourEnd:
-                coordinates:
-                - 0.0
-                - 10.0
-                - 0.0
-                unit: Um
-              ContourStart:
-                coordinates:
-                - 10.0
-                - 10.0
-                - 0.0
-                unit: Um
-            GUIDRef: 46b23698-55ca-4ad8-8d7e-95b3b886b2c2
-            Offset: null
-            localRef: nplcid18
-            name: Y10
-            refType: '{https://3docx.org/fileadmin//ocx_schema//V300rc3//OCX_Schema.xsd}ReferencePlane'
-          - ContourBounds:
-              ContourEnd:
-                coordinates:
-                - 0.0
-                - 0.0
-                - 0.0
-                unit: Um
-              ContourStart:
+                unit: u2
+              id: ID62
+              is2D: false
+              name: null
+            NURBS3D: []
+            PolyLine3D: []
+            id: ID61
+            is2D: false
+            isUVSpace: false
+            name: null
+          - Circle3D: []
+            CircumArc3D: []
+            CircumCircle3D: []
+            CompositeCurve3D: []
+            CurveLength:
+              numericvalue: 10000.0
+              unit: u2
+            CustomProperties: null
+            Description: null
+            Ellipse3D: []
+            GUIDRef: '{86E450D9-AD9B-41E5-B0B0-6066BEA0393F}'
+            Line3D:
+            - CurveLength:
+                numericvalue: 10000.0
+                unit: u2
+              CustomProperties: null
+              Description: null
+              EndPoint:
                 coordinates:
                 - 0.0
-                - 10.0
+                - 10000.0
                 - 0.0
-                unit: Um
-            GUIDRef: 763d8f2c-973b-4990-b577-f28958941cf4
-            Offset: null
-            localRef: FR0
-            name: X0
-            refType: '{https://3docx.org/fileadmin//ocx_schema//V300rc3//OCX_Schema.xsd}ReferencePlane'
+                unit: u2
+              GUIDRef: null
+              StartPoint:
+                coordinates:
+                - 10000.0
+                - 10000.0
+                - 0.0
+                unit: u2
+              id: ID64
+              is2D: false
+              name: null
+            NURBS3D: []
+            PolyLine3D: []
+            id: ID63
+            is2D: false
+            isUVSpace: false
+            name: null
+          - Circle3D: []
+            CircumArc3D: []
+            CircumCircle3D: []
+            CompositeCurve3D: []
+            CurveLength:
+              numericvalue: 10000.000000000116
+              unit: u2
+            CustomProperties: null
+            Description: null
+            Ellipse3D: []
+            GUIDRef: '{D6D65C45-539E-477E-B5A4-0819EBBF9F22}'
+            Line3D:
+            - CurveLength:
+                numericvalue: 10000.000000000116
+                unit: u2
+              CustomProperties: null
+              Description: null
+              EndPoint:
+                coordinates:
+                - -1.4551915228366852e-11
+                - -7.275957614183426e-11
+                - 0.0
+                unit: u2
+              GUIDRef: null
+              StartPoint:
+                coordinates:
+                - -1.4551915228366852e-11
+                - 10000.000000000044
+                - 0.0
+                unit: u2
+              id: ID66
+              is2D: false
+              name: null
+            NURBS3D: []
+            PolyLine3D: []
+            id: ID65
+            is2D: false
+            isUVSpace: false
+            name: null
+          - Circle3D: []
+            CircumArc3D: []
+            CircumCircle3D: []
+            CompositeCurve3D: []
+            CurveLength:
+              numericvalue: 10000.000000000116
+              unit: u2
+            CustomProperties: null
+            Description: null
+            Ellipse3D: []
+            GUIDRef: '{7D3C5932-0653-4661-9302-5960B54BC8D7}'
+            Line3D:
+            - CurveLength:
+                numericvalue: 10000.000000000116
+                unit: u2
+              CustomProperties: null
+              Description: null
+              EndPoint:
+                coordinates:
+                - 10000.0
+                - 10000.000000000051
+                - 0.0
+                unit: u2
+              GUIDRef: null
+              StartPoint:
+                coordinates:
+                - 10000.0
+                - -6.548361852765083e-11
+                - 0.0
+                unit: u2
+              id: ID68
+              is2D: false
+              name: null
+            NURBS3D: []
+            PolyLine3D: []
+            id: ID67
+            is2D: false
+            isUVSpace: false
+            name: null
+          GridRef: []
           PanelRef: []
           SeamRef: []
           StiffenerRef: []
           SurfaceRef: []
         NetArea:
-          numericvalue: 100.0
-          unit: Um2
+          numericvalue: 100000000.0000003
+          unit: u2
         Offset:
-          numericvalue: -0.005
-          unit: Um
+          numericvalue: 0.0
+          unit: u2
         OuterContour:
-          Circle3D: null
-          CircumCircle3D: null
-          CompositeCurve3D:
-            CircumArc3D: []
-            CurveLength:
-              numericvalue: 0.0
-              unit: Um
+          Circle3D: []
+          CircumArc3D: []
+          CircumCircle3D: []
+          CompositeCurve3D: []
+          Ellipse3D: []
+          Line3D:
+          - CurveLength:
+              numericvalue: 10000.0
+              unit: u2
             CustomProperties: null
             Description: null
-            GUIDRef: add7c37a-9aae-4671-ad9d-34eb0e2f5896
-            Line3D: []
-            NURBS3D:
-            - ControlPtList:
-                ControlPoint:
-                - Point3D:
-                    coordinates:
-                    - 0.0
-                    - 0.0
-                    - 0.0
-                    unit: Um
-                  weight: 1.0
-                - Point3D:
-                    coordinates:
-                    - 3.33333
-                    - 0.0
-                    - 0.0
-                    unit: Um
-                  weight: 1.0
-                - Point3D:
-                    coordinates:
-                    - 6.66667
-                    - 0.0
-                    - 0.0
-                    unit: Um
-                  weight: 1.0
-                - Point3D:
-                    coordinates:
-                    - 10.0
-                    - 0.0
-                    - 0.0
-                    unit: Um
-                  weight: 1.0
-                - Point3D:
-                    coordinates:
-                    - 10.0
-                    - 3.33333
-                    - 0.0
-                    unit: Um
-                  weight: 1.0
-                - Point3D:
-                    coordinates:
-                    - 10.0
-                    - 6.66667
-                    - 0.0
-                    unit: Um
-                  weight: 1.0
-                - Point3D:
-                    coordinates:
-                    - 10.0
-                    - 10.0
-                    - 0.0
-                    unit: Um
-                  weight: 1.0
-                - Point3D:
-                    coordinates:
-                    - 6.66667
-                    - 10.0
-                    - 0.0
-                    unit: Um
-                  weight: 1.0
-                - Point3D:
-                    coordinates:
-                    - 3.33333
-                    - 10.0
-                    - 0.0
-                    unit: Um
-                  weight: 1.0
-                - Point3D:
-                    coordinates:
-                    - 0.0
-                    - 10.0
-                    - 0.0
-                    unit: Um
-                  weight: 1.0
-                - Point3D:
-                    coordinates:
-                    - 0.0
-                    - 6.66667
-                    - 0.0
-                    unit: Um
-                  weight: 1.0
-                - Point3D:
-                    coordinates:
-                    - 0.0
-                    - 3.33333
-                    - 0.0
-                    unit: Um
-                  weight: 1.0
-                - Point3D:
-                    coordinates:
-                    - 0.0
-                    - 0.0
-                    - 0.0
-                    unit: Um
-                  weight: 1.0
-              CurveLength:
-                numericvalue: 0.0
-                unit: Um
-              CustomProperties: null
-              Description: null
-              GUIDRef: 7bfaa7e5-7032-4f12-b54f-064c2002b5e7
-              KnotVector:
-                value:
-                - 0.0
-                - 0.0
-                - 0.0
-                - 0.0
-                - 1.0
-                - 1.0
-                - 1.0
-                - 2.0
-                - 2.0
-                - 2.0
-                - 3.0
-                - 3.0
-                - 3.0
-                - 4.0
-                - 4.0
-                - 4.0
-                - 4.0
-              NURBSproperties:
-                degree: 3
-                form: Unknown
-                isRational: false
-                numCtrlPts: 13
-                numKnots: 17
-              id: nplcid16
-              is2D: false
-              name: null
-            PolyLine3D: []
-            id: nplcid15
+            EndPoint:
+              coordinates:
+              - 0.0
+              - 10000.0
+              - 0.0
+              unit: u2
+            GUIDRef: null
+            StartPoint:
+              coordinates:
+              - 10000.0
+              - 10000.0
+              - 0.0
+              unit: u2
+            id: ID57
             is2D: false
             name: null
-          Ellipse3D: null
+          - CurveLength:
+              numericvalue: 10000.000000000073
+              unit: u2
+            CustomProperties: null
+            Description: null
+            EndPoint:
+              coordinates:
+              - -1.4551915228366852e-11
+              - -7.275957614183426e-11
+              - 0.0
+              unit: u2
+            GUIDRef: null
+            StartPoint:
+              coordinates:
+              - 0.0
+              - 10000.0
+              - 0.0
+              unit: u2
+            id: ID58
+            is2D: false
+            name: null
+          - CurveLength:
+              numericvalue: 9999.999999999985
+              unit: u2
+            CustomProperties: null
+            Description: null
+            EndPoint:
+              coordinates:
+              - 9999.99999999997
+              - 0.0
+              - 0.0
+              unit: u2
+            GUIDRef: null
+            StartPoint:
+              coordinates:
+              - -1.4551915228366852e-11
+              - -7.275957614183426e-11
+              - 0.0
+              unit: u2
+            id: ID59
+            is2D: false
+            name: null
+          - CurveLength:
+              numericvalue: 10000.000000000051
+              unit: u2
+            CustomProperties: null
+            Description: null
+            EndPoint:
+              coordinates:
+              - 10000.0
+              - 10000.000000000051
+              - 0.0
+              unit: u2
+            GUIDRef: null
+            StartPoint:
+              coordinates:
+              - 9999.99999999997
+              - 0.0
+              - 0.0
+              unit: u2
+            id: ID60
+            is2D: false
+            name: null
+          NURBS3D: []
+          PolyLine3D: []
         PhysicalProperties:
           CenterOfGravity:
             coordinates:
-            - 5.0
-            - 5.0
+            - 4999.999999999983
+            - 4999.999999999982
             - 0.0
-            unit: Um
+            unit: u2
           DryWeight:
-            numericvalue: 7850.0
-            unit: UKg
+            numericvalue: 7850.000000000023
+            unit: u8
         PlateCutBy: null
         PlateMaterial:
-          GUIDRef: b1e760b1-067d-4062-8753-73f0956686df
+          GUIDRef: '{0BEF184A-6827-4A99-B527-31DC92D484BE}'
           Thickness:
-            numericvalue: 0.01
-            unit: Um
-          localRef: nplcid4
-          name: A
-          refType: '{https://3docx.org/fileadmin//ocx_schema//V300rc3//OCX_Schema.xsd}Material'
+            numericvalue: 10.0
+            unit: u2
+          localRef: null
+          name: GradeA
+          refType: '{https://3docx.org/fileadmin//ocx_schema//V300//OCX_Schema.xsd}Material'
         UnboundedGeometry: null
         functionType: null
-        id: nplcid12
-        name: P:P1/PANEL
+        id: ID56
+        name: null
     CustomProperties: null
     CutBy: null
-    Description: Hull Trans. Bulkhead, watertight
-    GUIDRef: b49a8de7-10fd-4655-a2f2-984b8baab268
+    Description: null
+    GUIDRef: '{60F98A9C-6FAF-4731-A7C0-13B07BD4BBC1}'
     LimitedBy:
       EdgeCurveRef: []
-      FreeEdgeCurve3D: []
-      GridRef:
-      - ContourBounds:
-          ContourEnd:
+      EdgeReinforcementRef: []
+      FreeEdgeCurve3D:
+      - Circle3D: []
+        CircumArc3D: []
+        CircumCircle3D: []
+        CompositeCurve3D: []
+        CurveLength:
+          numericvalue: 10000.0
+          unit: u2
+        CustomProperties: null
+        Description: null
+        Ellipse3D: []
+        GUIDRef: '{2621C560-D8B1-4A58-BEB3-DD88EFE42229}'
+        Line3D:
+        - CurveLength:
+            numericvalue: 10000.0
+            unit: u2
+          CustomProperties: null
+          Description: null
+          EndPoint:
             coordinates:
-            - 10.0
+            - 9999.99999999997
             - 0.0
             - 0.0
-            unit: Um
-          ContourStart:
+            unit: u2
+          GUIDRef: null
+          StartPoint:
             coordinates:
+            - -2.9103830456733704e-11
             - 0.0
             - 0.0
-            - 0.0
-            unit: Um
-        GUIDRef: 80ad65b2-2071-4a91-850e-817a38f68f95
-        Offset: null
-        localRef: nplcid17
-        name: Y0
-        refType: '{https://3docx.org/fileadmin//ocx_schema//V300rc3//OCX_Schema.xsd}ReferencePlane'
-      - ContourBounds:
-          ContourEnd:
-            coordinates:
-            - 10.0
-            - 10.0
-            - 0.0
-            unit: Um
-          ContourStart:
-            coordinates:
-            - 10.0
-            - 0.0
-            - 0.0
-            unit: Um
-        GUIDRef: b1578f2f-21cd-4474-8948-ec9a95a7f33b
-        Offset: null
-        localRef: FR10
-        name: X10
-        refType: '{https://3docx.org/fileadmin//ocx_schema//V300rc3//OCX_Schema.xsd}ReferencePlane'
-      - ContourBounds:
-          ContourEnd:
-            coordinates:
-            - 0.0
-            - 10.0
-            - 0.0
-            unit: Um
-          ContourStart:
-            coordinates:
-            - 10.0
-            - 10.0
-            - 0.0
-            unit: Um
-        GUIDRef: 46b23698-55ca-4ad8-8d7e-95b3b886b2c2
-        Offset: null
-        localRef: nplcid18
-        name: Y10
-        refType: '{https://3docx.org/fileadmin//ocx_schema//V300rc3//OCX_Schema.xsd}ReferencePlane'
-      - ContourBounds:
-          ContourEnd:
-            coordinates:
-            - 0.0
-            - 0.0
-            - 0.0
-            unit: Um
-          ContourStart:
+            unit: u2
+          id: ID49
+          is2D: false
+          name: null
+        NURBS3D: []
+        PolyLine3D: []
+        id: ID48
+        is2D: false
+        isUVSpace: false
+        name: null
+      - Circle3D: []
+        CircumArc3D: []
+        CircumCircle3D: []
+        CompositeCurve3D: []
+        CurveLength:
+          numericvalue: 10000.0
+          unit: u2
+        CustomProperties: null
+        Description: null
+        Ellipse3D: []
+        GUIDRef: '{86E450D9-AD9B-41E5-B0B0-6066BEA0393F}'
+        Line3D:
+        - CurveLength:
+            numericvalue: 10000.0
+            unit: u2
+          CustomProperties: null
+          Description: null
+          EndPoint:
             coordinates:
             - 0.0
-            - 10.0
+            - 10000.0
             - 0.0
-            unit: Um
-        GUIDRef: 763d8f2c-973b-4990-b577-f28958941cf4
-        Offset: null
-        localRef: FR0
-        name: X0
-        refType: '{https://3docx.org/fileadmin//ocx_schema//V300rc3//OCX_Schema.xsd}ReferencePlane'
+            unit: u2
+          GUIDRef: null
+          StartPoint:
+            coordinates:
+            - 10000.0
+            - 10000.0
+            - 0.0
+            unit: u2
+          id: ID51
+          is2D: false
+          name: null
+        NURBS3D: []
+        PolyLine3D: []
+        id: ID50
+        is2D: false
+        isUVSpace: false
+        name: null
+      - Circle3D: []
+        CircumArc3D: []
+        CircumCircle3D: []
+        CompositeCurve3D: []
+        CurveLength:
+          numericvalue: 10000.000000000116
+          unit: u2
+        CustomProperties: null
+        Description: null
+        Ellipse3D: []
+        GUIDRef: '{D6D65C45-539E-477E-B5A4-0819EBBF9F22}'
+        Line3D:
+        - CurveLength:
+            numericvalue: 10000.000000000116
+            unit: u2
+          CustomProperties: null
+          Description: null
+          EndPoint:
+            coordinates:
+            - -1.4551915228366852e-11
+            - -7.275957614183426e-11
+            - 0.0
+            unit: u2
+          GUIDRef: null
+          StartPoint:
+            coordinates:
+            - -1.4551915228366852e-11
+            - 10000.000000000044
+            - 0.0
+            unit: u2
+          id: ID53
+          is2D: false
+          name: null
+        NURBS3D: []
+        PolyLine3D: []
+        id: ID52
+        is2D: false
+        isUVSpace: false
+        name: null
+      - Circle3D: []
+        CircumArc3D: []
+        CircumCircle3D: []
+        CompositeCurve3D: []
+        CurveLength:
+          numericvalue: 10000.000000000116
+          unit: u2
+        CustomProperties: null
+        Description: null
+        Ellipse3D: []
+        GUIDRef: '{7D3C5932-0653-4661-9302-5960B54BC8D7}'
+        Line3D:
+        - CurveLength:
+            numericvalue: 10000.000000000116
+            unit: u2
+          CustomProperties: null
+          Description: null
+          EndPoint:
+            coordinates:
+            - 10000.0
+            - 10000.000000000051
+            - 0.0
+            unit: u2
+          GUIDRef: null
+          StartPoint:
+            coordinates:
+            - 10000.0
+            - -6.548361852765083e-11
+            - 0.0
+            unit: u2
+          id: ID55
+          is2D: false
+          name: null
+        NURBS3D: []
+        PolyLine3D: []
+        id: ID54
+        is2D: false
+        isUVSpace: false
+        name: null
+      GridRef: []
       PanelRef: []
       SeamRef: []
       StiffenerRef: []
       SurfaceRef: []
     OuterContour:
-      Circle3D: null
-      CircumCircle3D: null
-      CompositeCurve3D:
-        CircumArc3D: []
+      Circle3D: []
+      CircumArc3D: []
+      CircumCircle3D: []
+      CompositeCurve3D: []
+      Ellipse3D: []
+      Line3D: []
+      NURBS3D:
+      - ControlPtList:
+          ControlPoint:
+          - coordinates:
+            - 10000.0
+            - 10000.0
+            - 0.0
+            unit: u2
+            weight: 1.0
+          - coordinates:
+            - 0.0
+            - 10000.0
+            - 0.0
+            unit: u2
+            weight: 1.0
+          - coordinates:
+            - -1.4551915228366852e-11
+            - -7.275957614183426e-11
+            - 0.0
+            unit: u2
+            weight: 1.0
+          - coordinates:
+            - 9999.99999999997
+            - 0.0
+            - 0.0
+            unit: u2
+            weight: 1.0
+          - coordinates:
+            - 10000.0
+            - 10000.000000000051
+            - 0.0
+            unit: u2
+            weight: 1.0
         CurveLength:
-          numericvalue: 0.0
-          unit: Um
+          numericvalue: 40000.00000000011
+          unit: u2
         CustomProperties: null
         Description: null
-        GUIDRef: 4feb784f-5cff-406b-b91c-da288319d971
-        Line3D: []
-        NURBS3D:
-        - ControlPtList:
-            ControlPoint:
-            - Point3D:
-                coordinates:
-                - 0.0
-                - 0.0
-                - 0.0
-                unit: Um
-              weight: 1.0
-            - Point3D:
-                coordinates:
-                - 3.33333
-                - 0.0
-                - 0.0
-                unit: Um
-              weight: 1.0
-            - Point3D:
-                coordinates:
-                - 6.66667
-                - 0.0
-                - 0.0
-                unit: Um
-              weight: 1.0
-            - Point3D:
-                coordinates:
-                - 10.0
-                - 0.0
-                - 0.0
-                unit: Um
-              weight: 1.0
-            - Point3D:
-                coordinates:
-                - 10.0
-                - 3.33333
-                - 0.0
-                unit: Um
-              weight: 1.0
-            - Point3D:
-                coordinates:
-                - 10.0
-                - 6.66667
-                - 0.0
-                unit: Um
-              weight: 1.0
-            - Point3D:
-                coordinates:
-                - 10.0
-                - 10.0
-                - 0.0
-                unit: Um
-              weight: 1.0
-            - Point3D:
-                coordinates:
-                - 6.66667
-                - 10.0
-                - 0.0
-                unit: Um
-              weight: 1.0
-            - Point3D:
-                coordinates:
-                - 3.33333
-                - 10.0
-                - 0.0
-                unit: Um
-              weight: 1.0
-            - Point3D:
-                coordinates:
-                - 0.0
-                - 10.0
-                - 0.0
-                unit: Um
-              weight: 1.0
-            - Point3D:
-                coordinates:
-                - 0.0
-                - 6.66667
-                - 0.0
-                unit: Um
-              weight: 1.0
-            - Point3D:
-                coordinates:
-                - 0.0
-                - 3.33333
-                - 0.0
-                unit: Um
-              weight: 1.0
-            - Point3D:
-                coordinates:
-                - 0.0
-                - 0.0
-                - 0.0
-                unit: Um
-              weight: 1.0
-          CurveLength:
-            numericvalue: 0.0
-            unit: Um
-          CustomProperties: null
-          Description: null
-          GUIDRef: 6eaa927f-7770-4977-b9b1-d72243f24e86
-          KnotVector:
-            value:
-            - 0.0
-            - 0.0
-            - 0.0
-            - 0.0
-            - 1.0
-            - 1.0
-            - 1.0
-            - 2.0
-            - 2.0
-            - 2.0
-            - 3.0
-            - 3.0
-            - 3.0
-            - 4.0
-            - 4.0
-            - 4.0
-            - 4.0
-          NURBSproperties:
-            degree: 3
-            form: Unknown
-            isRational: false
-            numCtrlPts: 13
-            numKnots: 17
-          id: nplcid14
-          is2D: false
-          name: null
-        PolyLine3D: []
-        id: nplcid13
+        GUIDRef: null
+        KnotVector:
+          value:
+          - 0.0
+          - 0.0
+          - 10000.0
+          - 20000.000000000073
+          - 30000.00000000006
+          - 40000.00000000011
+          - 40000.00000000011
+        NURBSproperties:
+          degree: 1
+          form: Open
+          isRational: false
+          numCtrlPts: 5
+          numKnots: 7
+        id: ID69
         is2D: false
         name: null
-      Ellipse3D: null
+      PolyLine3D: []
     PhysicalProperties: null
     SplitBy: null
     StiffenedBy: null
@@ -1124,197 +1186,46 @@ Vessel:
       ExtrudedSurface: []
       GridRef: []
       NURBSSurface: []
-      Plane3D: []
+      Plane3D:
+      - CustomProperties: null
+        Description: null
+        FaceBoundaryCurve: null
+        GUIDRef: null
+        LimitedBy: null
+        Normal:
+          direction:
+          - 0.0
+          - 0.0
+          - 1.0
+        Origin:
+          coordinates:
+          - 0.0
+          - 0.0
+          - 0.0
+          unit: u2
+        UDirection: null
+        id: ID47
+        name: null
       Sphere3D: []
-      SurfaceRef:
-      - ContourBounds: null
-        GUIDRef: 32cf9c69-8ba8-4935-bbea-0f9fa5755353
-        localRef: nplcid9
-        name: PANEL
-        refType: '{https://3docx.org/fileadmin//ocx_schema//V300rc3//OCX_Schema.xsd}Surface'
-    functionType: TRANSVERSAL_BULKHEAD
-    id: nplcid8
-    name: PANEL
+      SurfaceRef: []
+    functionType: DECK
+    id: ID46
+    name: Model01
     tightness: WaterTight
   Pillar: []
   Plate: []
-  ReferenceSurfaces:
-    Cone3D: []
-    Cylinder3D: []
-    ExtrudedSurface: []
-    NURBSSurface: []
-    Plane3D:
-    - CustomProperties: null
-      Description: null
-      FaceBoundaryCurve:
-        Circle3D: null
-        CircumCircle3D: null
-        CompositeCurve3D:
-          CircumArc3D: []
-          CurveLength:
-            numericvalue: 0.0
-            unit: Um
-          CustomProperties: null
-          Description: null
-          GUIDRef: ffa1b2e4-d40a-4ca2-aa1c-3cc2425f9b58
-          Line3D: []
-          NURBS3D:
-          - ControlPtList:
-              ControlPoint:
-              - Point3D:
-                  coordinates:
-                  - 0.0
-                  - 0.0
-                  - 0.0
-                  unit: Um
-                weight: 1.0
-              - Point3D:
-                  coordinates:
-                  - 3.33333
-                  - 0.0
-                  - 0.0
-                  unit: Um
-                weight: 1.0
-              - Point3D:
-                  coordinates:
-                  - 6.66667
-                  - 0.0
-                  - 0.0
-                  unit: Um
-                weight: 1.0
-              - Point3D:
-                  coordinates:
-                  - 10.0
-                  - 0.0
-                  - 0.0
-                  unit: Um
-                weight: 1.0
-              - Point3D:
-                  coordinates:
-                  - 10.0
-                  - 3.33333
-                  - 0.0
-                  unit: Um
-                weight: 1.0
-              - Point3D:
-                  coordinates:
-                  - 10.0
-                  - 6.66667
-                  - 0.0
-                  unit: Um
-                weight: 1.0
-              - Point3D:
-                  coordinates:
-                  - 10.0
-                  - 10.0
-                  - 0.0
-                  unit: Um
-                weight: 1.0
-              - Point3D:
-                  coordinates:
-                  - 6.66667
-                  - 10.0
-                  - 0.0
-                  unit: Um
-                weight: 1.0
-              - Point3D:
-                  coordinates:
-                  - 3.33333
-                  - 10.0
-                  - 0.0
-                  unit: Um
-                weight: 1.0
-              - Point3D:
-                  coordinates:
-                  - 0.0
-                  - 10.0
-                  - 0.0
-                  unit: Um
-                weight: 1.0
-              - Point3D:
-                  coordinates:
-                  - 0.0
-                  - 6.66667
-                  - 0.0
-                  unit: Um
-                weight: 1.0
-              - Point3D:
-                  coordinates:
-                  - 0.0
-                  - 3.33333
-                  - 0.0
-                  unit: Um
-                weight: 1.0
-              - Point3D:
-                  coordinates:
-                  - 0.0
-                  - 0.0
-                  - 0.0
-                  unit: Um
-                weight: 1.0
-            CurveLength:
-              numericvalue: 0.0
-              unit: Um
-            CustomProperties: null
-            Description: null
-            GUIDRef: b3c0d9e8-24b4-4641-b03c-cbe0e95ef8e9
-            KnotVector:
-              value:
-              - 0.0
-              - 0.0
-              - 0.0
-              - 0.0
-              - 1.0
-              - 1.0
-              - 1.0
-              - 2.0
-              - 2.0
-              - 2.0
-              - 3.0
-              - 3.0
-              - 3.0
-              - 4.0
-              - 4.0
-              - 4.0
-              - 4.0
-            NURBSproperties:
-              degree: 3
-              form: Unknown
-              isRational: false
-              numCtrlPts: 13
-              numKnots: 17
-            id: nplcid11
-            is2D: false
-            name: null
-          PolyLine3D: []
-          id: nplcid10
-          is2D: false
-          name: null
-        Ellipse3D: null
-        isUVspace: false
-      GUIDRef: 32cf9c69-8ba8-4935-bbea-0f9fa5755353
-      LimitedBy: null
-      Normal:
-        direction:
-        - 0.0
-        - 0.0
-        - 1.0
-      Origin:
-        coordinates:
-        - 0.0
-        - 0.0
-        - 0.0
-        unit: Um
-      UDirection: null
-      id: nplcid9
-      name: REF_PANEL
-    Sphere3D: []
-    SurfaceCollection: []
-  ShipDesignation: null
-  StatutoryData: null
+  ReferenceSurfaces: null
+  ShipDesignation:
+    callSign: ''
+    numberIMO: '1004871'
+    shipName: IMC2023
+    shipType: Bulk Carrier
+  StatutoryData:
+    flagState: Swedish
+    portRegistration: Sweden
   Stiffener: []
   TonnageData: null
-  id: nplcid1
-  name: OCX-MODEL1/A
+  id: ID1
+  name: IMC2023
 language: en
-schemaVersion: 3.0.0rc3
+schemaVersion: 3.0.0

@@ -224,22 +224,23 @@ def details(
     try:
         to_col = int(max_col)
         console.section('Report Details')
-        for item in report_manager.report_detail(report_type=report,
-                                                 level=level,
-                                                 max_col=to_col,
-                                                 member=member,
-                                                 guid=guid):
-            if item is not None:
-                if guid != '':
-                    title = (f'Source: {item.source}. Columns: {item.columns}, Levels: {item.levels}, '
-                             f'Current level: {level}, Member: {member!r}, GUIDref={guid!r}')
-                else:
-                    title = (f'Source: {item.source}. Columns: {item.columns}, Levels: {item.levels}, '
-                             f'Current level: {level}, Member: {member!r}')
-                table = (RichTable.render(data=item.content, title=title))
-                console.print_table(table)
-            else:
-                console.info(f'There are no detailed reports for report {report.value!r}')
+        if report_manager.has_report(report.value):
+            for item in report_manager.report_detail(report_type=report,
+                                                     level=level,
+                                                     max_col=to_col,
+                                                     member=member,
+                                                     guid=guid):
+                if item is not None:
+                    if guid != '':
+                        title = (f'Source: {item.source}. Columns: {item.columns}, Levels: {item.levels}, '
+                                 f'Current level: {level}, Member: {member!r}, GUIDref={guid!r}')
+                    else:
+                        title = (f'Source: {item.source}. Columns: {item.columns}, Levels: {item.levels}, '
+                                 f'Current level: {level}, Member: {member!r}')
+                    table = (RichTable.render(data=item.content, title=title))
+                    console.print_table(table)
+        else:
+            console.info(f'There are no detailed reports for report {report.value!r}')
     except ReporterError as e:
         console.error(str(e))
 

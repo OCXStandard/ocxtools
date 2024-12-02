@@ -9,13 +9,14 @@ from loguru import logger
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../")))
 
 logger.disable("ocxtools")
-SCHEMA_VERSION = '3.0.0rc3'
-MODEL1 = 'NAPA-OCX_M1_v300rc3.3docx'
-MODEL2 = 'NAPA-OCX_M2_v300rc3.3docx'
-MODEL3 = 'NAPA-OCX_M3_v300rc3.3docx'
-MODEL4 = 'NAPA-OCX_M4_v300rc3.3docx'
-MODEL5 = 'NAPA-OCX_M5_v300rc3.3docx'
-MODEL6 = 'NAPA-OCX_M6_v300rc3.3docx'
-MODEL7 = 'NAPA-OCX_M7_v300rc3.3docx'
-MODEL8 = 'NAPA-OCX_M8_v300rc3.3docx'
+SCHEMA_VERSION = '3.0.0'
+MODEL1 = 'NAPA-OCX_M1.3docx'
+MODEL2 = 'NAPA-OCX_M2.3docx'
+MODEL3 = 'NAPA-OCX_M3.3docx'
+MODEL4 = 'NAPA-OCX_M4.3docx'
+MODEL5 = 'NAPA-OCX_M5.3docx'
+MODEL6 = 'NAPA-OCX_M6.3docx'
+MODEL7 = 'NAPA-OCX_M7.3docx'
+MODEL8 = 'NAPA-OCX_M8.3docx'
+AVEVA = 'AVEVA-E3D-Model01.3docx'
 TEST_MODEL = MODEL1
